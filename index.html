@@ -1,546 +1,935 @@
 
+
 <!DOCTYPE html>
+
 <html lang="fr">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
 <meta name="theme-color" content="#101216">
+
 <title>MERFIL LIVE STUDIO</title>
+
 <style>
+
 :root{--bg:#101216;--panel:#191d23;--panel2:#222832;--line:#343b46;--text:#f4f5f7;--muted:#929ba8;--red:#ed4545;--green:#32c987}
+
 *{box-sizing:border-box}
+
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+
 button,input{font:inherit}
+
 button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px 13px;cursor:pointer}
+
 button:disabled{opacity:.4;cursor:not-allowed}
+
 button:active{opacity:.8}
+
 .top{min-height:67px;padding:0 17px;display:flex;align-items:center;justify-content:space-between;background:#15191f;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+
 .brand{display:flex;align-items:center;gap:10px}
+
 .logo{border:1px solid #818b98;border-radius:7px;width:37px;height:37px;display:grid;place-items:center;font-size:12px;font-weight:bold;letter-spacing:-1px}
+
 .brandname{font-size:13px;font-weight:bold;letter-spacing:1px}
+
 .brandsub{font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:1.5px}
+
 .status{font-size:10px;display:flex;align-items:center;gap:7px}
+
 .dot{width:8px;height:8px;background:var(--muted);border-radius:50%}
+
 main{max-width:1100px;margin:auto;padding:16px}
+
 .heading{display:flex;justify-content:space-between;align-items:center;margin:7px 0 12px}
+
 .heading h2{font-size:12px;letter-spacing:1.2px;margin:0}
+
 .muted{color:var(--muted);font-size:11px}
+
 .monitor{position:relative;width:100%;aspect-ratio:16/9;background:#050608;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+
 #programCanvas{display:block;width:100%;height:100%;object-fit:contain;background:#050608}
+
 .tag{position:absolute;top:12px;left:12px;z-index:3;background:#161b22e8;border:1px solid #414955;padding:6px 9px;border-radius:5px;font-size:10px;letter-spacing:1px;pointer-events:none}
+
 .clock{position:absolute;right:12px;bottom:12px;z-index:3;background:#141922e8;padding:7px 9px;border-radius:5px;font-size:11px;font-variant-numeric:tabular-nums;pointer-events:none}
+
 .error{display:none;background:#3b2023;border:1px solid #754044;color:#ffb9b9;padding:11px;border-radius:8px;font-size:12px;line-height:1.5;margin-top:10px}
+
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+
 .toolbar button{flex:1;min-width:105px;font-size:11px}
+
 .primary{background:#edf0f3;color:#11151a;border-color:#edf0f3;font-weight:bold}
+
 .red{border-color:#743e42;color:#ffaaaa}
+
 .green{border-color:#246c50;color:#75e2ad}
+
 .layout{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:17px}
+
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}
+
 .panel h3{font-size:12px;letter-spacing:1px;margin:0 0 13px}
+
 .scenes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
 .scene{text-align:left;min-height:65px;font-size:12px}
+
 .scene small{display:block;color:var(--muted);font-size:10px;margin-top:7px}
+
 .scene.selected{border-color:#f0f2f5;background:#343c47}
+
 .source{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}
+
 .source:last-child{border:0}
+
 .source small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+
 .source button{font-size:10px;padding:8px}
+
 .meter{height:7px;background:#303640;border-radius:8px;overflow:hidden;margin-top:10px}
+
 #meterFill{height:100%;width:0;background:var(--green)}
+
 .actions{display:flex;gap:8px;flex-wrap:wrap}
+
 .actions button{flex:1;font-size:11px}
+
 .statusline{font-size:11px;color:var(--muted);line-height:1.5;margin-top:11px}
+
 .recordtime{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
 .field{width:100%;padding:11px;border:1px solid var(--line);background:#11151b;color:white;border-radius:8px;margin:6px 0 10px}
+
 .filelabel{display:block;border:1px dashed #687382;border-radius:8px;padding:13px;text-align:center;font-size:11px;color:#d9dfe7;cursor:pointer;margin-top:9px}
+
 input[type=file]{display:none}
+
 .footer{text-align:center;color:#697380;font-size:10px;letter-spacing:1px;padding:25px}
+
 @media(max-width:650px){
+
 main{padding:12px}
+
 .layout{grid-template-columns:1fr}
+
 .toolbar button{min-width:calc(50% - 8px)}
+
 .brandname{font-size:11px}
+
 }
+
 </style>
+
 </head>
+
 <body>
+
 <header class="top">
+
  <div class="brand">
+
   <div class="logo">MLS</div>
+
   <div>
+
    <div class="brandname">MERFIL LIVE STUDIO</div>
+
    <div class="brandsub">MOBILE PRODUCTION</div>
+
   </div>
+
  </div>
+
  <div class="status">
+
   <span class="dot" id="statusDot"></span>
+
   <span id="statusText">STUDIO PRÊT</span>
+
  </div>
+
 </header>
 
 <main>
+
  <div class="heading">
+
   <h2>MONITEUR PROGRAMME</h2>
+
   <span class="muted">MLS · 03.0</span>
+
  </div>
 
  <div class="monitor">
+
   <canvas id="programCanvas" width="1280" height="720" aria-label="Aperçu du programme vidéo"></canvas>
+
   <div class="tag" id="sceneTag">STUDIO · PRÊT</div>
+
   <div class="clock" id="clock">00:00:00</div>
+
  </div>
 
  <div class="error" id="errorBox" role="alert"></div>
 
  <div class="toolbar">
+
   <button class="primary" id="cameraBtn">Activer caméra</button>
+
   <button id="flipBtn">Retourner caméra</button>
+
   <button id="micBtn">Activer micro</button>
+
   <button id="lowerBtn">Bandeau titre</button>
+
   <button class="red" id="stopBtn">Arrêter sources</button>
+
  </div>
 
  <div class="layout">
+
   <section class="panel">
+
    <h3>RÉGIE · SCÈNES</h3>
+
    <div class="scenes">
+
     <button class="scene selected" data-scene="camera">01 · Caméra<small>Vue principale</small></button>
+
     <button class="scene" data-scene="welcome">02 · Accueil<small>Présentation</small></button>
+
     <button class="scene" data-scene="interview">03 · Interview<small>Discussion</small></button>
+
     <button class="scene" data-scene="pause">04 · Pause<small>Écran d'attente</small></button>
+
    </div>
+
    <div class="statusline" id="sceneStatus">Scène active : Caméra</div>
+
   </section>
 
   <section class="panel">
+
    <h3>SOURCES AUDIO & VIDÉO</h3>
+
    <div class="source">
+
     <div>Caméra principale<small id="cameraStatus">Non connectée</small></div>
+
     <button id="cameraSourceBtn">Activer</button>
+
    </div>
+
    <div class="source">
+
     <div>Microphone<small id="micStatus">Non connecté</small></div>
+
     <button id="micSourceBtn">Activer</button>
+
    </div>
+
    <div class="source">
+
     <div>Niveau du son<small>Entrée audio</small></div>
+
     <b id="audioValue">0%</b>
+
    </div>
+
    <div class="meter"><div id="meterFill"></div></div>
+
    <label class="filelabel" for="mediaFile">＋ IMPORTER UNE IMAGE OU VIDÉO</label>
+
    <input id="mediaFile" type="file" accept="image/*,video/*">
+
    <div class="statusline" id="mediaStatus">Aucun média importé.</div>
+
    <button id="clearMediaBtn" style="width:100%;margin-top:8px">Retirer le média</button>
+
   </section>
+
  </div>
 
  <section class="panel" style="margin-top:13px">
+
   <h3>PERSONNALISER LE BANDEAU</h3>
+
   <label class="muted" for="titleInput">Titre</label>
+
   <input class="field" id="titleInput" value="MERFIL LIVE STUDIO" maxlength="60">
+
   <label class="muted" for="subtitleInput">Sous-titre</label>
+
   <input class="field" id="subtitleInput" value="Production en direct" maxlength="80">
+
   <button id="applyTitle" style="width:100%">Appliquer le bandeau</button>
+
  </section>
 
  <section class="panel" style="margin-top:13px">
+
   <div class="heading">
+
    <h2>ENREGISTREMENT LOCAL</h2>
+
    <span class="recordtime" id="recordTime">00:00</span>
+
   </div>
+
   <div class="actions">
+
    <button class="primary" id="recordBtn">● Démarrer</button>
+
    <button id="downloadBtn" disabled>Télécharger vidéo</button>
+
   </div>
+
   <div class="statusline" id="recordStatus">Active la caméra et/ou le micro avant de démarrer.</div>
+
  </section>
 
  <section class="panel" style="margin-top:13px">
+
   <h3>DIFFUSION EN DIRECT</h3>
+
   <div class="source">
+
    <div>Facebook Live<small>Connexion serveur à intégrer en phase 3</small></div>
+
    <span class="muted">À venir</span>
+
   </div>
+
   <div class="source">
+
    <div>YouTube Live<small>Connexion serveur à intégrer en phase 3</small></div>
+
    <span class="muted">À venir</span>
+
   </div>
+
   <div class="source">
+
    <div>TikTok Live<small>Selon l'accès RTMP accordé au compte</small></div>
+
    <span class="muted">À venir</span>
+
   </div>
+
   <div class="statusline">Cette version prépare le programme audio/vidéo et l'enregistrement local. Elle ne diffuse pas encore sur Internet.</div>
+
  </section>
+
 </main>
 
 <footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 3.0</footer>
 
 <video id="cameraVideo" autoplay playsinline muted style="display:none"></video>
+
 <video id="mediaVideo" playsinline muted loop style="display:none"></video>
+
 <img id="mediaImage" alt="" style="display:none">
 
 <script>
+
 "use strict";
 
 const $ = id => document.getElementById(id);
+
 const canvas = $("programCanvas");
+
 const ctx = canvas.getContext("2d");
 
 let cameraStream = null;
+
 let micStream = null;
+
 let cameraFacing = "user";
+
 let micOn = false;
+
 let audioContext = null;
+
 let analyser = null;
+
 let micSourceNode = null;
+
 let audioDestination = null;
+
 let meterFrame = 0;
+
 let recorder = null;
+
 let recordingChunks = [];
+
 let recordingUrl = null;
+
 let recordingStartedAt = 0;
+
 let recordTimer = 0;
+
 let mediaUrl = null;
+
 let currentMediaType = null;
+
 let activeScene = "camera";
+
 let showLower = false;
+
 let titleText = "MERFIL LIVE STUDIO";
+
 let subtitleText = "Production en direct";
+
 let animationFrame = 0;
 
 function setStatus(message, active=false) {
+
  $("statusText").textContent = message;
+
  $("statusDot").style.background = active ? "#ed4545" : "#929ba8";
+
 }
 
 function showError(message) {
+
  $("errorBox").textContent = message;
+
  $("errorBox").style.display = "block";
+
 }
 
 function clearError() {
+
  $("errorBox").textContent = "";
+
  $("errorBox").style.display = "none";
+
 }
 
 function friendlyError(err, device) {
+
  if (err && err.name === "NotAllowedError")
+
   return "Autorisation refusée. Dans Réglages iPhone > Safari, autorise l’accès à la caméra et au microphone pour ce site, puis recharge la page.";
+
  if (err && err.name === "NotFoundError")
+
   return device === "camera" ? "Aucune caméra compatible n’a été trouvée." : "Aucun microphone compatible n’a été trouvé.";
+
  if (err && err.name === "NotReadableError")
+
   return "Cet appareil est peut-être déjà utilisé par une autre application. Ferme les autres applications puis réessaie.";
+
  if (err && err.name === "SecurityError")
+
   return "La caméra et le micro nécessitent une page sécurisée HTTPS.";
+
  return (err && err.message) || "Une erreur inconnue est survenue.";
+
 }
 
 function drawCover(source, x, y, width, height) {
+
  const sw = source.videoWidth || source.naturalWidth || source.width;
+
  const sh = source.videoHeight || source.naturalHeight || source.height;
+
  if (!sw || !sh) return false;
+
  const scale = Math.max(width / sw, height / sh);
+
  const dw = sw * scale;
+
  const dh = sh * scale;
+
  ctx.drawImage(source, x + (width-dw)/2, y + (height-dh)/2, dw, dh);
+
  return true;
+
 }
 
 function drawProgram() {
+
  const w = canvas.width;
+
  const h = canvas.height;
+
  ctx.fillStyle = "#080a0e";
+
  ctx.fillRect(0,0,w,h);
 
  let drew = false;
 
  if (activeScene === "camera" || activeScene === "interview") {
+
   if (currentMediaType === "image" && $("mediaImage").complete)
+
    drew = drawCover($("mediaImage"),0,0,w,h);
+
   else if (currentMediaType === "video" && $("mediaVideo").readyState >= 2)
+
    drew = drawCover($("mediaVideo"),0,0,w,h);
+
   else if (cameraStream && $("cameraVideo").readyState >= 2)
+
    drew = drawCover($("cameraVideo"),0,0,w,h);
+
  }
 
  if (!drew) {
+
   ctx.fillStyle = "#111720";
+
   ctx.fillRect(0,0,w,h);
+
   ctx.textAlign = "center";
+
   ctx.fillStyle = "#f4f5f7";
+
   ctx.font = "bold 44px Arial";
+
   ctx.fillText(activeScene === "pause" ? "PAUSE" :
+
    activeScene === "welcome" ? "BIENVENUE" : "MERFIL LIVE STUDIO",w/2,h/2-8);
+
   ctx.fillStyle = "#aab3bf";
+
   ctx.font = "24px Arial";
+
   ctx.fillText("MOBILE PRODUCTION",w/2,h/2+38);
+
  }
 
  if (activeScene === "interview" || showLower) {
+
   ctx.fillStyle = "rgba(10,18,29,.92)";
+
   ctx.fillRect(45,h-125,Math.min(w-90,850),82);
+
   ctx.fillStyle = "#f4f5f7";
+
   ctx.fillRect(45,h-125,7,82);
+
   ctx.textAlign = "left";
+
   ctx.fillStyle = "#fff";
+
   ctx.font = "bold 27px Arial";
+
   ctx.fillText(activeScene === "interview" && !showLower ? "INTERVIEW" : titleText,70,h-82);
+
   ctx.fillStyle = "#c2cbd5";
+
   ctx.font = "19px Arial";
+
   ctx.fillText(activeScene === "interview" && !showLower ? "MERFIL LIVE STUDIO" : subtitleText,70,h-53);
+
  }
 
  animationFrame = requestAnimationFrame(drawProgram);
+
 }
 
 function startRenderer() {
+
  if (!animationFrame) drawProgram();
+
 }
 
 async function startCamera() {
+
  clearError();
 
  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+
   showError("Caméra indisponible : ouvre le site avec son adresse HTTPS dans Safari.");
+
   return;
+
  }
 
  try {
+
   if (cameraStream) stopCamera();
 
   cameraStream = await navigator.mediaDevices.getUserMedia({
+
    video: {
+
     facingMode: cameraFacing,
+
     width: {ideal:1280},
+
     height: {ideal:720}
+
    },
+
    audio: false
+
   });
 
   $("cameraVideo").srcObject = cameraStream;
+
   await $("cameraVideo").play();
 
   $("cameraStatus").textContent = "Connectée";
+
   $("cameraBtn").textContent = "Caméra activée";
+
   $("cameraSourceBtn").textContent = "Activée";
 
   activeScene = "camera";
+
   updateSceneButtons();
+
   $("sceneTag").textContent = "CAMÉRA ACTIVE";
 
   startRenderer();
+
   setStatus("CAMÉRA ACTIVE",true);
 
  } catch(err) {
+
   cameraStream = null;
+
   showError(friendlyError(err,"camera"));
+
   $("cameraStatus").textContent = "Erreur";
+
   setStatus("CAMÉRA INDISPONIBLE");
+
  }
+
 }
 
 function stopCamera() {
+
  if (cameraStream) cameraStream.getTracks().forEach(track => track.stop());
+
  cameraStream = null;
+
  $("cameraVideo").srcObject = null;
+
  $("cameraStatus").textContent = "Non connectée";
+
  $("cameraBtn").textContent = "Activer caméra";
+
  $("cameraSourceBtn").textContent = "Activer";
+
 }
 
 async function flipCamera() {
+
  if (!cameraStream) {
+
   showError("Active d’abord la caméra pour changer d’objectif.");
+
   return;
+
  }
+
  cameraFacing = cameraFacing === "user" ? "environment" : "user";
+
  await startCamera();
+
 }
 
 async function ensureAudioContext() {
+
  const AudioCtx = window.AudioContext || window.webkitAudioContext;
 
  if (!AudioCtx) throw new Error("L’audio avancé n’est pas pris en charge par ce navigateur.");
 
  if (!audioContext) {
+
   audioContext = new AudioCtx();
+
   audioDestination = audioContext.createMediaStreamDestination();
+
   analyser = audioContext.createAnalyser();
+
   analyser.fftSize = 256;
+
   analyser.connect(audioDestination);
+
  }
 
  if (audioContext.state === "suspended") await audioContext.resume();
+
 }
 
 async function startMic() {
+
  clearError();
 
  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+
   showError("Microphone indisponible : utilise une page HTTPS.");
+
   return;
+
  }
 
  try {
+
   await ensureAudioContext();
 
   if (!micStream) {
+
    micStream = await navigator.mediaDevices.getUserMedia({
+
     audio:{
+
      echoCancellation:true,
+
      noiseSuppression:true,
+
      autoGainControl:true
+
     },
+
     video:false
+
    });
 
    micSourceNode = audioContext.createMediaStreamSource(micStream);
+
    micSourceNode.connect(analyser);
+
   }
 
   micOn = true;
+
   micStream.getAudioTracks().forEach(track => track.enabled = true);
 
   $("micStatus").textContent = "Connecté";
+
   $("micBtn").textContent = "Couper micro";
+
   $("micSourceBtn").textContent = "Activé";
 
   setStatus(cameraStream ? "CAMÉRA & MICRO ACTIFS" : "MICRO ACTIF",true);
+
   startMeter();
 
  } catch(err) {
+
   showError(friendlyError(err,"mic"));
+
   $("micStatus").textContent = "Erreur";
+
  }
+
 }
 
 function stopMic() {
+
  if (micStream) micStream.getTracks().forEach(track => track.stop());
+
  micStream = null;
+
  micOn = false;
 
  if (micSourceNode) {
+
   try { micSourceNode.disconnect(); } catch(e) {}
+
  }
+
  micSourceNode = null;
 
  $("micStatus").textContent = "Non connecté";
+
  $("micBtn").textContent = "Activer micro";
+
  $("micSourceBtn").textContent = "Activer";
+
  $("meterFill").style.width = "0%";
+
  $("audioValue").textContent = "0%";
+
 }
 
 async function toggleMic() {
+
  if (micOn) {
+
   micOn = false;
+
   if (micStream) micStream.getAudioTracks().forEach(track => track.enabled = false);
+
   $("micStatus").textContent = "Muet";
+
   $("micBtn").textContent = "Activer micro";
+
   $("micSourceBtn").textContent = "Muet";
+
   $("meterFill").style.width = "0%";
+
   $("audioValue").textContent = "0%";
+
  } else {
+
   await startMic();
+
  }
+
 }
 
 function startMeter() {
+
  if (!analyser || meterFrame) return;
 
  const data = new Uint8Array(analyser.frequencyBinCount);
 
  const tick = () => {
+
   if (!analyser) {
+
    meterFrame = 0;
+
    return;
+
   }
 
   analyser.getByteTimeDomainData(data);
+
   let sum = 0;
 
   for (const value of data) {
+
    const n = (value-128)/128;
+
    sum += n*n;
+
   }
 
   const rms = Math.sqrt(sum/data.length);
+
   const level = micOn ? Math.min(100,Math.round(rms*260)) : 0;
 
   $("meterFill").style.width = level + "%";
+
   $("audioValue").textContent = level + "%";
 
   meterFrame = requestAnimationFrame(tick);
+
  };
 
  tick();
+
 }
 
 function stopAllSources() {
+
  if (recorder && recorder.state === "recording") {
+
   showError("Arrête d’abord l’enregistrement.");
+
   return;
+
  }
 
  stopCamera();
+
  stopMic();
 
  if (audioContext) {
+
   audioContext.close().catch(()=>{});
+
   audioContext = null;
+
   analyser = null;
+
   audioDestination = null;
+
  }
 
  if (meterFrame) cancelAnimationFrame(meterFrame);
+
  meterFrame = 0;
 
  setStatus("STUDIO PRÊT");
+
 }
 
 function updateSceneButtons() {
+
  document.querySelectorAll(".scene").forEach(button => {
+
   button.classList.toggle("selected",button.dataset.scene === activeScene);
+
  });
 
  const names = {
+
   camera:"Caméra",
+
   welcome:"Accueil",
+
   interview:"Interview",
+
   pause:"Pause"
+
  };
 
  $("sceneStatus").textContent = "Scène active : " + names[activeScene];
+
  $("sceneTag").textContent = names[activeScene].toUpperCase();
+
 }
 
 function setScene(name) {
+
  activeScene = name;
+
  updateSceneButtons();
 
  if (name === "welcome" || name === "pause") showLower = false;
 
  startRenderer();
+
 }
 
 function toggleLower() {
+
  showLower = !showLower;
+
  $("lowerBtn").textContent = showLower ? "Masquer le bandeau" : "Bandeau titre";
+
 }
 
 function applyTitle() {
+
  titleText = $("titleInput").value.trim() || "MERFIL LIVE STUDIO";
+
  subtitleText = $("subtitleInput").value.trim();
+
  showLower = true;
+
  startRenderer();
+
 }
 
 function clearMedia() {
+
  if ($("mediaVideo").src) {
+
   $("mediaVideo").pause();
+
   $("mediaVideo").removeAttribute("src");
+
   $("mediaVideo").load();
+
  }
 
  $("mediaImage").removeAttribute("src");
@@ -548,190 +937,291 @@ function clearMedia() {
  if (mediaUrl) URL.revokeObjectURL(mediaUrl);
 
  mediaUrl = null;
+
  currentMediaType = null;
 
  $("mediaStatus").textContent = "Aucun média importé.";
+
  $("mediaFile").value = "";
+
 }
 
 function importMedia(file) {
+
  if (!file) return;
+
  clearError();
 
  if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+
   showError("Format non pris en charge. Choisis une image ou une vidéo.");
+
   return;
+
  }
 
  clearMedia();
+
  mediaUrl = URL.createObjectURL(file);
 
  if (file.type.startsWith("image/")) {
+
   currentMediaType = "image";
+
   $("mediaImage").src = mediaUrl;
+
  } else {
+
   currentMediaType = "video";
+
   $("mediaVideo").src = mediaUrl;
+
   $("mediaVideo").muted = true;
+
   $("mediaVideo").play().catch(()=>{
+
    $("mediaStatus").textContent = "Vidéo chargée. Appuie sur l’écran si la lecture est bloquée.";
+
   });
+
  }
 
  activeScene = "camera";
+
  updateSceneButtons();
+
  $("mediaStatus").textContent = "Média chargé : " + file.name;
+
  startRenderer();
+
 }
 
 function supportedMimeType() {
+
  if (!window.MediaRecorder) return "";
 
  const types = [
+
   "video/mp4;codecs=h264,aac",
+
   "video/mp4",
+
   "video/webm;codecs=vp8,opus",
+
   "video/webm"
+
  ];
 
  return types.find(type => MediaRecorder.isTypeSupported(type)) || "";
+
 }
 
 async function startRecording() {
+
  clearError();
 
  try {
+
   if (!cameraStream && !micStream)
+
    throw new Error("Active au moins la caméra ou le microphone avant d’enregistrer.");
 
   if (!window.MediaRecorder)
+
    throw new Error("MediaRecorder n’est pas pris en charge par ce navigateur.");
 
   startRenderer();
 
   const videoStream = canvas.captureStream(30);
+
   const tracks = [...videoStream.getVideoTracks()];
 
   if (micStream && micOn) {
+
    await ensureAudioContext();
+
    tracks.push(...audioDestination.stream.getAudioTracks());
+
   }
 
   const outputStream = new MediaStream(tracks);
+
   const mime = supportedMimeType();
 
   recorder = new MediaRecorder(outputStream,mime ? {mimeType:mime} : undefined);
+
   recordingChunks = [];
 
   recorder.ondataavailable = event => {
+
    if (event.data && event.data.size) recordingChunks.push(event.data);
+
   };
 
   recorder.onstop = () => {
+
    const type = recorder.mimeType || "video/webm";
+
    const blob = new Blob(recordingChunks,{type});
 
    if (recordingUrl) URL.revokeObjectURL(recordingUrl);
 
    recordingUrl = URL.createObjectURL(blob);
+
    $("downloadBtn").disabled = false;
+
    $("recordStatus").textContent = "Enregistrement terminé. Vidéo prête à télécharger.";
 
    tracks.forEach(track => {
+
     if (track.kind === "video") track.stop();
+
    });
+
   };
 
   recorder.onerror = () => showError("Une erreur est survenue pendant l’enregistrement.");
 
   recorder.start(1000);
+
   recordingStartedAt = Date.now();
 
   $("recordBtn").textContent = "■ Arrêter l’enregistrement";
+
   $("recordBtn").classList.add("red");
+
   $("recordStatus").textContent = "Enregistrement du programme en cours…";
+
   $("downloadBtn").disabled = true;
 
   setStatus("ENREGISTREMENT",true);
 
   recordTimer = setInterval(() => {
+
    const seconds = Math.floor((Date.now()-recordingStartedAt)/1000);
+
    $("recordTime").textContent =
+
     String(Math.floor(seconds/60)).padStart(2,"0") + ":" +
+
     String(seconds%60).padStart(2,"0");
+
   },500);
 
  } catch(err) {
+
   showError(err.message || "Impossible de démarrer l’enregistrement.");
+
  }
+
 }
 
 function stopRecording() {
+
  if (!recorder || recorder.state !== "recording") return;
 
  recorder.stop();
+
  clearInterval(recordTimer);
 
  $("recordBtn").textContent = "● Démarrer";
+
  $("recordBtn").classList.remove("red");
 
  setStatus("STUDIO PRÊT");
+
 }
 
 function downloadRecording() {
+
  if (!recordingUrl) return;
 
  const type = recorder && recorder.mimeType ? recorder.mimeType : "";
+
  const ext = type.includes("mp4") ? "mp4" : "webm";
 
  const link = document.createElement("a");
+
  link.href = recordingUrl;
+
  link.download = "MERFIL-LIVE-STUDIO-" +
+
   new Date().toISOString().slice(0,10) + "." + ext;
 
  document.body.appendChild(link);
+
  link.click();
+
  link.remove();
+
 }
 
 function updateClock() {
+
  $("clock").textContent = new Date().toLocaleTimeString("fr-FR",{hour12:false});
+
 }
 
 $("cameraBtn").addEventListener("click",startCamera);
+
 $("cameraSourceBtn").addEventListener("click",startCamera);
+
 $("flipBtn").addEventListener("click",flipCamera);
+
 $("micBtn").addEventListener("click",toggleMic);
+
 $("micSourceBtn").addEventListener("click",toggleMic);
+
 $("stopBtn").addEventListener("click",stopAllSources);
+
 $("lowerBtn").addEventListener("click",toggleLower);
+
 $("applyTitle").addEventListener("click",applyTitle);
+
 $("mediaFile").addEventListener("change",event=>{
+
  importMedia(event.target.files && event.target.files[0]);
+
 });
+
 $("clearMediaBtn").addEventListener("click",clearMedia);
 
 $("recordBtn").addEventListener("click",()=>{
+
  if (recorder && recorder.state === "recording") stopRecording();
+
  else startRecording();
+
 });
 
 $("downloadBtn").addEventListener("click",downloadRecording);
 
 document.querySelectorAll(".scene").forEach(button=>{
+
  button.addEventListener("click",()=>setScene(button.dataset.scene));
+
 });
 
 window.addEventListener("beforeunload",()=>{
+
  if (cameraStream) cameraStream.getTracks().forEach(track=>track.stop());
+
  if (micStream) micStream.getTracks().forEach(track=>track.stop());
+
  if (recordingUrl) URL.revokeObjectURL(recordingUrl);
+
  if (mediaUrl) URL.revokeObjectURL(mediaUrl);
+
 });
 
 updateClock();
+
 setInterval(updateClock,1000);
+
 startRenderer();
+
 </script>
+
 </body>
+
 </html>
