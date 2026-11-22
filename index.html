@@ -26,9 +26,7 @@ button,input,select{font:inherit}
 
 button,select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:7px;padding:9px;cursor:pointer}
 
-button:disabled{opacity:.4;cursor:not-allowed}
-
-button:active{filter:brightness(1.25)}
+button:disabled{opacity:.4}
 
 .top{position:sticky;top:0;z-index:20;background:#15191f;border-bottom:1px solid var(--line);padding:12px;display:flex;justify-content:space-between;align-items:center}
 
@@ -178,7 +176,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <div class="logo">MLS</div>
 
-  <div><div class="brandname">MERFIL LIVE STUDIO</div><div class="sub">MOBILE PRODUCTION · V5 STUDIO</div></div>
+  <div><div class="brandname">MERFIL LIVE STUDIO</div><div class="sub">MOBILE PRODUCTION · V6 STUDIO</div></div>
 
  </div>
 
@@ -206,7 +204,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="toolbar">
 
-    <button class="blue" id="previewBtn">Préparer cette scène</button>
+    <button class="blue" id="previewBtn">Actualiser Preview</button>
 
     <button class="primary" id="takeBtn">TAKE → PROGRAM</button>
 
@@ -278,13 +276,35 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
  </section>
 
+ <section class="panel" style="margin-top:12px">
+
+  <h3>GESTION DES CAMÉRAS</h3>
+
+  <label class="label">Caméra disponible sur cet appareil</label>
+
+  <select id="cameraDevice" class="field">
+
+   <option value="">Caméra par défaut</option>
+
+  </select>
+
+  <div class="rowbuttons">
+
+   <button id="cameraBtn" class="blue">Autoriser les caméras</button>
+
+   <button id="addCameraBtn" class="primary">＋ Ajouter cette caméra</button>
+
+   <button id="refreshCamerasBtn">Actualiser la liste</button>
+
+  </div>
+
+  <div class="hint">Chaque ajout crée une source caméra indépendante avec son propre flux. Le nombre de caméras utilisables simultanément dépend du téléphone et du navigateur.</div>
+
+  <div class="statusline" id="cameraStatus">Aucune caméra source ajoutée.</div>
+
+ </section>
+
  <div class="toolbar">
-
-  <button class="primary" id="cameraBtn">Activer caméra</button>
-
-  <button id="flipBtn">Avant / arrière</button>
-
-  <button id="addCameraBtn">＋ Source caméra</button>
 
   <button id="addTextBtn">＋ Texte</button>
 
@@ -332,7 +352,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="source-list" id="sourceList" style="margin-top:10px"></div>
 
-   <div class="hint">Sélectionne une source et déplace-la dans le moniteur Preview. La poignée permet de la redimensionner.</div>
+   <div class="hint">Sélectionne une source et déplace-la dans Preview. La poignée en bas à droite permet de la redimensionner.</div>
 
   </section>
 
@@ -394,7 +414,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
     <div class="meter"><span id="phoneMeter"></span></div>
 
-    <div class="hint">Contrôle le son des vidéos lues dans la régie. Le navigateur ne capture pas librement le son des autres applications du téléphone.</div>
+    <div class="hint">Contrôle le son des vidéos de la régie. Le navigateur ne capture pas le son des autres applications du téléphone.</div>
 
    </div>
 
@@ -428,7 +448,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   </div>
 
-  <div class="statusline" id="recordStatus">L'enregistrement capture le moniteur PROGRAM et le mixage audio disponible.</div>
+  <div class="statusline" id="recordStatus">Capture du moniteur PROGRAM et du mixage audio disponible.</div>
 
  </section>
 
@@ -436,19 +456,17 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <h3>DIFFUSION EN DIRECT</h3>
 
-  <div class="statusline">La diffusion Facebook, YouTube et TikTok nécessitera un serveur de streaming et une intégration dédiée. Elle n'est pas encore activée dans cette version.</div>
+  <div class="statusline">La diffusion Facebook, YouTube et TikTok nécessitera un serveur de streaming et une intégration dédiée. Elle n'est pas encore activée.</div>
 
  </section>
 
 </main>
 
-<footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 5.0 STUDIO</footer>
+<footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 6.0</footer>
 
 <input id="imageFile" type="file" accept="image/*" hidden>
 
 <input id="videoFile" type="file" accept="video/*" hidden>
-
-<video id="cameraVideo" autoplay playsinline muted style="display:none"></video>
 
 <script>
 
@@ -460,13 +478,11 @@ const preview=$("previewCanvas"),pctx=preview.getContext("2d");
 
 const program=$("programCanvas"),gctx=program.getContext("2d");
 
-let scenes=[],previewSceneId=null,programSceneId=null;
-
-let programSnapshot=null;
+let scenes=[],previewSceneId=null,programSceneId=null,programSnapshot=null;
 
 let selectedSourceId=null,sourceCounter=0,sceneCounter=0;
 
-let cameraStream=null,cameraFacing="user";
+let cameraSources=new Map(),cameraCounter=0;
 
 let mediaObjects=new Map(),mediaAudioNodes=new Map();
 
@@ -476,9 +492,7 @@ let recording=null,recordChunks=[],recordUrl=null;
 
 let drag=null,phoneEnabled=true,selectedTransition="cut";
 
-let transitionState=null,programBlack=false;
-
-let lastMultiUpdate=0;
+let transitionState=null,programBlack=false,lastMultiUpdate=0;
 
 const uid=()=>"src"+(++sourceCounter);
 
@@ -492,23 +506,13 @@ const selected=()=>previewScene()?.sources.find(s=>s.id===selectedSourceId);
 
 function snapshotScene(sc){
 
- return sc?{
-
-  id:sc.id,
-
-  name:sc.name,
-
-  sources:sc.sources.map(s=>({...s}))
-
- }:null;
+ return sc?{id:sc.id,name:sc.name,sources:sc.sources.map(s=>({...s}))}:null;
 
 }
 
 function err(msg){
 
- $("errorBox").textContent=msg;
-
- $("errorBox").style.display="block";
+ $("errorBox").textContent=msg;$("errorBox").style.display="block";
 
 }
 
@@ -522,11 +526,7 @@ function status(t,on=false){
 
 }
 
-function makeScene(name){
-
- return{id:"scene"+(++sceneCounter),name,sources:[]};
-
-}
+function makeScene(name){return{id:"scene"+(++sceneCounter),name,sources:[]}}
 
 function escapeHtml(s){
 
@@ -554,9 +554,7 @@ function addSource(type,extra={}){
 
  };
 
- sc.sources.push(src);
-
- selectedSourceId=src.id;
+ sc.sources.push(src);selectedSourceId=src.id;
 
  renderLists();renderProps();renderAll();
 
@@ -572,9 +570,7 @@ function renderLists(){
 
   wrap.className="scene-item"+(sc.id===previewSceneId?" active":"");
 
-  const b=document.createElement("button");
-
-  b.className="scene-pick";
+  const b=document.createElement("button");b.className="scene-pick";
 
   const labels=[];
 
@@ -600,31 +596,21 @@ function renderLists(){
 
   wrap.className="source-item"+(src.id===selectedSourceId?" active":"");
 
-  const b=document.createElement("button");
-
-  b.className="source-pick";
+  const b=document.createElement("button");b.className="source-pick";
 
   b.innerHTML=(src.visible?"◉ ":"○ ")+escapeHtml(src.name)+"<small>"+src.type.toUpperCase()+"</small>";
 
   b.onclick=()=>{selectedSourceId=src.id;renderLists();renderProps();renderAll()};
 
-  const vis=document.createElement("button");
-
-  vis.className="mini";vis.textContent=src.visible?"Masquer":"Afficher";
+  const vis=document.createElement("button");vis.className="mini";vis.textContent=src.visible?"Masquer":"Afficher";
 
   vis.onclick=()=>{src.visible=!src.visible;renderLists();renderAll()};
 
-  const up=document.createElement("button");
+  const up=document.createElement("button");up.className="mini";up.textContent="↑";up.onclick=()=>moveLayer(src.id,-1);
 
-  up.className="mini";up.textContent="↑";up.onclick=()=>moveLayer(src.id,-1);
+  const down=document.createElement("button");down.className="mini";down.textContent="↓";down.onclick=()=>moveLayer(src.id,1);
 
-  const down=document.createElement("button");
-
-  down.className="mini";down.textContent="↓";down.onclick=()=>moveLayer(src.id,1);
-
-  const del=document.createElement("button");
-
-  del.className="mini danger";del.textContent="×";del.onclick=()=>removeSource(src.id);
+  const del=document.createElement("button");del.className="mini danger";del.textContent="×";del.onclick=()=>removeSource(src.id);
 
   wrap.append(b,vis,up,down,del);$("sourceList").append(wrap);
 
@@ -635,6 +621,8 @@ function renderLists(){
  $("previewStatus").textContent="Preview : "+(sc?.name||"aucune scène");
 
  $("programStatus").textContent="Programme : "+(programScene()?.name||"aucune scène")+(programBlack?" · NOIR":"");
+
+ updateCameraStatus();
 
 }
 
@@ -690,33 +678,53 @@ function isMediaUsed(key){
 
  if(!key)return false;
 
- if(programSnapshot?.sources.some(s=>s.mediaKey===key))return true;
+ if(programSnapshot?.sources.some(s=>s.mediaKey===key||s.cameraKey===key))return true;
 
- return scenes.some(sc=>sc.sources.some(s=>s.mediaKey===key));
+ return scenes.some(sc=>sc.sources.some(s=>s.mediaKey===key||s.cameraKey===key));
 
 }
 
 function cleanupMedia(s){
 
- if(!s?.mediaKey||isMediaUsed(s.mediaKey))return;
+ if(!s)return;
 
- const key=s.mediaKey;
+ if(s.mediaKey&&!isMediaUsed(s.mediaKey)){
 
- const node=mediaAudioNodes.get(key);
+  const key=s.mediaKey,node=mediaAudioNodes.get(key);
 
- if(node){
+  if(node){
 
-  try{node.source.disconnect();node.gain.disconnect()}catch(e){}
+   try{node.source.disconnect();node.gain.disconnect()}catch(e){}
 
-  mediaAudioNodes.delete(key);
+   mediaAudioNodes.delete(key);
+
+  }
+
+  const el=mediaObjects.get(key);
+
+  if(el){el.pause?.();el.remove?.();mediaObjects.delete(key)}
+
+  if(s.url)URL.revokeObjectURL(s.url);
 
  }
 
- const el=mediaObjects.get(key);
+ if(s.cameraKey&&!isMediaUsed(s.cameraKey)){
 
- if(el){el.pause?.();el.remove?.();mediaObjects.delete(key)}
+  const cam=cameraSources.get(s.cameraKey);
 
- if(s.url)URL.revokeObjectURL(s.url);
+  if(cam){
+
+   cam.stream.getTracks().forEach(t=>t.stop());
+
+   cam.video.srcObject=null;
+
+   cameraSources.delete(s.cameraKey);
+
+  }
+
+ }
+
+ updateCameraStatus();
 
 }
 
@@ -728,9 +736,9 @@ function removeSource(id){
 
  const [s]=sc.sources.splice(i,1);
 
- cleanupMedia(s);
+ cleanupMedia(s);selectedSourceId=null;
 
- selectedSourceId=null;renderLists();renderProps();renderAll();
+ renderLists();renderProps();renderAll();
 
 }
 
@@ -806,7 +814,9 @@ function renderScene(c,sc,highlight=false){
 
   }else if(s.type==="camera"){
 
-   if(cameraStream&&$("cameraVideo").readyState>=2)cover(c,$("cameraVideo"),s.x,s.y,s.w,s.h);
+   const cam=cameraSources.get(s.cameraKey);
+
+   if(cam&&cam.video.readyState>=2)cover(c,cam.video,s.x,s.y,s.w,s.h);
 
    else placeholder(c,s);
 
@@ -842,23 +852,15 @@ function renderAll(){
 
  if(!transitionState){
 
-  if(programBlack){
+  if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
 
-   gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
-
-  }else{
-
-   renderScene(gctx,programScene(),false);
-
-  }
+  else renderScene(gctx,programScene(),false);
 
  }
 
  updateMultiview();
 
 }
-
-/* Boucle de rendu : Preview et Program sont actualisés indépendamment. */
 
 function animate(){
 
@@ -874,25 +876,19 @@ function animate(){
 
    gctx.globalAlpha=1-t;gctx.drawImage(st.from,0,0);
 
-   gctx.globalAlpha=t;gctx.drawImage(st.to,0,0);
-
-   gctx.globalAlpha=1;
+   gctx.globalAlpha=t;gctx.drawImage(st.to,0,0);gctx.globalAlpha=1;
 
   }else if(st.type==="dip"){
 
    if(t<.5){
 
-    gctx.globalAlpha=1-t*2;gctx.drawImage(st.from,0,0);
-
-    gctx.globalAlpha=1;
+    gctx.globalAlpha=1-t*2;gctx.drawImage(st.from,0,0);gctx.globalAlpha=1;
 
    }else{
 
     gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
 
-    gctx.globalAlpha=(t-.5)*2;gctx.drawImage(st.to,0,0);
-
-    gctx.globalAlpha=1;
+    gctx.globalAlpha=(t-.5)*2;gctx.drawImage(st.to,0,0);gctx.globalAlpha=1;
 
    }
 
@@ -914,11 +910,7 @@ function animate(){
 
   gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
 
- }else{
-
-  renderScene(gctx,programScene(),false);
-
- }
+ }else renderScene(gctx,programScene(),false);
 
  updateMultiview();
 
@@ -928,9 +920,7 @@ function animate(){
 
 function updateMultiview(){
 
- const now=performance.now();
-
- if(now-lastMultiUpdate<500)return;
+ const now=performance.now();if(now-lastMultiUpdate<500)return;
 
  lastMultiUpdate=now;
 
@@ -946,9 +936,7 @@ function updateMultiview(){
 
   scenes.forEach(sc=>{
 
-   const card=document.createElement("div");
-
-   card.className="multi-card";card.dataset.id=sc.id;
+   const card=document.createElement("div");card.className="multi-card";card.dataset.id=sc.id;
 
    const c=document.createElement("canvas");c.width=640;c.height=360;
 
@@ -976,11 +964,11 @@ function updateMultiview(){
 
   const c=card.querySelector("canvas"),cx=c.getContext("2d");
 
-  cx.clearRect(0,0,c.width,c.height);
+  cx.clearRect(0,0,c.width,c.height);cx.save();cx.scale(.5,.5);
 
-  cx.save();cx.scale(.5,.5);renderScene(cx,sc,false);cx.restore();
+  renderScene(cx,sc,false);cx.restore();
 
-  const name=card.querySelector("b");name.textContent=sc.name;
+  card.querySelector("b").textContent=sc.name;
 
   const info=card.querySelector(".multi-info");
 
@@ -988,17 +976,13 @@ function updateMultiview(){
 
   if(sc.id===previewSceneId){
 
-   const b=document.createElement("span");b.className="badge pvw";b.textContent="PVW";
-
-   info.insertBefore(b,info.lastChild);
+   const b=document.createElement("span");b.className="badge pvw";b.textContent="PVW";info.insertBefore(b,info.lastChild);
 
   }
 
   if(sc.id===programSceneId){
 
-   const b=document.createElement("span");b.className="badge pgm";b.textContent="PGM";
-
-   info.insertBefore(b,info.lastChild);
+   const b=document.createElement("span");b.className="badge pgm";b.textContent="PGM";info.insertBefore(b,info.lastChild);
 
   }
 
@@ -1028,11 +1012,7 @@ preview.addEventListener("pointerdown",e=>{
 
  }
 
- if(!hit){
-
-  selectedSourceId=null;renderLists();renderProps();renderAll();return;
-
- }
+ if(!hit){selectedSourceId=null;renderLists();renderProps();renderAll();return}
 
  selectedSourceId=hit.id;
 
@@ -1058,9 +1038,7 @@ preview.addEventListener("pointermove",e=>{
 
  }else{
 
-  s.x=drag.x+p.x-drag.start.x;
-
-  s.y=drag.y+p.y-drag.start.y;
+  s.x=drag.x+p.x-drag.start.x;s.y=drag.y+p.y-drag.start.y;
 
  }
 
@@ -1076,7 +1054,7 @@ preview.addEventListener("pointerup",()=>{if(drag){drag=null;renderProps();rende
 
 preview.addEventListener("pointercancel",()=>drag=null);
 
-/* TAKE et AUTO appliquent une copie de la scène Preview au Program. */
+/* PROGRAM indépendant du PREVIEW */
 
 function takeScene(type){
 
@@ -1090,69 +1068,31 @@ function takeScene(type){
 
  if(type==="cut"||selectedTransition==="cut"){
 
-  programSceneId=target.id;
+  programSceneId=target.id;programSnapshot=nextSnapshot;programBlack=false;
 
-  programSnapshot=nextSnapshot;
+  transitionState=null;renderScene(gctx,programScene(),false);
 
-  programBlack=false;
-
-  transitionState=null;
-
-  renderScene(gctx,programScene(),false);
-
-  $("programStatus").textContent="Programme : "+target.name;
-
-  renderLists();
-
-  return;
+  $("programStatus").textContent="Programme : "+target.name;renderLists();return;
 
  }
 
- const from=document.createElement("canvas");
+ const from=document.createElement("canvas"),to=document.createElement("canvas");
 
- const to=document.createElement("canvas");
+ from.width=to.width=1280;from.height=to.height=720;
 
- from.width=to.width=1280;
+ const fc=from.getContext("2d"),tc=to.getContext("2d");
 
- from.height=to.height=720;
+ if(programBlack){fc.fillStyle="#000";fc.fillRect(0,0,1280,720)}
 
- const fc=from.getContext("2d");
-
- const tc=to.getContext("2d");
-
- if(programBlack){
-
-  fc.fillStyle="#000";fc.fillRect(0,0,1280,720);
-
- }else{
-
-  renderScene(fc,programScene(),false);
-
- }
+ else renderScene(fc,programScene(),false);
 
  renderScene(tc,nextSnapshot,false);
 
- programSceneId=target.id;
+ programSceneId=target.id;programSnapshot=nextSnapshot;programBlack=false;
 
- programSnapshot=nextSnapshot;
+ transitionState={from,to,type:selectedTransition,start:performance.now(),duration:+$("transitionDuration").value};
 
- programBlack=false;
-
- transitionState={
-
-  from,to,
-
-  type:selectedTransition,
-
-  start:performance.now(),
-
-  duration:+$("transitionDuration").value
-
- };
-
- $("programStatus").textContent="Transition en cours vers : "+target.name;
-
- renderLists();
+ $("programStatus").textContent="Transition en cours vers : "+target.name;renderLists();
 
 }
 
@@ -1166,11 +1106,11 @@ function setTransition(type){
 
 }
 
+/* SCÈNES */
+
 function newScene(){
 
- const sc=makeScene("Scène "+(scenes.length+1));
-
- scenes.push(sc);selectPreview(sc.id);renderAll();
+ const sc=makeScene("Scène "+(scenes.length+1));scenes.push(sc);selectPreview(sc.id);renderAll();
 
 }
 
@@ -1200,17 +1140,15 @@ function deleteScene(){
 
  if(scenes.length<=1){err("Il faut conserver au moins une scène.");return}
 
- const i=scenes.findIndex(s=>s.id===previewSceneId);
-
- if(i<0)return;
+ const i=scenes.findIndex(s=>s.id===previewSceneId);if(i<0)return;
 
  const [removed]=scenes.splice(i,1);
 
  if(removed.id===programSceneId){
 
-  programSceneId=scenes[Math.max(0,i-1)].id;
+  const fallback=scenes[Math.max(0,i-1)];
 
-  programSnapshot=snapshotScene(sceneById(programSceneId));
+  programSceneId=fallback.id;programSnapshot=snapshotScene(fallback);
 
   renderScene(gctx,programScene(),false);
 
@@ -1218,13 +1156,43 @@ function deleteScene(){
 
  removed.sources.forEach(cleanupMedia);
 
- selectPreview(scenes[Math.max(0,i-1)].id);
-
- renderLists();renderAll();
+ selectPreview(scenes[Math.max(0,i-1)].id);renderLists();renderAll();
 
 }
 
-async function startCamera(){
+/* CAMÉRAS INDÉPENDANTES */
+
+async function refreshCameras(){
+
+ if(!navigator.mediaDevices?.enumerateDevices){err("La liste des caméras n'est pas disponible dans ce navigateur.");return}
+
+ try{
+
+  const devices=await navigator.mediaDevices.enumerateDevices();
+
+  const cams=devices.filter(d=>d.kind==="videoinput");
+
+  const sel=$("cameraDevice"),old=sel.value;
+
+  sel.innerHTML='<option value="">Caméra par défaut</option>';
+
+  cams.forEach((d,i)=>{
+
+   const o=document.createElement("option");
+
+   o.value=d.deviceId;o.textContent=d.label||"Caméra "+(i+1);sel.append(o);
+
+  });
+
+  if([...sel.options].some(o=>o.value===old))sel.value=old;
+
+  $("cameraStatus").textContent=cams.length+" caméra(s) détectée(s).";
+
+ }catch(e){err("Impossible de lire les caméras : "+e.message)}
+
+}
+
+async function authorizeCameras(){
 
  clearErr();
 
@@ -1232,39 +1200,91 @@ async function startCamera(){
 
   if(!navigator.mediaDevices?.getUserMedia)throw Error("Caméra indisponible. Ouvre le site en HTTPS dans Safari.");
 
-  if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());
+  const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
 
-  cameraStream=await navigator.mediaDevices.getUserMedia({
+  stream.getTracks().forEach(t=>t.stop());
 
-   video:{facingMode:cameraFacing,width:{ideal:1280},height:{ideal:720}},
+  await refreshCameras();
 
-   audio:false
+  status("CAMÉRAS AUTORISÉES",true);
 
-  });
-
-  $("cameraVideo").srcObject=cameraStream;
-
-  await $("cameraVideo").play();
-
-  $("cameraBtn").textContent="Caméra activée";
-
-  status("CAMÉRA ACTIVE",true);
-
-  if(!previewScene().sources.some(s=>s.type==="camera"))addSource("camera");
-
-  renderAll();
-
- }catch(e){err(e.message||"Impossible d'activer la caméra.")}
+ }catch(e){err(e.message||"Autorisation caméra refusée.")}
 
 }
 
-async function flipCamera(){
+async function addCameraSource(){
 
- cameraFacing=cameraFacing==="user"?"environment":"user";
+ clearErr();
 
- await startCamera();
+ try{
+
+  if(!navigator.mediaDevices?.getUserMedia)throw Error("Caméra indisponible. Utilise une connexion HTTPS.");
+
+  const deviceId=$("cameraDevice").value;
+
+  const videoConstraints=deviceId?{deviceId:{exact:deviceId},width:{ideal:1280},height:{ideal:720}}:{facingMode:"environment",width:{ideal:1280},height:{ideal:720}};
+
+  const stream=await navigator.mediaDevices.getUserMedia({video:videoConstraints,audio:false});
+
+  const video=document.createElement("video");
+
+  video.autoplay=true;video.playsInline=true;video.muted=true;video.srcObject=stream;
+
+  await video.play();
+
+  const key="camera"+(++cameraCounter);
+
+  cameraSources.set(key,{stream,video,deviceId});
+
+  const n=cameraSources.size;
+
+  addSource("camera",{name:"Caméra "+n,cameraKey:key,x:100,y:80,w:900,h:506});
+
+  await refreshCameras();
+
+  $("cameraStatus").textContent=cameraSources.size+" source(s) caméra active(s).";
+
+  status("CAMÉRA AJOUTÉE",true);
+
+ }catch(e){
+
+  let message=e.message||"Impossible d'ajouter cette caméra.";
+
+  if(e.name==="NotReadableError")message="Cette caméra est déjà utilisée ou indisponible. Essaie une autre caméra.";
+
+  if(e.name==="OverconstrainedError")message="Cette caméra ne peut pas répondre aux paramètres demandés.";
+
+  err(message);
+
+ }
 
 }
+
+function updateCameraStatus(){
+
+ const count=cameraSources.size;
+
+ $("cameraStatus").textContent=count?count+" source(s) caméra active(s).":"Aucune caméra source active.";
+
+}
+
+function stopAll(){
+
+ if(recording?.state==="recording"){err("Arrête d'abord l'enregistrement.");return}
+
+ cameraSources.forEach(cam=>cam.stream.getTracks().forEach(t=>t.stop()));
+
+ cameraSources.clear();
+
+ ["mic","aux"].forEach(stopInput);
+
+ $("cameraStatus").textContent="Toutes les caméras sont arrêtées.";
+
+ status("STUDIO PRÊT");renderAll();renderLists();
+
+}
+
+/* MÉDIAS */
 
 function addMedia(file,type){
 
@@ -1276,21 +1296,15 @@ function addMedia(file,type){
 
  if(type==="image"){
 
-  el=new Image();el.src=url;
+  el=new Image();el.onload=renderAll;el.src=url;
 
  }else{
 
   el=document.createElement("video");
 
-  el.src=url;el.playsInline=true;el.loop=true;
+  el.src=url;el.playsInline=true;el.loop=true;el.preload="auto";el.controls=false;
 
-  el.preload="auto";el.controls=false;
-
-  el.addEventListener("loadeddata",()=>{
-
-   setupMediaAudio(key,el);renderAll();
-
-  });
+  el.addEventListener("loadeddata",()=>{setupMediaAudio(key,el);renderAll()});
 
   el.play().catch(()=>{});
 
@@ -1322,6 +1336,8 @@ function addColor(){
 
 }
 
+/* AUDIO */
+
 async function audioInit(){
 
  const AC=window.AudioContext||window.webkitAudioContext;
@@ -1330,9 +1346,7 @@ async function audioInit(){
 
  if(!audioContext){
 
-  audioContext=new AC();
-
-  mixDestination=audioContext.createMediaStreamDestination();
+  audioContext=new AC();mixDestination=audioContext.createMediaStreamDestination();
 
  }
 
@@ -1346,9 +1360,7 @@ function channelNode(name,stream){
 
  const gain=audioContext.createGain(),an=audioContext.createAnalyser();
 
- an.fftSize=256;
-
- src.connect(gain);gain.connect(an);an.connect(mixDestination);
+ an.fftSize=256;src.connect(gain);gain.connect(an);an.connect(mixDestination);
 
  audioChannels[name]={stream,src,gain,an,enabled:true};
 
@@ -1376,19 +1388,13 @@ async function startInput(name,deviceId){
 
   if(audioChannels[name])stopInput(name);
 
-  const constraints={
+  const constraints={audio:{
 
-   audio:{
+   echoCancellation:true,noiseSuppression:true,autoGainControl:true,
 
-    echoCancellation:true,noiseSuppression:true,autoGainControl:true,
+   ...(deviceId?{deviceId:{exact:deviceId}}:{})
 
-    ...(deviceId?{deviceId:{exact:deviceId}}:{})
-
-   },
-
-   video:false
-
-  };
+  },video:false};
 
   const stream=await navigator.mediaDevices.getUserMedia(constraints);
 
@@ -1414,9 +1420,7 @@ function stopInput(name){
 
  delete audioChannels[name];
 
- $(`${name}Toggle`).textContent="Activer";
-
- $(`${name}Meter`).style.width="0%";
+ $(`${name}Toggle`).textContent="Activer";$(`${name}Meter`).style.width="0%";
 
 }
 
@@ -1438,17 +1442,13 @@ function meterLoop(name){
 
   if(audioChannels[name]!==ch)return;
 
-  ch.an.getByteTimeDomainData(arr);
-
-  let sum=0;
+  ch.an.getByteTimeDomainData(arr);let sum=0;
 
   for(const v of arr){const n=(v-128)/128;sum+=n*n}
 
   const level=Math.min(100,Math.round(Math.sqrt(sum/arr.length)*300));
 
-  $(`${name}Meter`).style.width=level+"%";
-
-  requestAnimationFrame(tick);
+  $(`${name}Meter`).style.width=level+"%";requestAnimationFrame(tick);
 
  };
 
@@ -1466,19 +1466,13 @@ async function listDevices(){
 
   const sel=$(id),old=sel.value;
 
-  sel.innerHTML=id==="micDevice"
-
-   ?'<option value="">Microphone par défaut</option>'
-
-   :'<option value="">Choisir une entrée audio</option>';
+  sel.innerHTML=id==="micDevice"?'<option value="">Microphone par défaut</option>':'<option value="">Choisir une entrée audio</option>';
 
   dev.filter(d=>d.kind==="audioinput").forEach((d,i)=>{
 
-   const o=document.createElement("option");
+   const o=document.createElement("option");o.value=d.deviceId;
 
-   o.value=d.deviceId;o.textContent=d.label||"Entrée audio "+(i+1);
-
-   sel.append(o);
+   o.textContent=d.label||"Entrée audio "+(i+1);sel.append(o);
 
   });
 
@@ -1494,9 +1488,7 @@ function setupMediaAudio(key,el){
 
   if(!audioContext||mediaAudioNodes.has(key))return;
 
-  const source=audioContext.createMediaElementSource(el);
-
-  const gain=audioContext.createGain();
+  const source=audioContext.createMediaElementSource(el),gain=audioContext.createGain();
 
   source.connect(gain);gain.connect(mixDestination);
 
@@ -1514,13 +1506,11 @@ function updatePhoneAudio(){
 
  $("phoneToggle").textContent=phoneEnabled?"Couper":"Activer";
 
- mediaAudioNodes.forEach(n=>{
-
-  n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0;
-
- });
+ mediaAudioNodes.forEach(n=>n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0);
 
 }
+
+/* ENREGISTREMENT */
 
 async function startRecording(){
 
@@ -1528,33 +1518,17 @@ async function startRecording(){
 
   clearErr();
 
-  if(!window.MediaRecorder||!program.captureStream){
-
-   throw Error("L'enregistrement n'est pas pris en charge par ce navigateur.");
-
-  }
+  if(!window.MediaRecorder||!program.captureStream)throw Error("Enregistrement non pris en charge par ce navigateur.");
 
   await audioInit();
 
-  const v=program.captureStream(30);
-
-  const tracks=[...v.getVideoTracks()];
+  const v=program.captureStream(30),tracks=[...v.getVideoTracks()];
 
   tracks.push(...mixDestination.stream.getAudioTracks());
 
   const stream=new MediaStream(tracks);
 
-  const types=[
-
-   "video/mp4;codecs=h264,aac",
-
-   "video/mp4",
-
-   "video/webm;codecs=vp8,opus",
-
-   "video/webm"
-
-  ];
+  const types=["video/mp4;codecs=h264,aac","video/mp4","video/webm;codecs=vp8,opus","video/webm"];
 
   const mime=types.find(t=>MediaRecorder.isTypeSupported(t));
 
@@ -1562,11 +1536,7 @@ async function startRecording(){
 
   recordChunks=[];
 
-  recording.ondataavailable=e=>{
-
-   if(e.data.size)recordChunks.push(e.data);
-
-  };
+  recording.ondataavailable=e=>{if(e.data.size)recordChunks.push(e.data)};
 
   recording.onstop=()=>{
 
@@ -1598,11 +1568,7 @@ function stopRecording(){
 
  if(recording?.state==="recording"){
 
-  recording.stop();
-
-  $("recordBtn").textContent="● Démarrer l'enregistrement";
-
-  status("STUDIO PRÊT");
+  recording.stop();$("recordBtn").textContent="● Démarrer l'enregistrement";status("STUDIO PRÊT");
 
  }
 
@@ -1612,9 +1578,7 @@ function download(){
 
  if(!recordUrl)return;
 
- const a=document.createElement("a");
-
- a.href=recordUrl;
+ const a=document.createElement("a");a.href=recordUrl;
 
  const mp4=recording?.mimeType?.includes("mp4");
 
@@ -1624,31 +1588,13 @@ function download(){
 
 }
 
-function stopAll(){
+/* COMMANDES */
 
- if(recording?.state==="recording"){
+$("cameraBtn").onclick=authorizeCameras;
 
-  err("Arrête d'abord l'enregistrement.");return;
+$("addCameraBtn").onclick=addCameraSource;
 
- }
-
- if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());
-
- cameraStream=null;$("cameraVideo").srcObject=null;
-
- ["mic","aux"].forEach(stopInput);
-
- $("cameraBtn").textContent="Activer caméra";
-
- status("STUDIO PRÊT");renderAll();
-
-}
-
-$("cameraBtn").onclick=startCamera;
-
-$("flipBtn").onclick=flipCamera;
-
-$("addCameraBtn").onclick=()=>addSource("camera");
+$("refreshCamerasBtn").onclick=refreshCameras;
 
 $("addTextBtn").onclick=addText;
 
@@ -1690,21 +1636,11 @@ $("blackBtn").onclick=()=>{
 
  programBlack=!programBlack;
 
- if(programBlack){
+ if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
 
-  gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
+ else renderScene(gctx,programScene(),false);
 
- }else{
-
-  renderScene(gctx,programScene(),false);
-
- }
-
- $("programStatus").textContent=programBlack
-
-  ?"Programme : NOIR"
-
-  :"Programme : "+(programScene()?.name||"—");
+ $("programStatus").textContent=programBlack?"Programme : NOIR":"Programme : "+(programScene()?.name||"—");
 
 };
 
@@ -1730,11 +1666,7 @@ $("phoneVolume").oninput=()=>{
 
  $("phonePct").textContent=$("phoneVolume").value+"%";
 
- mediaAudioNodes.forEach(n=>{
-
-  n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0;
-
- });
+ mediaAudioNodes.forEach(n=>n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0);
 
 };
 
@@ -1748,7 +1680,7 @@ $("micDevice").onchange=()=>{if(audioChannels.mic)startInput("mic",$("micDevice"
 
 $("auxDevice").onchange=()=>{if(audioChannels.aux)startInput("aux",$("auxDevice").value)};
 
-/* Initialisation des trois scènes. */
+/* INITIALISATION */
 
 scenes=[
 
@@ -1766,23 +1698,21 @@ programSceneId=scenes[0].id;
 
 programSnapshot=snapshotScene(scenes[0]);
 
-renderLists();
-
-renderProps();
-
-renderAll();
-
-setTransition("cut");
+renderLists();renderProps();renderAll();setTransition("cut");
 
 requestAnimationFrame(animate);
 
 setInterval(()=>$("clock").textContent=new Date().toLocaleTimeString("fr-FR",{hour12:false}),1000);
 
-if(navigator.mediaDevices?.enumerateDevices)listDevices();
+if(navigator.mediaDevices?.enumerateDevices){
+
+ refreshCameras();listDevices();
+
+}
 
 window.addEventListener("beforeunload",()=>{
 
- if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());
+ cameraSources.forEach(cam=>cam.stream.getTracks().forEach(t=>t.stop()));
 
  Object.keys(audioChannels).forEach(stopInput);
 
