@@ -462,6 +462,8 @@ const program=$("programCanvas"),gctx=program.getContext("2d");
 
 let scenes=[],previewSceneId=null,programSceneId=null;
 
+let programSnapshot=null;
+
 let selectedSourceId=null,sourceCounter=0,sceneCounter=0;
 
 let cameraStream=null,cameraFacing="user";
@@ -478,15 +480,29 @@ let transitionState=null,programBlack=false;
 
 let lastMultiUpdate=0;
 
-const uid=()=> "src"+(++sourceCounter);
+const uid=()=>"src"+(++sourceCounter);
 
 const sceneById=id=>scenes.find(s=>s.id===id);
 
 const previewScene=()=>sceneById(previewSceneId);
 
-const programScene=()=>sceneById(programSceneId);
+const programScene=()=>programSnapshot;
 
 const selected=()=>previewScene()?.sources.find(s=>s.id===selectedSourceId);
+
+function snapshotScene(sc){
+
+ return sc?{
+
+  id:sc.id,
+
+  name:sc.name,
+
+  sources:sc.sources.map(s=>({...s}))
+
+ }:null;
+
+}
 
 function err(msg){
 
@@ -508,7 +524,7 @@ function status(t,on=false){
 
 function makeScene(name){
 
- return {id:"scene"+(++sceneCounter),name,sources:[]};
+ return{id:"scene"+(++sceneCounter),name,sources:[]};
 
 }
 
@@ -670,6 +686,40 @@ function applyProps(){
 
 }
 
+function isMediaUsed(key){
+
+ if(!key)return false;
+
+ if(programSnapshot?.sources.some(s=>s.mediaKey===key))return true;
+
+ return scenes.some(sc=>sc.sources.some(s=>s.mediaKey===key));
+
+}
+
+function cleanupMedia(s){
+
+ if(!s?.mediaKey||isMediaUsed(s.mediaKey))return;
+
+ const key=s.mediaKey;
+
+ const node=mediaAudioNodes.get(key);
+
+ if(node){
+
+  try{node.source.disconnect();node.gain.disconnect()}catch(e){}
+
+  mediaAudioNodes.delete(key);
+
+ }
+
+ const el=mediaObjects.get(key);
+
+ if(el){el.pause?.();el.remove?.();mediaObjects.delete(key)}
+
+ if(s.url)URL.revokeObjectURL(s.url);
+
+}
+
 function removeSource(id){
 
  const sc=previewScene();if(!sc)return;
@@ -681,22 +731,6 @@ function removeSource(id){
  cleanupMedia(s);
 
  selectedSourceId=null;renderLists();renderProps();renderAll();
-
-}
-
-function cleanupMedia(s){
-
- if(!s?.mediaKey)return;
-
- const node=mediaAudioNodes.get(s.mediaKey);
-
- if(node){try{node.source.disconnect();node.gain.disconnect()}catch(e){}mediaAudioNodes.delete(s.mediaKey)}
-
- const el=mediaObjects.get(s.mediaKey);
-
- if(el){el.pause?.();el.remove?.();mediaObjects.delete(s.mediaKey)}
-
- if(s.url)URL.revokeObjectURL(s.url);
 
 }
 
@@ -806,15 +840,29 @@ function renderAll(){
 
  renderScene(pctx,previewScene(),true);
 
- if(!transitionState&&!programBlack)renderScene(gctx,programScene(),false);
+ if(!transitionState){
 
- if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
+  if(programBlack){
+
+   gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
+
+  }else{
+
+   renderScene(gctx,programScene(),false);
+
+  }
+
+ }
 
  updateMultiview();
 
 }
 
+/* Boucle de rendu : Preview et Program sont actualisés indépendamment. */
+
 function animate(){
+
+ renderScene(pctx,previewScene(),true);
 
  if(transitionState){
 
@@ -834,13 +882,17 @@ function animate(){
 
    if(t<.5){
 
-    gctx.globalAlpha=1-t*2;gctx.drawImage(st.from,0,0);gctx.globalAlpha=1;
+    gctx.globalAlpha=1-t*2;gctx.drawImage(st.from,0,0);
+
+    gctx.globalAlpha=1;
 
    }else{
 
     gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
 
-    gctx.globalAlpha=(t-.5)*2;gctx.drawImage(st.to,0,0);gctx.globalAlpha=1;
+    gctx.globalAlpha=(t-.5)*2;gctx.drawImage(st.to,0,0);
+
+    gctx.globalAlpha=1;
 
    }
 
@@ -854,9 +906,21 @@ function animate(){
 
    $("programStatus").textContent="Programme : "+(programScene()?.name||"—");
 
+   renderLists();
+
   }
 
+ }else if(programBlack){
+
+  gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
+
+ }else{
+
+  renderScene(gctx,programScene(),false);
+
  }
+
+ updateMultiview();
 
  requestAnimationFrame(animate);
 
@@ -882,7 +946,9 @@ function updateMultiview(){
 
   scenes.forEach(sc=>{
 
-   const card=document.createElement("div");card.className="multi-card";card.dataset.id=sc.id;
+   const card=document.createElement("div");
+
+   card.className="multi-card";card.dataset.id=sc.id;
 
    const c=document.createElement("canvas");c.width=640;c.height=360;
 
@@ -914,9 +980,7 @@ function updateMultiview(){
 
   cx.save();cx.scale(.5,.5);renderScene(cx,sc,false);cx.restore();
 
-  const name=card.querySelector("b");
-
-  name.textContent=sc.name;
+  const name=card.querySelector("b");name.textContent=sc.name;
 
   const info=card.querySelector(".multi-info");
 
@@ -924,13 +988,17 @@ function updateMultiview(){
 
   if(sc.id===previewSceneId){
 
-   const b=document.createElement("span");b.className="badge pvw";b.textContent="PVW";info.insertBefore(b,info.lastChild);
+   const b=document.createElement("span");b.className="badge pvw";b.textContent="PVW";
+
+   info.insertBefore(b,info.lastChild);
 
   }
 
   if(sc.id===programSceneId){
 
-   const b=document.createElement("span");b.className="badge pgm";b.textContent="PGM";info.insertBefore(b,info.lastChild);
+   const b=document.createElement("span");b.className="badge pgm";b.textContent="PGM";
+
+   info.insertBefore(b,info.lastChild);
 
   }
 
@@ -948,7 +1016,9 @@ function canvasPoint(e){
 
 preview.addEventListener("pointerdown",e=>{
 
- const p=canvasPoint(e),a=previewScene()?.sources||[];let hit=null;
+ const p=canvasPoint(e),a=previewScene()?.sources||[];
+
+ let hit=null;
 
  for(let i=a.length-1;i>=0;i--){
 
@@ -958,13 +1028,19 @@ preview.addEventListener("pointerdown",e=>{
 
  }
 
- if(!hit){selectedSourceId=null;renderLists();renderProps();renderAll();return}
+ if(!hit){
+
+  selectedSourceId=null;renderLists();renderProps();renderAll();return;
+
+ }
 
  selectedSourceId=hit.id;
 
  drag={id:hit.id,start:p,x:hit.x,y:hit.y,w:hit.w,h:hit.h,resize:p.x>hit.x+hit.w-35&&p.y>hit.y+hit.h-35};
 
- preview.setPointerCapture(e.pointerId);renderLists();renderProps();renderAll();
+ preview.setPointerCapture(e.pointerId);
+
+ renderLists();renderProps();renderAll();
 
 });
 
@@ -974,9 +1050,19 @@ preview.addEventListener("pointermove",e=>{
 
  const p=canvasPoint(e),s=selected();if(!s)return;
 
- if(drag.resize){s.w=Math.max(30,drag.w+p.x-drag.start.x);s.h=Math.max(30,drag.h+p.y-drag.start.y)}
+ if(drag.resize){
 
- else{s.x=drag.x+p.x-drag.start.x;s.y=drag.y+p.y-drag.start.y}
+  s.w=Math.max(30,drag.w+p.x-drag.start.x);
+
+  s.h=Math.max(30,drag.h+p.y-drag.start.y);
+
+ }else{
+
+  s.x=drag.x+p.x-drag.start.x;
+
+  s.y=drag.y+p.y-drag.start.y;
+
+ }
 
  $("propX").value=Math.round(s.x);$("propY").value=Math.round(s.y);
 
@@ -990,39 +1076,79 @@ preview.addEventListener("pointerup",()=>{if(drag){drag=null;renderProps();rende
 
 preview.addEventListener("pointercancel",()=>drag=null);
 
+/* TAKE et AUTO appliquent une copie de la scène Preview au Program. */
+
 function takeScene(type){
 
  if(transitionState)return;
 
- const target=previewScene();if(!target){err("Aucune scène sélectionnée dans Preview.");return}
+ const target=previewScene();
+
+ if(!target){err("Aucune scène sélectionnée dans Preview.");return}
+
+ const nextSnapshot=snapshotScene(target);
 
  if(type==="cut"||selectedTransition==="cut"){
 
-  programSceneId=target.id;programBlack=false;transitionState=null;
+  programSceneId=target.id;
+
+  programSnapshot=nextSnapshot;
+
+  programBlack=false;
+
+  transitionState=null;
 
   renderScene(gctx,programScene(),false);
 
   $("programStatus").textContent="Programme : "+target.name;
 
-  renderLists();return;
+  renderLists();
+
+  return;
 
  }
 
- const from=document.createElement("canvas"),to=document.createElement("canvas");
+ const from=document.createElement("canvas");
 
- from.width=to.width=1280;from.height=to.height=720;
+ const to=document.createElement("canvas");
 
- const fc=from.getContext("2d"),tc=to.getContext("2d");
+ from.width=to.width=1280;
 
- if(programBlack){fc.fillStyle="#000";fc.fillRect(0,0,1280,720)}
+ from.height=to.height=720;
 
- else renderScene(fc,programScene(),false);
+ const fc=from.getContext("2d");
 
- renderScene(tc,target,false);
+ const tc=to.getContext("2d");
 
- programSceneId=target.id;programBlack=false;
+ if(programBlack){
 
- transitionState={from,to,type:selectedTransition,start:performance.now(),duration:+$("transitionDuration").value};
+  fc.fillStyle="#000";fc.fillRect(0,0,1280,720);
+
+ }else{
+
+  renderScene(fc,programScene(),false);
+
+ }
+
+ renderScene(tc,nextSnapshot,false);
+
+ programSceneId=target.id;
+
+ programSnapshot=nextSnapshot;
+
+ programBlack=false;
+
+ transitionState={
+
+  from,to,
+
+  type:selectedTransition,
+
+  start:performance.now(),
+
+  duration:+$("transitionDuration").value
+
+ };
 
  $("programStatus").textContent="Transition en cours vers : "+target.name;
 
@@ -1042,9 +1168,9 @@ function setTransition(type){
 
 function newScene(){
 
- const sc=makeScene("Scène "+(scenes.length+1));scenes.push(sc);
+ const sc=makeScene("Scène "+(scenes.length+1));
 
- selectPreview(sc.id);renderAll();
+ scenes.push(sc);selectPreview(sc.id);renderAll();
 
 }
 
@@ -1076,11 +1202,15 @@ function deleteScene(){
 
  const i=scenes.findIndex(s=>s.id===previewSceneId);
 
+ if(i<0)return;
+
  const [removed]=scenes.splice(i,1);
 
  if(removed.id===programSceneId){
 
   programSceneId=scenes[Math.max(0,i-1)].id;
+
+  programSnapshot=snapshotScene(sceneById(programSceneId));
 
   renderScene(gctx,programScene(),false);
 
@@ -1106,7 +1236,9 @@ async function startCamera(){
 
   cameraStream=await navigator.mediaDevices.getUserMedia({
 
-   video:{facingMode:cameraFacing,width:{ideal:1280},height:{ideal:720}},audio:false
+   video:{facingMode:cameraFacing,width:{ideal:1280},height:{ideal:720}},
+
+   audio:false
 
   });
 
@@ -1138,17 +1270,27 @@ function addMedia(file,type){
 
  if(!file)return;
 
- const url=URL.createObjectURL(file),key=uid();let el;
+ const url=URL.createObjectURL(file),key=uid();
 
- if(type==="image"){el=new Image();el.src=url}
+ let el;
 
- else{
+ if(type==="image"){
 
-  el=document.createElement("video");el.src=url;el.playsInline=true;el.loop=true;
+  el=new Image();el.src=url;
+
+ }else{
+
+  el=document.createElement("video");
+
+  el.src=url;el.playsInline=true;el.loop=true;
 
   el.preload="auto";el.controls=false;
 
-  el.addEventListener("loadeddata",()=>{setupMediaAudio(key,el);renderAll()});
+  el.addEventListener("loadeddata",()=>{
+
+   setupMediaAudio(key,el);renderAll();
+
+  });
 
   el.play().catch(()=>{});
 
@@ -1204,7 +1346,9 @@ function channelNode(name,stream){
 
  const gain=audioContext.createGain(),an=audioContext.createAnalyser();
 
- an.fftSize=256;src.connect(gain);gain.connect(an);an.connect(mixDestination);
+ an.fftSize=256;
+
+ src.connect(gain);gain.connect(an);an.connect(mixDestination);
 
  audioChannels[name]={stream,src,gain,an,enabled:true};
 
@@ -1232,7 +1376,19 @@ async function startInput(name,deviceId){
 
   if(audioChannels[name])stopInput(name);
 
-  const constraints={audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true,...(deviceId?{deviceId:{exact:deviceId}}:{})},video:false};
+  const constraints={
+
+   audio:{
+
+    echoCancellation:true,noiseSuppression:true,autoGainControl:true,
+
+    ...(deviceId?{deviceId:{exact:deviceId}}:{})
+
+   },
+
+   video:false
+
+  };
 
   const stream=await navigator.mediaDevices.getUserMedia(constraints);
 
@@ -1282,7 +1438,9 @@ function meterLoop(name){
 
   if(audioChannels[name]!==ch)return;
 
-  ch.an.getByteTimeDomainData(arr);let sum=0;
+  ch.an.getByteTimeDomainData(arr);
+
+  let sum=0;
 
   for(const v of arr){const n=(v-128)/128;sum+=n*n}
 
@@ -1308,13 +1466,19 @@ async function listDevices(){
 
   const sel=$(id),old=sel.value;
 
-  sel.innerHTML=id==="micDevice"?'<option value="">Microphone par défaut</option>':'<option value="">Choisir une entrée audio</option>';
+  sel.innerHTML=id==="micDevice"
+
+   ?'<option value="">Microphone par défaut</option>'
+
+   :'<option value="">Choisir une entrée audio</option>';
 
   dev.filter(d=>d.kind==="audioinput").forEach((d,i)=>{
 
-   const o=document.createElement("option");o.value=d.deviceId;
+   const o=document.createElement("option");
 
-   o.textContent=d.label||"Entrée audio "+(i+1);sel.append(o);
+   o.value=d.deviceId;o.textContent=d.label||"Entrée audio "+(i+1);
+
+   sel.append(o);
 
   });
 
@@ -1350,7 +1514,11 @@ function updatePhoneAudio(){
 
  $("phoneToggle").textContent=phoneEnabled?"Couper":"Activer";
 
- mediaAudioNodes.forEach(n=>n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0);
+ mediaAudioNodes.forEach(n=>{
+
+  n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0;
+
+ });
 
 }
 
@@ -1360,17 +1528,33 @@ async function startRecording(){
 
   clearErr();
 
-  if(!window.MediaRecorder||!program.captureStream)throw Error("L'enregistrement n'est pas pris en charge par ce navigateur.");
+  if(!window.MediaRecorder||!program.captureStream){
+
+   throw Error("L'enregistrement n'est pas pris en charge par ce navigateur.");
+
+  }
 
   await audioInit();
 
-  const v=program.captureStream(30),tracks=[...v.getVideoTracks()];
+  const v=program.captureStream(30);
+
+  const tracks=[...v.getVideoTracks()];
 
   tracks.push(...mixDestination.stream.getAudioTracks());
 
   const stream=new MediaStream(tracks);
 
-  const types=["video/mp4;codecs=h264,aac","video/mp4","video/webm;codecs=vp8,opus","video/webm"];
+  const types=[
+
+   "video/mp4;codecs=h264,aac",
+
+   "video/mp4",
+
+   "video/webm;codecs=vp8,opus",
+
+   "video/webm"
+
+  ];
 
   const mime=types.find(t=>MediaRecorder.isTypeSupported(t));
 
@@ -1378,7 +1562,11 @@ async function startRecording(){
 
   recordChunks=[];
 
-  recording.ondataavailable=e=>{if(e.data.size)recordChunks.push(e.data)};
+  recording.ondataavailable=e=>{
+
+   if(e.data.size)recordChunks.push(e.data);
+
+  };
 
   recording.onstop=()=>{
 
@@ -1410,7 +1598,9 @@ function stopRecording(){
 
  if(recording?.state==="recording"){
 
-  recording.stop();$("recordBtn").textContent="● Démarrer l'enregistrement";
+  recording.stop();
+
+  $("recordBtn").textContent="● Démarrer l'enregistrement";
 
   status("STUDIO PRÊT");
 
@@ -1422,7 +1612,9 @@ function download(){
 
  if(!recordUrl)return;
 
- const a=document.createElement("a");a.href=recordUrl;
+ const a=document.createElement("a");
+
+ a.href=recordUrl;
 
  const mp4=recording?.mimeType?.includes("mp4");
 
@@ -1434,7 +1626,11 @@ function download(){
 
 function stopAll(){
 
- if(recording?.state==="recording"){err("Arrête d'abord l'enregistrement.");return}
+ if(recording?.state==="recording"){
+
+  err("Arrête d'abord l'enregistrement.");return;
+
+ }
 
  if(cameraStream)cameraStream.getTracks().forEach(t=>t.stop());
 
@@ -1476,7 +1672,13 @@ $("deleteSceneBtn").onclick=deleteScene;
 
 $("applyProps").onclick=applyProps;
 
-$("previewBtn").onclick=()=>renderAll();
+$("previewBtn").onclick=()=>{
+
+ renderScene(pctx,previewScene(),true);
+
+ $("previewStatus").textContent="Preview actualisé : "+(previewScene()?.name||"—");
+
+};
 
 $("takeBtn").onclick=()=>takeScene("cut");
 
@@ -1488,11 +1690,21 @@ $("blackBtn").onclick=()=>{
 
  programBlack=!programBlack;
 
- if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
+ if(programBlack){
 
- else renderScene(gctx,programScene(),false);
+  gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
 
- $("programStatus").textContent=programBlack?"Programme : NOIR":"Programme : "+(programScene()?.name||"—");
+ }else{
+
+  renderScene(gctx,programScene(),false);
+
+ }
+
+ $("programStatus").textContent=programBlack
+
+  ?"Programme : NOIR"
+
+  :"Programme : "+(programScene()?.name||"—");
 
 };
 
@@ -1518,7 +1730,11 @@ $("phoneVolume").oninput=()=>{
 
  $("phonePct").textContent=$("phoneVolume").value+"%";
 
- mediaAudioNodes.forEach(n=>n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0);
+ mediaAudioNodes.forEach(n=>{
+
+  n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0;
+
+ });
 
 };
 
@@ -1532,13 +1748,29 @@ $("micDevice").onchange=()=>{if(audioChannels.mic)startInput("mic",$("micDevice"
 
 $("auxDevice").onchange=()=>{if(audioChannels.aux)startInput("aux",$("auxDevice").value)};
 
-scenes=[makeScene("Caméra principale"),makeScene("Interview"),makeScene("Pause")];
+/* Initialisation des trois scènes. */
+
+scenes=[
+
+ makeScene("Caméra principale"),
+
+ makeScene("Interview"),
+
+ makeScene("Pause")
+
+];
 
 previewSceneId=scenes[0].id;
 
 programSceneId=scenes[0].id;
 
-renderLists();renderProps();renderAll();
+programSnapshot=snapshotScene(scenes[0]);
+
+renderLists();
+
+renderProps();
+
+renderAll();
 
 setTransition("cut");
 
