@@ -462,6 +462,8 @@ let recording=null,recordChunks=[],recordUrl=null,recordStream=null;
 
 let recordStartedAt=0,recordElapsed=0,recordTimerInterval=null;
 
+let recordingMimeType="",recordingExtension="webm",recordingFinalizing=false;
+
 let drag=null,selectedTransition="cut",transitionState=null;
 
 let programBlack=false,lastMultiUpdate=0;
@@ -1148,7 +1150,7 @@ function updateMediaVolume(){
 
 }
 
-/* ENREGISTREMENT V9 */
+/* ENREGISTREMENT PROFESSIONNEL */
 
 function formatTime(ms){
 
@@ -1160,7 +1162,7 @@ function formatTime(ms){
 
 function elapsedRecording(){
 
- if(recording?.state==="recording")return recordElapsed+(Date.now()-recordStartedAt);
+ if(recording?.state==="recording")return recordElapsed+(performance.now()-recordStartedAt);
 
  return recordElapsed;
 
@@ -1178,7 +1180,7 @@ function setRecordUI(state){
 
  light.className="record-light";
 
- $("recordBtn").disabled=state==="recording"||state==="paused";
+ $("recordBtn").disabled=state==="recording"||state==="paused"||state==="processing";
 
  $("pauseRecordBtn").disabled=state!=="recording"&&state!=="paused";
 
@@ -1212,47 +1214,111 @@ function setRecordUI(state){
 
 }
 
+function getRecordingFormat(){
+
+ if(!window.MediaRecorder)return null;
+
+ if(typeof MediaRecorder.isTypeSupported!=="function")return "";
+
+ const types=[
+
+  "video/mp4;codecs=avc1.42E01E,mp4a.40.2",
+
+  "video/mp4",
+
+  "video/webm;codecs=vp9,opus",
+
+  "video/webm;codecs=vp8,opus",
+
+  "video/webm"
+
+ ];
+
+ return types.find(type=>MediaRecorder.isTypeSupported(type))||"";
+
+}
+
+function releaseRecordingStream(){
+
+ if(recordStream){
+
+  recordStream.getTracks().forEach(track=>track.stop());
+
+  recordStream=null;
+
+ }
+
+}
+
 async function startRecording(){
 
  try{
 
   clearErr();
 
-  if(!window.MediaRecorder||!program.captureStream)throw Error("Enregistrement non pris en charge par ce navigateur.");
+  if(recordingFinalizing)throw Error("La vidéo précédente est encore en cours de finalisation.");
+
+  if(!window.MediaRecorder)throw Error("MediaRecorder n'est pas pris en charge par ce navigateur.");
+
+  if(!program.captureStream)throw Error("La capture du PROGRAM n'est pas disponible.");
 
   await audioInit();
 
   const videoStream=program.captureStream(30);
 
+  const videoTracks=videoStream.getVideoTracks();
+
   const audioTracks=mixDestination.stream.getAudioTracks();
 
-  const tracks=[...videoStream.getVideoTracks(),...audioTracks];
+  if(!videoTracks.length){
 
-  if(!tracks.some(t=>t.kind==="video"))throw Error("La capture vidéo du PROGRAM n'est pas disponible.");
+   videoStream.getTracks().forEach(track=>track.stop());
 
-  recordStream=new MediaStream(tracks);
+   throw Error("Aucune piste vidéo disponible dans le PROGRAM.");
 
-  const types=["video/mp4;codecs=h264,aac","video/mp4","video/webm;codecs=vp8,opus","video/webm"];
+  }
 
-  const mime=types.find(t=>MediaRecorder.isTypeSupported(t));
+  recordStream=new MediaStream([...videoTracks,...audioTracks]);
 
-  recording=new MediaRecorder(recordStream,mime?{mimeType:mime}:undefined);
+  const mime=getRecordingFormat();
 
-  recordChunks=[];recordElapsed=0;recordStartedAt=Date.now();
+  recording=mime?new MediaRecorder(recordStream,{mimeType:mime}):new MediaRecorder(recordStream);
 
-  if(recordUrl){URL.revokeObjectURL(recordUrl);recordUrl=null}
+  recordChunks=[];
+
+  recordElapsed=0;
+
+  recordStartedAt=performance.now();
+
+  recordingMimeType=recording.mimeType||mime||"";
+
+  recordingExtension=recordingMimeType.includes("mp4")?"mp4":"webm";
+
+  if(recordUrl){
+
+   URL.revokeObjectURL(recordUrl);
+
+   recordUrl=null;
+
+  }
 
   $("downloadBtn").disabled=true;
 
-  $("recordFormat").textContent="Format détecté : "+(recording.mimeType||mime||"format navigateur");
+  $("recordFormat").textContent="Format utilisé : "+(recordingMimeType||"format automatique du navigateur");
 
-  recording.ondataavailable=e=>{if(e.data&&e.data.size>0)recordChunks.push(e.data)};
+  recording.ondataavailable=e=>{
+
+   if(e.data&&e.data.size>0)recordChunks.push(e.data);
+
+  };
 
   recording.onerror=e=>{
 
    const message=e.error?.message||"Une erreur est survenue pendant l'enregistrement.";
 
-   err(message);$("recordStatus").textContent="Erreur pendant l'enregistrement.";
+   err(message);
+
+   $("recordStatus").textContent="Erreur pendant l'enregistrement.";
 
   };
 
@@ -1260,7 +1326,9 @@ async function startRecording(){
 
    $("recordStatus").textContent="Enregistrement mis en pause.";
 
-   setRecordUI("paused");updateRecordDisplay();
+   setRecordUI("paused");
+
+   updateRecordDisplay();
 
   };
 
@@ -1274,23 +1342,41 @@ async function startRecording(){
 
   recording.onstop=()=>{
 
-   clearInterval(recordTimerInterval);recordTimerInterval=null;
+   clearInterval(recordTimerInterval);
 
-   updateRecordDisplay();setRecordUI("processing");
+   recordTimerInterval=null;
 
-   const mimeType=recording.mimeType||"video/webm";
+   recordingFinalizing=true;
 
-   const blob=new Blob(recordChunks,{type:mimeType});
+   updateRecordDisplay();
 
-   if(recordStream){recordStream.getTracks().forEach(t=>t.stop());recordStream=null}
+   setRecordUI("processing");
+
+   const actualMime=recording.mimeType||recordingMimeType||"video/webm";
+
+   const blob=new Blob(recordChunks,{type:actualMime});
+
+   releaseRecordingStream();
 
    if(!blob.size){
 
+    recordingFinalizing=false;
+
     $("recordStatus").textContent="Aucune donnée vidéo n'a été enregistrée.";
 
-    setRecordUI("ready");err("Le fichier enregistré est vide. Réessaie avec un enregistrement plus long.");return;
+    setRecordUI("ready");
+
+    $("recordBtn").textContent="● DÉMARRER";
+
+    err("Le fichier enregistré est vide. Réessaie avec un enregistrement plus long.");
+
+    return;
 
    }
+
+   recordingMimeType=actualMime;
+
+   recordingExtension=actualMime.includes("mp4")?"mp4":"webm";
 
    recordUrl=URL.createObjectURL(blob);
 
@@ -1298,9 +1384,17 @@ async function startRecording(){
 
    $("recordStatus").textContent="Vidéo prête · "+(blob.size/1024/1024).toFixed(2)+" Mo · "+formatTime(recordElapsed);
 
-   $("recordFormat").textContent="Fichier : "+mimeType+" · "+(blob.size/1024/1024).toFixed(2)+" Mo";
+   $("recordFormat").textContent="Fichier : "+actualMime+" · "+(blob.size/1024/1024).toFixed(2)+" Mo";
 
-   setRecordUI("finished");$("recordBtn").disabled=false;status("STUDIO PRÊT");
+   recordingFinalizing=false;
+
+   setRecordUI("finished");
+
+   $("recordBtn").textContent="● NOUVEL ENREGISTREMENT";
+
+   $("recordBtn").disabled=false;
+
+   status("STUDIO PRÊT");
 
   };
 
@@ -1310,17 +1404,29 @@ async function startRecording(){
 
   setRecordUI("recording");
 
+  $("recordBtn").textContent="● ENREGISTREMENT";
+
   $("recordStatus").textContent="Capture du PROGRAM et du mixage audio en cours…";
 
-  $("recordBtn").textContent="● ENREGISTREMENT";
+  $("recordFormat").textContent="Enregistrement : "+(recordingMimeType||"format automatique");
 
   status("ENREGISTREMENT",true);
 
  }catch(e){
 
-  if(recordStream){recordStream.getTracks().forEach(t=>t.stop());recordStream=null}
+  releaseRecordingStream();
 
-  setRecordUI("ready");$("recordBtn").disabled=false;
+  clearInterval(recordTimerInterval);
+
+  recordTimerInterval=null;
+
+  recordingFinalizing=false;
+
+  setRecordUI("ready");
+
+  $("recordBtn").textContent="● DÉMARRER";
+
+  $("recordBtn").disabled=false;
 
   err(e.message||"Erreur au démarrage de l'enregistrement.");
 
@@ -1330,21 +1436,41 @@ async function startRecording(){
 
 function pauseRecording(){
 
- if(!recording)return;
+ if(!recording||recordingFinalizing)return;
 
  if(recording.state==="recording"){
 
-  recordElapsed+=Date.now()-recordStartedAt;
+  recordElapsed+=performance.now()-recordStartedAt;
 
-  try{recording.pause();setRecordUI("paused");updateRecordDisplay()}
+  try{
 
-  catch(e){err("Impossible de mettre en pause : "+e.message)}
+   recording.pause();
+
+   setRecordUI("paused");
+
+   updateRecordDisplay();
+
+  }catch(e){
+
+   err("Impossible de mettre en pause : "+e.message);
+
+  }
 
  }else if(recording.state==="paused"){
 
-  try{recordStartedAt=Date.now();recording.resume();setRecordUI("recording")}
+  try{
 
-  catch(e){err("Impossible de reprendre : "+e.message)}
+   recordStartedAt=performance.now();
+
+   recording.resume();
+
+   setRecordUI("recording");
+
+  }catch(e){
+
+   err("Impossible de reprendre : "+e.message);
+
+  }
 
  }
 
@@ -1352,21 +1478,39 @@ function pauseRecording(){
 
 function stopRecording(){
 
- if(recording&&(recording.state==="recording"||recording.state==="paused")){
+ if(!recording||recordingFinalizing)return;
 
-  if(recording.state==="recording")recordElapsed+=Date.now()-recordStartedAt;
+ if(recording.state==="recording"||recording.state==="paused"){
+
+  if(recording.state==="recording"){
+
+   recordElapsed+=performance.now()-recordStartedAt;
+
+  }
 
   try{
 
-   recording.stop();$("recordStatus").textContent="Arrêt demandé. Préparation du fichier…";
+   recordingFinalizing=true;
 
-   $("stopRecordBtn").disabled=true;$("pauseRecordBtn").disabled=true;
+   recording.stop();
 
-   $("recordBtn").textContent="● NOUVEL ENREGISTREMENT";
+   $("recordStatus").textContent="Arrêt demandé. Préparation du fichier…";
+
+   $("stopRecordBtn").disabled=true;
+
+   $("pauseRecordBtn").disabled=true;
+
+   $("recordBtn").textContent="● FINALISATION";
 
    status("FINALISATION",true);
 
-  }catch(e){err("Impossible d'arrêter l'enregistrement : "+e.message)}
+  }catch(e){
+
+   recordingFinalizing=false;
+
+   err("Impossible d'arrêter l'enregistrement : "+e.message);
+
+  }
 
  }
 
@@ -1374,15 +1518,27 @@ function stopRecording(){
 
 function download(){
 
- if(!recordUrl){err("Aucune vidéo prête à télécharger.");return}
+ if(!recordUrl){
 
- const a=document.createElement("a");a.href=recordUrl;
+  err("Aucune vidéo prête à télécharger.");
 
- const mp4=recording?.mimeType?.includes("mp4");
+  return;
 
- a.download="MERFIL-LIVE-STUDIO-"+new Date().toISOString().slice(0,10)+(mp4?".mp4":".webm");
+ }
 
- document.body.appendChild(a);a.click();a.remove();
+ const a=document.createElement("a");
+
+ a.href=recordUrl;
+
+ a.download="MERFIL-LIVE-STUDIO-"+new Date().toISOString().slice(0,10)+"."+recordingExtension;
+
+ document.body.appendChild(a);
+
+ a.click();
+
+ a.remove();
+
+ $("recordStatus").textContent="Téléchargement demandé. Vérifie les fichiers de ton appareil.";
 
 }
 
@@ -1430,9 +1586,13 @@ $("autoBtn").onclick=takeScene;
 
 $("blackBtn").onclick=()=>{
 
- if(transitionState)return;programBlack=!programBlack;
+ if(transitionState)return;
 
- if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}else renderScene(gctx,programScene(),false);
+ programBlack=!programBlack;
+
+ if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
+
+ else renderScene(gctx,programScene(),false);
 
  $("programStatus").textContent=programBlack?"Programme : NOIR":"Programme : "+(programScene()?.name||"—");
 
@@ -1480,19 +1640,43 @@ $("auxDevice").onchange=()=>{if(audioChannels.aux)startInput("aux",$("auxDevice"
 
 scenes=[makeScene("Caméra principale"),makeScene("Interview"),makeScene("Pause")];
 
-previewSceneId=scenes[0].id;programSceneId=scenes[0].id;programSnapshot=snapshotScene(scenes[0]);
+previewSceneId=scenes[0].id;
 
-renderLists();renderProps();renderAll();setTransition("cut");setRecordUI("ready");
+programSceneId=scenes[0].id;
+
+programSnapshot=snapshotScene(scenes[0]);
+
+renderLists();
+
+renderProps();
+
+renderAll();
+
+setTransition("cut");
+
+setRecordUI("ready");
+
+updateRecordDisplay();
 
 requestAnimationFrame(animate);
 
 setInterval(()=>$("clock").textContent=new Date().toLocaleTimeString("fr-FR",{hour12:false}),1000);
 
-if(navigator.mediaDevices?.enumerateDevices){refreshCameras();listDevices()}
+if(navigator.mediaDevices?.enumerateDevices){
+
+ refreshCameras();
+
+ listDevices();
+
+}
 
 window.addEventListener("beforeunload",()=>{
 
- if(recording&&(recording.state==="recording"||recording.state==="paused"))recording.stop();
+ if(recording&&(recording.state==="recording"||recording.state==="paused")){
+
+  try{recording.stop()}catch(e){}
+
+ }
 
  cameraSources.forEach(cam=>cam.stream.getTracks().forEach(t=>t.stop()));
 
