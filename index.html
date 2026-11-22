@@ -26,7 +26,7 @@ button,input,select{font:inherit}
 
 button,select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:7px;padding:9px;cursor:pointer}
 
-button:disabled{opacity:.4}
+button:disabled{opacity:.4;cursor:not-allowed}
 
 .top{position:sticky;top:0;z-index:20;background:#15191f;border-bottom:1px solid var(--line);padding:12px;display:flex;justify-content:space-between;align-items:center}
 
@@ -116,7 +116,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 .audio-row:last-child{border:0}
 
-.audio-head{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.audio-head{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px}
 
 .audio-controls{display:flex;gap:8px;align-items:center;margin-top:7px}
 
@@ -176,7 +176,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <div class="logo">MLS</div>
 
-  <div><div class="brandname">MERFIL LIVE STUDIO</div><div class="sub">MOBILE PRODUCTION · V6 STUDIO</div></div>
+  <div><div class="brandname">MERFIL LIVE STUDIO</div><div class="sub">MOBILE PRODUCTION · V7 AUDIO</div></div>
 
  </div>
 
@@ -282,11 +282,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <label class="label">Caméra disponible sur cet appareil</label>
 
-  <select id="cameraDevice" class="field">
-
-   <option value="">Caméra par défaut</option>
-
-  </select>
+  <select id="cameraDevice" class="field"><option value="">Caméra par défaut</option></select>
 
   <div class="rowbuttons">
 
@@ -298,7 +294,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   </div>
 
-  <div class="hint">Chaque ajout crée une source caméra indépendante avec son propre flux. Le nombre de caméras utilisables simultanément dépend du téléphone et du navigateur.</div>
+  <div class="hint">Chaque ajout crée une source caméra indépendante. Le nombre de caméras utilisables simultanément dépend du téléphone et du navigateur.</div>
 
   <div class="statusline" id="cameraStatus">Aucune caméra source ajoutée.</div>
 
@@ -392,15 +388,29 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <section class="panel">
 
-   <h3>MÉLANGEUR AUDIO</h3>
+   <h3>MÉLANGEUR AUDIO · MLS</h3>
 
    <div class="audio-row">
 
-    <div class="audio-head"><b>Microphone</b><button class="mini" id="micToggle">Activer</button></div>
+    <div class="audio-head">
+
+     <b>Microphone</b>
+
+     <button class="mini" id="micToggle">Activer</button>
+
+     <button class="mini danger" id="micMute" disabled>MUTE</button>
+
+    </div>
 
     <select id="micDevice" class="field"><option value="">Microphone par défaut</option></select>
 
-    <div class="audio-controls"><input id="micVolume" type="range" min="0" max="150" value="100"><span id="micPct">100%</span></div>
+    <div class="audio-controls">
+
+     <input id="micVolume" type="range" min="0" max="150" value="100">
+
+     <span id="micPct">100%</span>
+
+    </div>
 
     <div class="meter"><span id="micMeter"></span></div>
 
@@ -408,29 +418,55 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="audio-row">
 
-    <div class="audio-head"><b>Son des médias</b><button class="mini" id="phoneToggle">Couper</button></div>
+    <div class="audio-head">
 
-    <div class="audio-controls"><input id="phoneVolume" type="range" min="0" max="150" value="100"><span id="phonePct">100%</span></div>
+     <b>Son des médias / téléphone</b>
+
+     <button class="mini danger" id="phoneToggle">MUTE</button>
+
+    </div>
+
+    <div class="audio-controls">
+
+     <input id="phoneVolume" type="range" min="0" max="150" value="100">
+
+     <span id="phonePct">100%</span>
+
+    </div>
 
     <div class="meter"><span id="phoneMeter"></span></div>
 
-    <div class="hint">Contrôle le son des vidéos de la régie. Le navigateur ne capture pas le son des autres applications du téléphone.</div>
+    <div class="hint">Contrôle le son des vidéos lues dans MERFIL LIVE STUDIO. Le navigateur ne capture pas le son des autres applications du téléphone.</div>
 
    </div>
 
    <div class="audio-row">
 
-    <div class="audio-head"><b>Entrée AUX</b><button class="mini" id="auxToggle">Activer</button></div>
+    <div class="audio-head">
+
+     <b>Entrée auxiliaire AUX</b>
+
+     <button class="mini" id="auxToggle">Activer</button>
+
+     <button class="mini danger" id="auxMute" disabled>MUTE</button>
+
+    </div>
 
     <select id="auxDevice" class="field"><option value="">Choisir une entrée audio</option></select>
 
-    <div class="audio-controls"><input id="auxVolume" type="range" min="0" max="150" value="100"><span id="auxPct">100%</span></div>
+    <div class="audio-controls">
+
+     <input id="auxVolume" type="range" min="0" max="150" value="100">
+
+     <span id="auxPct">100%</span>
+
+    </div>
 
     <div class="meter"><span id="auxMeter"></span></div>
 
    </div>
 
-   <div class="statusline" id="audioStatus">Les entrées audio seront proposées après autorisation.</div>
+   <div class="statusline" id="audioStatus">Mixeur audio prêt. Active une entrée pour commencer.</div>
 
   </section>
 
@@ -448,7 +484,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   </div>
 
-  <div class="statusline" id="recordStatus">Capture du moniteur PROGRAM et du mixage audio disponible.</div>
+  <div class="statusline" id="recordStatus">Capture du moniteur PROGRAM et du mixage audio.</div>
 
  </section>
 
@@ -462,7 +498,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 </main>
 
-<footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 6.0</footer>
+<footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 7.0 AUDIO</footer>
 
 <input id="imageFile" type="file" accept="image/*" hidden>
 
@@ -488,11 +524,13 @@ let mediaObjects=new Map(),mediaAudioNodes=new Map();
 
 let audioContext=null,mixDestination=null,audioChannels={};
 
+let audioMuted={mic:false,aux:false,phone:false};
+
 let recording=null,recordChunks=[],recordUrl=null;
 
-let drag=null,phoneEnabled=true,selectedTransition="cut";
+let drag=null,selectedTransition="cut",transitionState=null;
 
-let transitionState=null,programBlack=false,lastMultiUpdate=0;
+let programBlack=false,lastMultiUpdate=0;
 
 const uid=()=>"src"+(++sourceCounter);
 
@@ -502,8 +540,6 @@ const previewScene=()=>sceneById(previewSceneId);
 
 const programScene=()=>programSnapshot;
 
-const selected=()=>previewScene()?.sources.find(s=>s.id===selectedSourceId);
-
 function snapshotScene(sc){
 
  return sc?{id:sc.id,name:sc.name,sources:sc.sources.map(s=>({...s}))}:null;
@@ -512,7 +548,9 @@ function snapshotScene(sc){
 
 function err(msg){
 
- $("errorBox").textContent=msg;$("errorBox").style.display="block";
+ $("errorBox").textContent=msg;
+
+ $("errorBox").style.display="block";
 
 }
 
@@ -656,6 +694,8 @@ function renderProps(){
 
 }
 
+function selected(){return previewScene()?.sources.find(s=>s.id===selectedSourceId)}
+
 function applyProps(){
 
  const s=selected();if(!s)return;
@@ -694,7 +734,7 @@ function cleanupMedia(s){
 
   if(node){
 
-   try{node.source.disconnect();node.gain.disconnect()}catch(e){}
+   try{node.source.disconnect();node.gain.disconnect();node.analyser?.disconnect()}catch(e){}
 
    mediaAudioNodes.delete(key);
 
@@ -716,9 +756,7 @@ function cleanupMedia(s){
 
    cam.stream.getTracks().forEach(t=>t.stop());
 
-   cam.video.srcObject=null;
-
-   cameraSources.delete(s.cameraKey);
+   cam.video.srcObject=null;cameraSources.delete(s.cameraKey);
 
   }
 
@@ -1054,7 +1092,7 @@ preview.addEventListener("pointerup",()=>{if(drag){drag=null;renderProps();rende
 
 preview.addEventListener("pointercancel",()=>drag=null);
 
-/* PROGRAM indépendant du PREVIEW */
+/* PROGRAM INDÉPENDANT DU PREVIEW */
 
 function takeScene(type){
 
@@ -1164,7 +1202,7 @@ function deleteScene(){
 
 async function refreshCameras(){
 
- if(!navigator.mediaDevices?.enumerateDevices){err("La liste des caméras n'est pas disponible dans ce navigateur.");return}
+ if(!navigator.mediaDevices?.enumerateDevices){err("La liste des caméras n'est pas disponible.");return}
 
  try{
 
@@ -1204,9 +1242,7 @@ async function authorizeCameras(){
 
   stream.getTracks().forEach(t=>t.stop());
 
-  await refreshCameras();
-
-  status("CAMÉRAS AUTORISÉES",true);
+  await refreshCameras();status("CAMÉRAS AUTORISÉES",true);
 
  }catch(e){err(e.message||"Autorisation caméra refusée.")}
 
@@ -1236,9 +1272,7 @@ async function addCameraSource(){
 
   cameraSources.set(key,{stream,video,deviceId});
 
-  const n=cameraSources.size;
-
-  addSource("camera",{name:"Caméra "+n,cameraKey:key,x:100,y:80,w:900,h:506});
+  addSource("camera",{name:"Caméra "+cameraSources.size,cameraKey:key,x:100,y:80,w:900,h:506});
 
   await refreshCameras();
 
@@ -1304,7 +1338,13 @@ function addMedia(file,type){
 
   el.src=url;el.playsInline=true;el.loop=true;el.preload="auto";el.controls=false;
 
-  el.addEventListener("loadeddata",()=>{setupMediaAudio(key,el);renderAll()});
+  el.addEventListener("loadeddata",()=>{
+
+   if(audioContext)setupMediaAudio(key,el);
+
+   renderAll();
+
+  });
 
   el.play().catch(()=>{});
 
@@ -1336,7 +1376,7 @@ function addColor(){
 
 }
 
-/* AUDIO */
+/* AUDIO - MIXAGE MLS */
 
 async function audioInit(){
 
@@ -1346,11 +1386,33 @@ async function audioInit(){
 
  if(!audioContext){
 
-  audioContext=new AC();mixDestination=audioContext.createMediaStreamDestination();
+  audioContext=new AC();
+
+  mixDestination=audioContext.createMediaStreamDestination();
 
  }
 
  if(audioContext.state==="suspended")await audioContext.resume();
+
+ mediaObjects.forEach((el,key)=>{
+
+  if(el instanceof HTMLVideoElement)setupMediaAudio(key,el);
+
+ });
+
+}
+
+function setVolume(name){
+
+ const ch=audioChannels[name],slider=$(name+"Volume");
+
+ if(!slider)return;
+
+ const value=Number(slider.value)/100;
+
+ if(ch)ch.gain.gain.value=audioMuted[name]?0:value;
+
+ $(name+"Pct").textContent=slider.value+"%";
 
 }
 
@@ -1358,23 +1420,25 @@ function channelNode(name,stream){
 
  const src=audioContext.createMediaStreamSource(stream);
 
- const gain=audioContext.createGain(),an=audioContext.createAnalyser();
+ const gain=audioContext.createGain();
 
- an.fftSize=256;src.connect(gain);gain.connect(an);an.connect(mixDestination);
+ const analyser=audioContext.createAnalyser();
 
- audioChannels[name]={stream,src,gain,an,enabled:true};
+ analyser.fftSize=256;
+
+ src.connect(gain);gain.connect(analyser);analyser.connect(mixDestination);
+
+ audioChannels[name]={stream,src,gain,an:analyser};
+
+ audioMuted[name]=false;
 
  setVolume(name);meterLoop(name);
 
-}
+ const muteButton=$(name+"Mute");
 
-function setVolume(name){
+ if(muteButton){muteButton.disabled=false;muteButton.textContent="MUTE"}
 
- const ch=audioChannels[name];
-
- if(ch)ch.gain.gain.value=(+$(`${name}Volume`).value/100)*(ch.enabled?1:0);
-
- $(`${name}Pct`).textContent=$(`${name}Volume`).value+"%";
+ $(name+"Toggle").textContent="Désactiver";
 
 }
 
@@ -1386,11 +1450,17 @@ async function startInput(name,deviceId){
 
   await audioInit();
 
+  if(!navigator.mediaDevices?.getUserMedia)throw Error("Entrée audio indisponible dans ce navigateur.");
+
   if(audioChannels[name])stopInput(name);
 
   const constraints={audio:{
 
-   echoCancellation:true,noiseSuppression:true,autoGainControl:true,
+   echoCancellation:name==="mic",
+
+   noiseSuppression:name==="mic",
+
+   autoGainControl:name==="mic",
 
    ...(deviceId?{deviceId:{exact:deviceId}}:{})
 
@@ -1400,11 +1470,9 @@ async function startInput(name,deviceId){
 
   channelNode(name,stream);
 
-  $(`${name}Toggle`).textContent="Couper";
+  $("audioStatus").textContent=name==="mic"?"Microphone connecté.":"Entrée AUX connectée.";
 
-  $("audioStatus").textContent=name==="aux"?"Entrée AUX connectée.":"Entrée audio connectée.";
-
-  await listDevices();status("AUDIO ACTIF",true);
+  await listDevices();status("MIXAGE AUDIO ACTIF",true);
 
  }catch(e){err(e.message||"Impossible d'activer cette entrée audio.")}
 
@@ -1414,13 +1482,21 @@ function stopInput(name){
 
  const ch=audioChannels[name];if(!ch)return;
 
- ch.stream.getTracks().forEach(t=>t.stop());
+ ch.stream.getTracks().forEach(track=>track.stop());
 
  try{ch.src.disconnect();ch.gain.disconnect();ch.an.disconnect()}catch(e){}
 
  delete audioChannels[name];
 
- $(`${name}Toggle`).textContent="Activer";$(`${name}Meter`).style.width="0%";
+ $(name+"Toggle").textContent="Activer";
+
+ $(name+"Meter").style.width="0%";
+
+ const muteButton=$(name+"Mute");
+
+ if(muteButton){muteButton.disabled=true;muteButton.textContent="MUTE"}
+
+ audioMuted[name]=false;
 
 }
 
@@ -1428,7 +1504,33 @@ function toggleInput(name){
 
  if(audioChannels[name])stopInput(name);
 
- else startInput(name,$(`${name}Device`)?.value||"");
+ else startInput(name,$(name+"Device").value);
+
+}
+
+function toggleMute(name){
+
+ if(name!=="phone"&&!audioChannels[name])return;
+
+ audioMuted[name]=!audioMuted[name];
+
+ if(name==="phone"){
+
+  mediaAudioNodes.forEach(node=>{
+
+   node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100;
+
+  });
+
+  $("phoneToggle").textContent=audioMuted.phone?"SON ON":"MUTE";
+
+  return;
+
+ }
+
+ setVolume(name);
+
+ $(name+"Mute").textContent=audioMuted[name]?"SON ON":"MUTE";
 
 }
 
@@ -1436,19 +1538,23 @@ function meterLoop(name){
 
  const ch=audioChannels[name];if(!ch)return;
 
- const arr=new Uint8Array(ch.an.frequencyBinCount);
+ const data=new Uint8Array(ch.an.frequencyBinCount);
 
  const tick=()=>{
 
   if(audioChannels[name]!==ch)return;
 
-  ch.an.getByteTimeDomainData(arr);let sum=0;
+  ch.an.getByteTimeDomainData(data);
 
-  for(const v of arr){const n=(v-128)/128;sum+=n*n}
+  let sum=0;
 
-  const level=Math.min(100,Math.round(Math.sqrt(sum/arr.length)*300));
+  for(const value of data){const n=(value-128)/128;sum+=n*n}
 
-  $(`${name}Meter`).style.width=level+"%";requestAnimationFrame(tick);
+  const level=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300));
+
+  $(name+"Meter").style.width=level+"%";
+
+  requestAnimationFrame(tick);
 
  };
 
@@ -1460,23 +1566,31 @@ async function listDevices(){
 
  if(!navigator.mediaDevices?.enumerateDevices)return;
 
- const dev=await navigator.mediaDevices.enumerateDevices();
+ const devices=await navigator.mediaDevices.enumerateDevices();
 
  for(const id of ["micDevice","auxDevice"]){
 
-  const sel=$(id),old=sel.value;
+  const select=$(id),old=select.value;
 
-  sel.innerHTML=id==="micDevice"?'<option value="">Microphone par défaut</option>':'<option value="">Choisir une entrée audio</option>';
+  select.innerHTML=id==="micDevice"
 
-  dev.filter(d=>d.kind==="audioinput").forEach((d,i)=>{
+   ?'<option value="">Microphone par défaut</option>'
 
-   const o=document.createElement("option");o.value=d.deviceId;
+   :'<option value="">Choisir une entrée audio</option>';
 
-   o.textContent=d.label||"Entrée audio "+(i+1);sel.append(o);
+  devices.filter(d=>d.kind==="audioinput").forEach((device,i)=>{
+
+   const option=document.createElement("option");
+
+   option.value=device.deviceId;
+
+   option.textContent=device.label||"Entrée audio "+(i+1);
+
+   select.append(option);
 
   });
 
-  if([...sel.options].some(o=>o.value===old))sel.value=old;
+  if([...select.options].some(o=>o.value===old))select.value=old;
 
  }
 
@@ -1488,25 +1602,71 @@ function setupMediaAudio(key,el){
 
   if(!audioContext||mediaAudioNodes.has(key))return;
 
-  const source=audioContext.createMediaElementSource(el),gain=audioContext.createGain();
+  const source=audioContext.createMediaElementSource(el);
 
-  source.connect(gain);gain.connect(mixDestination);
+  const gain=audioContext.createGain();
 
-  mediaAudioNodes.set(key,{source,gain});
+  const analyser=audioContext.createAnalyser();
 
-  gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0;
+  analyser.fftSize=256;
 
- }catch(e){}
+  source.connect(gain);
+
+  gain.connect(analyser);
+
+  analyser.connect(mixDestination);
+
+  gain.connect(audioContext.destination);
+
+  gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100;
+
+  mediaAudioNodes.set(key,{source,gain,analyser});
+
+  mediaMeterLoop(key);
+
+ }catch(e){console.warn("Audio média :",e)}
 
 }
 
-function updatePhoneAudio(){
+function mediaMeterLoop(key){
 
- phoneEnabled=!phoneEnabled;
+ const node=mediaAudioNodes.get(key);if(!node)return;
 
- $("phoneToggle").textContent=phoneEnabled?"Couper":"Activer";
+ const data=new Uint8Array(node.analyser.frequencyBinCount);
 
- mediaAudioNodes.forEach(n=>n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0);
+ const tick=()=>{
+
+  if(mediaAudioNodes.get(key)!==node)return;
+
+  node.analyser.getByteTimeDomainData(data);
+
+  let sum=0;
+
+  for(const value of data){const n=(value-128)/128;sum+=n*n}
+
+  const level=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300));
+
+  $("phoneMeter").style.width=level+"%";
+
+  requestAnimationFrame(tick);
+
+ };
+
+ requestAnimationFrame(tick);
+
+}
+
+function updatePhoneAudio(){toggleMute("phone")}
+
+function updateMediaVolume(){
+
+ $("phonePct").textContent=$("phoneVolume").value+"%";
+
+ mediaAudioNodes.forEach(node=>{
+
+  node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100;
+
+ });
 
 }
 
@@ -1522,7 +1682,9 @@ async function startRecording(){
 
   await audioInit();
 
-  const v=program.captureStream(30),tracks=[...v.getVideoTracks()];
+  const videoStream=program.captureStream(30);
+
+  const tracks=[...videoStream.getVideoTracks()];
 
   tracks.push(...mixDestination.stream.getAudioTracks());
 
@@ -1550,6 +1712,8 @@ async function startRecording(){
 
    $("recordStatus").textContent="Enregistrement terminé. Vidéo prête.";
 
+   stream.getTracks().forEach(t=>t.stop());
+
   };
 
   recording.start(1000);
@@ -1568,7 +1732,11 @@ function stopRecording(){
 
  if(recording?.state==="recording"){
 
-  recording.stop();$("recordBtn").textContent="● Démarrer l'enregistrement";status("STUDIO PRÊT");
+  recording.stop();
+
+  $("recordBtn").textContent="● Démarrer l'enregistrement";
+
+  status("STUDIO PRÊT");
 
  }
 
@@ -1656,19 +1824,17 @@ $("micToggle").onclick=()=>toggleInput("mic");
 
 $("auxToggle").onclick=()=>toggleInput("aux");
 
+$("micMute").onclick=()=>toggleMute("mic");
+
+$("auxMute").onclick=()=>toggleMute("aux");
+
 $("phoneToggle").onclick=updatePhoneAudio;
 
 $("micVolume").oninput=()=>setVolume("mic");
 
 $("auxVolume").oninput=()=>setVolume("aux");
 
-$("phoneVolume").oninput=()=>{
-
- $("phonePct").textContent=$("phoneVolume").value+"%";
-
- mediaAudioNodes.forEach(n=>n.gain.gain.value=phoneEnabled?(+$("phoneVolume").value/100):0);
-
-};
+$("phoneVolume").oninput=updateMediaVolume;
 
 $("stopBtn").onclick=stopAll;
 
@@ -1676,9 +1842,17 @@ $("recordBtn").onclick=()=>recording?.state==="recording"?stopRecording():startR
 
 $("downloadBtn").onclick=download;
 
-$("micDevice").onchange=()=>{if(audioChannels.mic)startInput("mic",$("micDevice").value)};
+$("micDevice").onchange=()=>{
 
-$("auxDevice").onchange=()=>{if(audioChannels.aux)startInput("aux",$("auxDevice").value)};
+ if(audioChannels.mic)startInput("mic",$("micDevice").value);
+
+};
+
+$("auxDevice").onchange=()=>{
+
+ if(audioChannels.aux)startInput("aux",$("auxDevice").value);
+
+};
 
 /* INITIALISATION */
 
@@ -1719,6 +1893,8 @@ window.addEventListener("beforeunload",()=>{
  mediaObjects.forEach(el=>{if(el.pause)el.pause()});
 
  if(recordUrl)URL.revokeObjectURL(recordUrl);
+
+ if(audioContext)audioContext.close();
 
 });
 
