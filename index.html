@@ -30,13 +30,9 @@ button:disabled{opacity:.4;cursor:not-allowed}
 
 .top{position:sticky;top:0;z-index:20;background:#15191f;border-bottom:1px solid var(--line);padding:12px;display:flex;justify-content:space-between;align-items:center}
 
-.brand{display:flex;gap:10px;align-items:center}
+.brand{display:flex;gap:10px;align-items:center}.logo{border:1px solid #87919e;border-radius:7px;padding:10px;font-weight:bold}
 
-.logo{border:1px solid #87919e;border-radius:7px;padding:10px;font-weight:bold}
-
-.brandname{font-weight:bold;font-size:12px;letter-spacing:1px}
-
-.sub{font-size:9px;letter-spacing:1.3px;margin-top:4px;color:var(--muted)}
+.brandname{font-weight:bold;font-size:12px;letter-spacing:1px}.sub{font-size:9px;letter-spacing:1.3px;margin-top:4px;color:var(--muted)}
 
 .status{font-size:10px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#929ba8;margin-right:6px}
 
@@ -50,21 +46,15 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 .studio{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-.monitor-wrap{min-width:0}
+.monitor-wrap{min-width:0}.monitor{position:relative;width:100%;aspect-ratio:16/9;background:#050608;border:2px solid var(--line);border-radius:8px;overflow:hidden}
 
-.monitor{position:relative;width:100%;aspect-ratio:16/9;background:#050608;border:2px solid var(--line);border-radius:8px;overflow:hidden}
-
-.monitor.preview{border-color:var(--blue)}
-
-.monitor.program{border-color:var(--red)}
+.monitor.preview{border-color:var(--blue)}.monitor.program{border-color:var(--red)}
 
 .monitor canvas{width:100%;height:100%;display:block;touch-action:none}
 
 .monitor-label{position:absolute;top:8px;left:8px;background:#111c;padding:6px 9px;border-radius:4px;font-size:10px;font-weight:bold;pointer-events:none}
 
-.preview .monitor-label{background:#174b91}
-
-.program .monitor-label{background:#8d2222}
+.preview .monitor-label{background:#174b91}.program .monitor-label{background:#8d2222}
 
 .clock{position:absolute;bottom:8px;right:8px;background:#111c;padding:5px 8px;border-radius:4px;font-size:10px}
 
@@ -72,49 +62,39 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 .toolbar button,.rowbuttons button{flex:1;min-width:90px;font-size:11px}
 
-.primary{background:#edf0f3;color:#11151a;font-weight:bold}
+.primary{background:#edf0f3;color:#11151a;font-weight:bold}.good{border-color:#246c50;color:#75e2ad}
 
-.good{border-color:#246c50;color:#75e2ad}
-
-.danger{border-color:#744044;color:#ffaaaa}
-
-.blue{border-color:#326db8;color:#a9ceff}
+.danger{border-color:#744044;color:#ffaaaa}.blue{border-color:#326db8;color:#a9ceff}
 
 .auto{background:#246c50;border-color:#32c987;color:white;font-weight:bold}
 
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px;min-width:0}
 
-.panel h3{margin-bottom:12px}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.panel h3{margin-bottom:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 
 .scene-list,.source-list{display:grid;gap:7px}
 
-.scene-item,.source-item{display:flex;align-items:center;justify-content:space-between;gap:6px;border:1px solid var(--line);border-radius:7px;padding:8px;background:#151a21}
+.scene-item,.source-item{display:flex;align-items:center;justify-content:space-between;gap:5px;border:1px solid var(--line);border-radius:7px;padding:7px;background:#151a21;min-width:0}
 
 .scene-item.active,.source-item.active{border-color:#f1f3f5;background:#303844}
 
-.scene-pick,.source-pick{flex:1;text-align:left;background:transparent;border:0;padding:3px;min-width:0}
+.scene-pick,.source-pick{flex:1;text-align:left;background:transparent;border:0;padding:3px;min-width:0;overflow:hidden}
 
 .scene-pick small,.source-pick small{display:block;margin-top:4px}
 
-.mini{padding:6px 8px;font-size:10px}
+.mini{padding:6px 7px;font-size:10px;white-space:nowrap}
 
 .field{width:100%;background:#11151b;color:white;border:1px solid var(--line);border-radius:7px;padding:9px;margin:5px 0 9px}
 
 .label{display:block;color:var(--muted);font-size:11px;margin-top:7px}
 
-.props{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-
-.props .field{margin:5px 0}
+.props{display:grid;grid-template-columns:1fr 1fr;gap:7px}.props .field{margin:5px 0}
 
 .hint,.statusline{font-size:11px;line-height:1.5;margin-top:9px}
 
 .error{display:none;background:#3b2023;color:#ffb9b9;padding:10px;border-radius:7px;margin:10px 0;font-size:12px}
 
-.audio-row{padding:9px 0;border-bottom:1px solid var(--line)}
-
-.audio-row:last-child{border:0}
+.audio-row{padding:9px 0;border-bottom:1px solid var(--line)}.audio-row:last-child{border:0}
 
 .audio-head{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px}
 
@@ -136,9 +116,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 .multi-card{border:2px solid var(--line);border-radius:7px;overflow:hidden;background:#101216;min-width:0}
 
-.multi-card.pvw{border-color:var(--blue)}
-
-.multi-card.pgm{border-color:var(--red)}
+.multi-card.pvw{border-color:var(--blue)}.multi-card.pgm{border-color:var(--red)}
 
 .multi-card canvas{display:block;width:100%;aspect-ratio:16/9;background:#050608}
 
@@ -152,17 +130,11 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 .footer{text-align:center;color:#697380;font-size:10px;padding:22px;letter-spacing:1px}
 
-@media(max-width:700px){
+.source-tools{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 
- main{padding:9px}.studio{grid-template-columns:1fr}
+.source-tools button{flex:1;font-size:10px}
 
- .grid{grid-template-columns:1fr}
-
- .multi-grid{grid-template-columns:repeat(2,1fr)}
-
- .toolbar button{min-width:calc(50% - 8px)}
-
-}
+@media(max-width:700px){main{padding:9px}.studio,.grid{grid-template-columns:1fr}.multi-grid{grid-template-columns:repeat(2,1fr)}.toolbar button{min-width:calc(50% - 8px)}}
 
 </style>
 
@@ -172,13 +144,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 <header class="top">
 
- <div class="brand">
-
-  <div class="logo">MLS</div>
-
-  <div><div class="brandname">MERFIL LIVE STUDIO</div><div class="sub">MOBILE PRODUCTION · V7 AUDIO</div></div>
-
- </div>
+ <div class="brand"><div class="logo">MLS</div><div><div class="brandname">MERFIL LIVE STUDIO</div><div class="sub">MOBILE PRODUCTION · VERSION 8</div></div></div>
 
  <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">STUDIO PRÊT</span></div>
 
@@ -194,21 +160,9 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="heading"><h2>PREVIEW · PVW</h2><span class="badge pvw">PRÉPARATION</span></div>
 
-   <div class="monitor preview">
+   <div class="monitor preview"><canvas id="previewCanvas" width="1280" height="720"></canvas><div class="monitor-label">PREVIEW</div></div>
 
-    <canvas id="previewCanvas" width="1280" height="720"></canvas>
-
-    <div class="monitor-label">PREVIEW</div>
-
-   </div>
-
-   <div class="toolbar">
-
-    <button class="blue" id="previewBtn">Actualiser Preview</button>
-
-    <button class="primary" id="takeBtn">TAKE → PROGRAM</button>
-
-   </div>
+   <div class="toolbar"><button class="blue" id="previewBtn">Actualiser Preview</button><button class="primary" id="takeBtn">TAKE → PROGRAM</button></div>
 
    <div class="statusline" id="previewStatus">Scène en préparation.</div>
 
@@ -218,23 +172,9 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="heading"><h2>PROGRAM · PGM</h2><span class="badge pgm">SORTIE PRINCIPALE</span></div>
 
-   <div class="monitor program">
+   <div class="monitor program"><canvas id="programCanvas" width="1280" height="720"></canvas><div class="monitor-label">PROGRAM</div><div class="clock" id="clock">00:00:00</div></div>
 
-    <canvas id="programCanvas" width="1280" height="720"></canvas>
-
-    <div class="monitor-label">PROGRAM</div>
-
-    <div class="clock" id="clock">00:00:00</div>
-
-   </div>
-
-   <div class="toolbar">
-
-    <button class="auto" id="autoBtn">AUTO · TRANSITION</button>
-
-    <button class="danger" id="blackBtn">NOIR</button>
-
-   </div>
+   <div class="toolbar"><button class="auto" id="autoBtn">AUTO · TRANSITION</button><button class="danger" id="blackBtn">NOIR</button></div>
 
    <div class="statusline" id="programStatus">Programme : aucune scène.</div>
 
@@ -248,15 +188,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <h3>CONTRÔLE DES TRANSITIONS</h3>
 
-  <div class="transition-controls">
-
-   <button id="cutTransition" class="primary">CUT</button>
-
-   <button id="fadeTransition">FONDU</button>
-
-   <button id="dipTransition">FONDU AU NOIR</button>
-
-  </div>
+  <div class="transition-controls"><button id="cutTransition" class="primary">CUT</button><button id="fadeTransition">FONDU</button><button id="dipTransition">FONDU AU NOIR</button></div>
 
   <label class="label">Durée de transition : <b id="durationText">700 ms</b></label>
 
@@ -272,7 +204,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <div class="multi-grid" id="multiGrid"></div>
 
-  <div class="hint">Sélectionne une scène dans le Multiview pour la charger dans Preview. Le Program reste indépendant jusqu'à TAKE ou AUTO.</div>
+  <div class="hint">Sélectionne une scène pour la charger dans Preview. Le Program reste indépendant jusqu'à TAKE ou AUTO.</div>
 
  </section>
 
@@ -338,17 +270,23 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="rowbuttons">
 
-    <button id="addImageBtn">＋ Image</button>
-
-    <button id="addVideoBtn">＋ Vidéo</button>
-
-    <button id="addColorBtn">＋ Fond</button>
+    <button id="addImageBtn">＋ Image</button><button id="addVideoBtn">＋ Vidéo</button><button id="addColorBtn">＋ Fond</button>
 
    </div>
 
    <div class="source-list" id="sourceList" style="margin-top:10px"></div>
 
-   <div class="hint">Sélectionne une source et déplace-la dans Preview. La poignée en bas à droite permet de la redimensionner.</div>
+   <div class="source-tools">
+
+    <button id="duplicateSourceBtn">Dupliquer source</button>
+
+    <button id="lockSourceBtn">Verrouiller</button>
+
+    <button id="deleteSourceBtn" class="danger">Supprimer source</button>
+
+   </div>
+
+   <div class="hint">Chaque scène possède sa propre liste de sources. Sélectionne une source puis déplace-la dans Preview. La poignée en bas à droite permet de la redimensionner.</div>
 
   </section>
 
@@ -380,7 +318,11 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
     <div id="textProps"><label class="label">Texte affiché</label><input class="field" id="propText"></div>
 
-    <button id="applyProps" class="primary" style="width:100%">Appliquer les modifications</button>
+    <div id="colorProps"><label class="label">Couleur du fond</label><input class="field" id="propColor" type="color"></div>
+
+    <label class="label">Opacité</label><input id="propOpacity" type="range" min="0" max="100" value="100" style="width:100%">
+
+    <button id="applyProps" class="primary" style="width:100%;margin-top:8px">Appliquer les modifications</button>
 
    </div>
 
@@ -392,25 +334,11 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="audio-row">
 
-    <div class="audio-head">
-
-     <b>Microphone</b>
-
-     <button class="mini" id="micToggle">Activer</button>
-
-     <button class="mini danger" id="micMute" disabled>MUTE</button>
-
-    </div>
+    <div class="audio-head"><b>Microphone</b><button class="mini" id="micToggle">Activer</button><button class="mini danger" id="micMute" disabled>MUTE</button></div>
 
     <select id="micDevice" class="field"><option value="">Microphone par défaut</option></select>
 
-    <div class="audio-controls">
-
-     <input id="micVolume" type="range" min="0" max="150" value="100">
-
-     <span id="micPct">100%</span>
-
-    </div>
+    <div class="audio-controls"><input id="micVolume" type="range" min="0" max="150" value="100"><span id="micPct">100%</span></div>
 
     <div class="meter"><span id="micMeter"></span></div>
 
@@ -418,21 +346,9 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="audio-row">
 
-    <div class="audio-head">
+    <div class="audio-head"><b>Son des médias / téléphone</b><button class="mini danger" id="phoneToggle">MUTE</button></div>
 
-     <b>Son des médias / téléphone</b>
-
-     <button class="mini danger" id="phoneToggle">MUTE</button>
-
-    </div>
-
-    <div class="audio-controls">
-
-     <input id="phoneVolume" type="range" min="0" max="150" value="100">
-
-     <span id="phonePct">100%</span>
-
-    </div>
+    <div class="audio-controls"><input id="phoneVolume" type="range" min="0" max="150" value="100"><span id="phonePct">100%</span></div>
 
     <div class="meter"><span id="phoneMeter"></span></div>
 
@@ -442,25 +358,11 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
    <div class="audio-row">
 
-    <div class="audio-head">
-
-     <b>Entrée auxiliaire AUX</b>
-
-     <button class="mini" id="auxToggle">Activer</button>
-
-     <button class="mini danger" id="auxMute" disabled>MUTE</button>
-
-    </div>
+    <div class="audio-head"><b>Entrée auxiliaire AUX</b><button class="mini" id="auxToggle">Activer</button><button class="mini danger" id="auxMute" disabled>MUTE</button></div>
 
     <select id="auxDevice" class="field"><option value="">Choisir une entrée audio</option></select>
 
-    <div class="audio-controls">
-
-     <input id="auxVolume" type="range" min="0" max="150" value="100">
-
-     <span id="auxPct">100%</span>
-
-    </div>
+    <div class="audio-controls"><input id="auxVolume" type="range" min="0" max="150" value="100"><span id="auxPct">100%</span></div>
 
     <div class="meter"><span id="auxMeter"></span></div>
 
@@ -476,13 +378,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
   <h3>ENREGISTREMENT DU PROGRAMME</h3>
 
-  <div class="rowbuttons">
-
-   <button class="primary" id="recordBtn">● Démarrer l'enregistrement</button>
-
-   <button id="downloadBtn" disabled>Télécharger la vidéo</button>
-
-  </div>
+  <div class="rowbuttons"><button class="primary" id="recordBtn">● Démarrer l'enregistrement</button><button id="downloadBtn" disabled>Télécharger la vidéo</button></div>
 
   <div class="statusline" id="recordStatus">Capture du moniteur PROGRAM et du mixage audio.</div>
 
@@ -498,7 +394,7 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 
 </main>
 
-<footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 7.0 AUDIO</footer>
+<footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 8.0</footer>
 
 <input id="imageFile" type="file" accept="image/*" hidden>
 
@@ -516,11 +412,9 @@ const program=$("programCanvas"),gctx=program.getContext("2d");
 
 let scenes=[],previewSceneId=null,programSceneId=null,programSnapshot=null;
 
-let selectedSourceId=null,sourceCounter=0,sceneCounter=0;
+let selectedSourceId=null,sourceCounter=0,sceneCounter=0,cameraCounter=0;
 
-let cameraSources=new Map(),cameraCounter=0;
-
-let mediaObjects=new Map(),mediaAudioNodes=new Map();
+let cameraSources=new Map(),mediaObjects=new Map(),mediaAudioNodes=new Map();
 
 let audioContext=null,mixDestination=null,audioChannels={};
 
@@ -540,37 +434,23 @@ const previewScene=()=>sceneById(previewSceneId);
 
 const programScene=()=>programSnapshot;
 
+const cloneSource=s=>({...s,id:uid()});
+
 function snapshotScene(sc){
 
  return sc?{id:sc.id,name:sc.name,sources:sc.sources.map(s=>({...s}))}:null;
 
 }
 
-function err(msg){
-
- $("errorBox").textContent=msg;
-
- $("errorBox").style.display="block";
-
-}
+function err(msg){$("errorBox").textContent=msg;$("errorBox").style.display="block"}
 
 function clearErr(){$("errorBox").style.display="none"}
 
-function status(t,on=false){
-
- $("statusText").textContent=t;
-
- $("statusDot").style.background=on?"#ed4545":"#929ba8";
-
-}
+function status(t,on=false){$("statusText").textContent=t;$("statusDot").style.background=on?"#ed4545":"#929ba8"}
 
 function makeScene(name){return{id:"scene"+(++sceneCounter),name,sources:[]}}
 
-function escapeHtml(s){
-
- return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 
 function addSource(type,extra={}){
 
@@ -578,17 +458,11 @@ function addSource(type,extra={}){
 
  const src={
 
-  id:uid(),type,
+  id:uid(),type,name:extra.name||({camera:"Caméra",image:"Image",video:"Vidéo",text:"Texte",color:"Fond"}[type]),
 
-  name:extra.name||({camera:"Caméra",image:"Image",video:"Vidéo",text:"Texte",color:"Fond"}[type]),
+  x:extra.x??120,y:extra.y??100,w:extra.w??(type==="text"?700:900),
 
-  x:extra.x??120,y:extra.y??100,
-
-  w:extra.w??(type==="text"?700:900),
-
-  h:extra.h??(type==="text"?110:506),
-
-  visible:true,...extra
+  h:extra.h??(type==="text"?110:506),visible:true,locked:false,opacity:100,...extra
 
  };
 
@@ -636,7 +510,7 @@ function renderLists(){
 
   const b=document.createElement("button");b.className="source-pick";
 
-  b.innerHTML=(src.visible?"◉ ":"○ ")+escapeHtml(src.name)+"<small>"+src.type.toUpperCase()+"</small>";
+  b.innerHTML=(src.visible?"◉ ":"○ ")+(src.locked?"🔒 ":"")+escapeHtml(src.name)+"<small>"+src.type.toUpperCase()+"</small>";
 
   b.onclick=()=>{selectedSourceId=src.id;renderLists();renderProps();renderAll()};
 
@@ -644,9 +518,9 @@ function renderLists(){
 
   vis.onclick=()=>{src.visible=!src.visible;renderLists();renderAll()};
 
-  const up=document.createElement("button");up.className="mini";up.textContent="↑";up.onclick=()=>moveLayer(src.id,-1);
+  const up=document.createElement("button");up.className="mini";up.textContent="↑";up.onclick=()=>moveLayer(src.id,1);
 
-  const down=document.createElement("button");down.className="mini";down.textContent="↓";down.onclick=()=>moveLayer(src.id,1);
+  const down=document.createElement("button");down.className="mini";down.textContent="↓";down.onclick=()=>moveLayer(src.id,-1);
 
   const del=document.createElement("button");del.className="mini danger";del.textContent="×";del.onclick=()=>removeSource(src.id);
 
@@ -659,6 +533,8 @@ function renderLists(){
  $("previewStatus").textContent="Preview : "+(sc?.name||"aucune scène");
 
  $("programStatus").textContent="Programme : "+(programScene()?.name||"aucune scène")+(programBlack?" · NOIR":"");
+
+ $("lockSourceBtn").textContent=selected()?.locked?"Déverrouiller":"Verrouiller";
 
  updateCameraStatus();
 
@@ -673,6 +549,8 @@ function selectPreview(id){
  renderLists();renderProps();renderAll();
 
 }
+
+function selected(){return previewScene()?.sources.find(s=>s.id===selectedSourceId)}
 
 function renderProps(){
 
@@ -690,11 +568,17 @@ function renderProps(){
 
  $("textProps").hidden=s.type!=="text";
 
+ $("colorProps").hidden=s.type!=="color";
+
  $("propText").value=s.text||"";
 
-}
+ $("propColor").value=s.color||"#17202c";
 
-function selected(){return previewScene()?.sources.find(s=>s.id===selectedSourceId)}
+ $("propOpacity").value=s.opacity??100;
+
+ $("lockSourceBtn").textContent=s.locked?"Déverrouiller":"Verrouiller";
+
+}
 
 function applyProps(){
 
@@ -702,13 +586,17 @@ function applyProps(){
 
  s.name=$("propName").value||s.name;
 
- s.x=+$("propX").value||0;s.y=+$("propY").value||0;
+ s.x=Number($("propX").value)||0;s.y=Number($("propY").value)||0;
 
- s.w=Math.max(20,+$("propW").value||20);
+ s.w=Math.max(20,Number($("propW").value)||20);
 
- s.h=Math.max(20,+$("propH").value||20);
+ s.h=Math.max(20,Number($("propH").value)||20);
+
+ s.opacity=Number($("propOpacity").value);
 
  if(s.type==="text")s.text=$("propText").value;
+
+ if(s.type==="color")s.color=$("propColor").value;
 
  renderLists();renderProps();renderAll();
 
@@ -732,13 +620,7 @@ function cleanupMedia(s){
 
   const key=s.mediaKey,node=mediaAudioNodes.get(key);
 
-  if(node){
-
-   try{node.source.disconnect();node.gain.disconnect();node.analyser?.disconnect()}catch(e){}
-
-   mediaAudioNodes.delete(key);
-
-  }
+  if(node){try{node.source.disconnect();node.gain.disconnect();node.analyser.disconnect()}catch(e){}mediaAudioNodes.delete(key)}
 
   const el=mediaObjects.get(key);
 
@@ -752,13 +634,7 @@ function cleanupMedia(s){
 
   const cam=cameraSources.get(s.cameraKey);
 
-  if(cam){
-
-   cam.stream.getTracks().forEach(t=>t.stop());
-
-   cam.video.srcObject=null;cameraSources.delete(s.cameraKey);
-
-  }
+  if(cam){cam.stream.getTracks().forEach(t=>t.stop());cam.video.srcObject=null;cameraSources.delete(s.cameraKey)}
 
  }
 
@@ -772,11 +648,9 @@ function removeSource(id){
 
  const i=sc.sources.findIndex(x=>x.id===id);if(i<0)return;
 
- const [s]=sc.sources.splice(i,1);
+ const [s]=sc.sources.splice(i,1);cleanupMedia(s);
 
- cleanupMedia(s);selectedSourceId=null;
-
- renderLists();renderProps();renderAll();
+ selectedSourceId=null;renderLists();renderProps();renderAll();
 
 }
 
@@ -786,11 +660,31 @@ function moveLayer(id,d){
 
  const i=a.findIndex(s=>s.id===id),j=i+d;
 
- if(j<0||j>=a.length)return;
+ if(i<0||j<0||j>=a.length)return;
 
  [a[i],a[j]]=[a[j],a[i]];
 
  renderLists();renderAll();
+
+}
+
+function duplicateSource(){
+
+ const s=selected(),sc=previewScene();if(!s||!sc)return;
+
+ const copy=cloneSource(s);copy.name=s.name+" copie";
+
+ copy.x+=35;copy.y+=35;sc.sources.push(copy);selectedSourceId=copy.id;
+
+ renderLists();renderProps();renderAll();
+
+}
+
+function toggleSourceLock(){
+
+ const s=selected();if(!s)return;
+
+ s.locked=!s.locked;renderLists();renderProps();renderAll();
 
 }
 
@@ -822,25 +716,17 @@ function renderScene(c,sc,highlight=false){
 
  c.fillStyle="#080a0e";c.fillRect(0,0,1280,720);
 
- if(!sc){
-
-  c.fillStyle="#dce2e9";c.textAlign="center";c.font="bold 38px Arial";
-
-  c.fillText("MERFIL LIVE STUDIO",640,360);return;
-
- }
+ if(!sc){c.fillStyle="#dce2e9";c.textAlign="center";c.font="bold 38px Arial";c.fillText("MERFIL LIVE STUDIO",640,360);return}
 
  for(const s of sc.sources){
 
   if(!s.visible)continue;
 
-  c.save();
+  c.save();c.globalAlpha=Math.max(0,Math.min(100,s.opacity??100))/100;
 
-  if(s.type==="color"){
+  if(s.type==="color"){c.fillStyle=s.color||"#17202c";c.fillRect(s.x,s.y,s.w,s.h)}
 
-   c.fillStyle=s.color||"#17202c";c.fillRect(s.x,s.y,s.w,s.h);
-
-  }else if(s.type==="text"){
+  else if(s.type==="text"){
 
    c.fillStyle=s.bg||"rgba(8,12,20,.72)";c.fillRect(s.x,s.y,s.w,s.h);
 
@@ -854,27 +740,25 @@ function renderScene(c,sc,highlight=false){
 
    const cam=cameraSources.get(s.cameraKey);
 
-   if(cam&&cam.video.readyState>=2)cover(c,cam.video,s.x,s.y,s.w,s.h);
-
-   else placeholder(c,s);
+   if(cam&&cam.video.readyState>=2)cover(c,cam.video,s.x,s.y,s.w,s.h);else placeholder(c,s);
 
   }else if(s.type==="image"||s.type==="video"){
 
    const el=mediaObjects.get(s.mediaKey);
 
-   if(el&&(s.type==="image"?el.complete&&el.naturalWidth:el.readyState>=2))cover(c,el,s.x,s.y,s.w,s.h);
-
-   else placeholder(c,s);
+   if(el&&(s.type==="image"?el.complete&&el.naturalWidth:el.readyState>=2))cover(c,el,s.x,s.y,s.w,s.h);else placeholder(c,s);
 
   }
 
+  c.globalAlpha=1;
+
   if(highlight&&s.id===selectedSourceId){
 
-   c.strokeStyle="#fff";c.lineWidth=3;c.setLineDash([10,7]);
-
-   c.strokeRect(s.x,s.y,s.w,s.h);c.setLineDash([]);
+   c.strokeStyle="#fff";c.lineWidth=3;c.setLineDash([10,7]);c.strokeRect(s.x,s.y,s.w,s.h);c.setLineDash([]);
 
    c.fillStyle="#fff";c.fillRect(s.x+s.w-15,s.y+s.h-15,22,22);
+
+   if(s.locked){c.fillStyle="#ffcc66";c.font="bold 18px Arial";c.fillText("🔒",s.x+8,s.y+25)}
 
   }
 
@@ -906,9 +790,7 @@ function animate(){
 
  if(transitionState){
 
-  const t=Math.min(1,(performance.now()-transitionState.start)/transitionState.duration);
-
-  const st=transitionState;
+  const t=Math.min(1,(performance.now()-transitionState.start)/transitionState.duration),st=transitionState;
 
   if(st.type==="fade"){
 
@@ -918,55 +800,33 @@ function animate(){
 
   }else if(st.type==="dip"){
 
-   if(t<.5){
+   if(t<.5){gctx.globalAlpha=1-t*2;gctx.drawImage(st.from,0,0);gctx.globalAlpha=1}
 
-    gctx.globalAlpha=1-t*2;gctx.drawImage(st.from,0,0);gctx.globalAlpha=1;
-
-   }else{
-
-    gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
-
-    gctx.globalAlpha=(t-.5)*2;gctx.drawImage(st.to,0,0);gctx.globalAlpha=1;
-
-   }
+   else{gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);gctx.globalAlpha=(t-.5)*2;gctx.drawImage(st.to,0,0);gctx.globalAlpha=1}
 
   }
 
   if(t>=1){
 
-   transitionState=null;programBlack=false;
+   transitionState=null;programBlack=false;renderScene(gctx,programScene(),false);
 
-   renderScene(gctx,programScene(),false);
-
-   $("programStatus").textContent="Programme : "+(programScene()?.name||"—");
-
-   renderLists();
+   $("programStatus").textContent="Programme : "+(programScene()?.name||"—");renderLists();
 
   }
 
- }else if(programBlack){
+ }else if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
 
-  gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);
+ else renderScene(gctx,programScene(),false);
 
- }else renderScene(gctx,programScene(),false);
-
- updateMultiview();
-
- requestAnimationFrame(animate);
+ updateMultiview();requestAnimationFrame(animate);
 
 }
 
 function updateMultiview(){
 
- const now=performance.now();if(now-lastMultiUpdate<500)return;
+ const now=performance.now();if(now-lastMultiUpdate<500)return;lastMultiUpdate=now;
 
- lastMultiUpdate=now;
-
- const grid=$("multiGrid");
-
- const oldIds=[...grid.children].map(x=>x.dataset.id);
-
- const newIds=scenes.map(s=>s.id);
+ const grid=$("multiGrid"),oldIds=[...grid.children].map(x=>x.dataset.id),newIds=scenes.map(s=>s.id);
 
  if(oldIds.join("|")!==newIds.join("|")){
 
@@ -982,9 +842,7 @@ function updateMultiview(){
 
    const name=document.createElement("b");name.textContent=sc.name;
 
-   const choose=document.createElement("button");choose.textContent="PREVIEW";
-
-   choose.onclick=()=>selectPreview(sc.id);
+   const choose=document.createElement("button");choose.textContent="PREVIEW";choose.onclick=()=>selectPreview(sc.id);
 
    info.append(name,choose);card.append(c,info);grid.append(card);
 
@@ -996,33 +854,19 @@ function updateMultiview(){
 
   const card=[...grid.children].find(x=>x.dataset.id===sc.id);if(!card)return;
 
-  card.classList.toggle("pvw",sc.id===previewSceneId);
-
-  card.classList.toggle("pgm",sc.id===programSceneId);
+  card.classList.toggle("pvw",sc.id===previewSceneId);card.classList.toggle("pgm",sc.id===programSceneId);
 
   const c=card.querySelector("canvas"),cx=c.getContext("2d");
 
-  cx.clearRect(0,0,c.width,c.height);cx.save();cx.scale(.5,.5);
-
-  renderScene(cx,sc,false);cx.restore();
+  cx.clearRect(0,0,c.width,c.height);cx.save();cx.scale(.5,.5);renderScene(cx,sc,false);cx.restore();
 
   card.querySelector("b").textContent=sc.name;
 
-  const info=card.querySelector(".multi-info");
+  const info=card.querySelector(".multi-info");info.querySelectorAll(".badge").forEach(x=>x.remove());
 
-  info.querySelectorAll(".badge").forEach(x=>x.remove());
+  if(sc.id===previewSceneId){const b=document.createElement("span");b.className="badge pvw";b.textContent="PVW";info.insertBefore(b,info.lastChild)}
 
-  if(sc.id===previewSceneId){
-
-   const b=document.createElement("span");b.className="badge pvw";b.textContent="PVW";info.insertBefore(b,info.lastChild);
-
-  }
-
-  if(sc.id===programSceneId){
-
-   const b=document.createElement("span");b.className="badge pgm";b.textContent="PGM";info.insertBefore(b,info.lastChild);
-
-  }
+  if(sc.id===programSceneId){const b=document.createElement("span");b.className="badge pgm";b.textContent="PGM";info.insertBefore(b,info.lastChild)}
 
  });
 
@@ -1038,53 +882,33 @@ function canvasPoint(e){
 
 preview.addEventListener("pointerdown",e=>{
 
- const p=canvasPoint(e),a=previewScene()?.sources||[];
+ const p=canvasPoint(e),a=previewScene()?.sources||[];let hit=null;
 
- let hit=null;
-
- for(let i=a.length-1;i>=0;i--){
-
-  const s=a[i];
-
-  if(s.visible&&p.x>=s.x&&p.x<=s.x+s.w&&p.y>=s.y&&p.y<=s.y+s.h){hit=s;break}
-
- }
+ for(let i=a.length-1;i>=0;i--){const s=a[i];if(s.visible&&p.x>=s.x&&p.x<=s.x+s.w&&p.y>=s.y&&p.y<=s.y+s.h){hit=s;break}}
 
  if(!hit){selectedSourceId=null;renderLists();renderProps();renderAll();return}
 
  selectedSourceId=hit.id;
 
+ if(hit.locked){renderLists();renderProps();renderAll();return}
+
  drag={id:hit.id,start:p,x:hit.x,y:hit.y,w:hit.w,h:hit.h,resize:p.x>hit.x+hit.w-35&&p.y>hit.y+hit.h-35};
 
- preview.setPointerCapture(e.pointerId);
-
- renderLists();renderProps();renderAll();
+ preview.setPointerCapture(e.pointerId);renderLists();renderProps();renderAll();
 
 });
 
 preview.addEventListener("pointermove",e=>{
 
- if(!drag)return;
+ if(!drag)return;const p=canvasPoint(e),s=selected();if(!s||s.locked)return;
 
- const p=canvasPoint(e),s=selected();if(!s)return;
+ if(drag.resize){s.w=Math.max(30,drag.w+p.x-drag.start.x);s.h=Math.max(30,drag.h+p.y-drag.start.y)}
 
- if(drag.resize){
-
-  s.w=Math.max(30,drag.w+p.x-drag.start.x);
-
-  s.h=Math.max(30,drag.h+p.y-drag.start.y);
-
- }else{
-
-  s.x=drag.x+p.x-drag.start.x;s.y=drag.y+p.y-drag.start.y;
-
- }
+ else{s.x=drag.x+p.x-drag.start.x;s.y=drag.y+p.y-drag.start.y}
 
  $("propX").value=Math.round(s.x);$("propY").value=Math.round(s.y);
 
- $("propW").value=Math.round(s.w);$("propH").value=Math.round(s.h);
-
- renderAll();
+ $("propW").value=Math.round(s.w);$("propH").value=Math.round(s.h);renderAll();
 
 });
 
@@ -1092,25 +916,21 @@ preview.addEventListener("pointerup",()=>{if(drag){drag=null;renderProps();rende
 
 preview.addEventListener("pointercancel",()=>drag=null);
 
-/* PROGRAM INDÉPENDANT DU PREVIEW */
+/* PROGRAM : SNAPSHOT INDEPENDANT */
 
-function takeScene(type){
+function takeScene(){
 
  if(transitionState)return;
 
- const target=previewScene();
+ const target=previewScene();if(!target){err("Aucune scène sélectionnée dans Preview.");return}
 
- if(!target){err("Aucune scène sélectionnée dans Preview.");return}
+ const next=snapshotScene(target);
 
- const nextSnapshot=snapshotScene(target);
+ if(selectedTransition==="cut"){
 
- if(type==="cut"||selectedTransition==="cut"){
+  programSceneId=target.id;programSnapshot=next;programBlack=false;transitionState=null;
 
-  programSceneId=target.id;programSnapshot=nextSnapshot;programBlack=false;
-
-  transitionState=null;renderScene(gctx,programScene(),false);
-
-  $("programStatus").textContent="Programme : "+target.name;renderLists();return;
+  renderScene(gctx,programScene(),false);$("programStatus").textContent="Programme : "+target.name;renderLists();return;
 
  }
 
@@ -1120,15 +940,13 @@ function takeScene(type){
 
  const fc=from.getContext("2d"),tc=to.getContext("2d");
 
- if(programBlack){fc.fillStyle="#000";fc.fillRect(0,0,1280,720)}
+ if(programBlack){fc.fillStyle="#000";fc.fillRect(0,0,1280,720)}else renderScene(fc,programScene(),false);
 
- else renderScene(fc,programScene(),false);
+ renderScene(tc,next,false);
 
- renderScene(tc,nextSnapshot,false);
+ programSceneId=target.id;programSnapshot=next;programBlack=false;
 
- programSceneId=target.id;programSnapshot=nextSnapshot;programBlack=false;
-
- transitionState={from,to,type:selectedTransition,start:performance.now(),duration:+$("transitionDuration").value};
+ transitionState={from,to,type:selectedTransition,start:performance.now(),duration:Number($("transitionDuration").value)};
 
  $("programStatus").textContent="Transition en cours vers : "+target.name;renderLists();
 
@@ -1168,7 +986,7 @@ function duplicateScene(){
 
  const copy=makeScene(sc.name+" copie");
 
- copy.sources=sc.sources.map(s=>({...s,id:uid()}));
+ copy.sources=sc.sources.map(s=>cloneSource(s));
 
  scenes.push(copy);selectPreview(copy.id);renderAll();
 
@@ -1198,7 +1016,7 @@ function deleteScene(){
 
 }
 
-/* CAMÉRAS INDÉPENDANTES */
+/* CAMÉRAS */
 
 async function refreshCameras(){
 
@@ -1206,21 +1024,11 @@ async function refreshCameras(){
 
  try{
 
-  const devices=await navigator.mediaDevices.enumerateDevices();
+  const devices=await navigator.mediaDevices.enumerateDevices(),cams=devices.filter(d=>d.kind==="videoinput");
 
-  const cams=devices.filter(d=>d.kind==="videoinput");
+  const sel=$("cameraDevice"),old=sel.value;sel.innerHTML='<option value="">Caméra par défaut</option>';
 
-  const sel=$("cameraDevice"),old=sel.value;
-
-  sel.innerHTML='<option value="">Caméra par défaut</option>';
-
-  cams.forEach((d,i)=>{
-
-   const o=document.createElement("option");
-
-   o.value=d.deviceId;o.textContent=d.label||"Caméra "+(i+1);sel.append(o);
-
-  });
+  cams.forEach((d,i)=>{const o=document.createElement("option");o.value=d.deviceId;o.textContent=d.label||"Caméra "+(i+1);sel.append(o)});
 
   if([...sel.options].some(o=>o.value===old))sel.value=old;
 
@@ -1240,9 +1048,7 @@ async function authorizeCameras(){
 
   const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
 
-  stream.getTracks().forEach(t=>t.stop());
-
-  await refreshCameras();status("CAMÉRAS AUTORISÉES",true);
+  stream.getTracks().forEach(t=>t.stop());await refreshCameras();status("CAMÉRAS AUTORISÉES",true);
 
  }catch(e){err(e.message||"Autorisation caméra refusée.")}
 
@@ -1258,37 +1064,29 @@ async function addCameraSource(){
 
   const deviceId=$("cameraDevice").value;
 
-  const videoConstraints=deviceId?{deviceId:{exact:deviceId},width:{ideal:1280},height:{ideal:720}}:{facingMode:"environment",width:{ideal:1280},height:{ideal:720}};
+  const constraints=deviceId?{deviceId:{exact:deviceId},width:{ideal:1280},height:{ideal:720}}:{facingMode:"environment",width:{ideal:1280},height:{ideal:720}};
 
-  const stream=await navigator.mediaDevices.getUserMedia({video:videoConstraints,audio:false});
+  const stream=await navigator.mediaDevices.getUserMedia({video:constraints,audio:false});
 
-  const video=document.createElement("video");
-
-  video.autoplay=true;video.playsInline=true;video.muted=true;video.srcObject=stream;
+  const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;video.srcObject=stream;
 
   await video.play();
 
-  const key="camera"+(++cameraCounter);
-
-  cameraSources.set(key,{stream,video,deviceId});
+  const key="camera"+(++cameraCounter);cameraSources.set(key,{stream,video,deviceId});
 
   addSource("camera",{name:"Caméra "+cameraSources.size,cameraKey:key,x:100,y:80,w:900,h:506});
 
-  await refreshCameras();
-
-  $("cameraStatus").textContent=cameraSources.size+" source(s) caméra active(s).";
-
-  status("CAMÉRA AJOUTÉE",true);
+  await refreshCameras();$("cameraStatus").textContent=cameraSources.size+" source(s) caméra active(s).";status("CAMÉRA AJOUTÉE",true);
 
  }catch(e){
 
-  let message=e.message||"Impossible d'ajouter cette caméra.";
+  let m=e.message||"Impossible d'ajouter cette caméra.";
 
-  if(e.name==="NotReadableError")message="Cette caméra est déjà utilisée ou indisponible. Essaie une autre caméra.";
+  if(e.name==="NotReadableError")m="Cette caméra est déjà utilisée ou indisponible. Essaie une autre caméra.";
 
-  if(e.name==="OverconstrainedError")message="Cette caméra ne peut pas répondre aux paramètres demandés.";
+  if(e.name==="OverconstrainedError")m="Cette caméra ne peut pas répondre aux paramètres demandés.";
 
-  err(message);
+  err(m);
 
  }
 
@@ -1296,9 +1094,7 @@ async function addCameraSource(){
 
 function updateCameraStatus(){
 
- const count=cameraSources.size;
-
- $("cameraStatus").textContent=count?count+" source(s) caméra active(s).":"Aucune caméra source active.";
+ const n=cameraSources.size;$("cameraStatus").textContent=n?n+" source(s) caméra active(s).":"Aucune source caméra active.";
 
 }
 
@@ -1306,13 +1102,9 @@ function stopAll(){
 
  if(recording?.state==="recording"){err("Arrête d'abord l'enregistrement.");return}
 
- cameraSources.forEach(cam=>cam.stream.getTracks().forEach(t=>t.stop()));
+ cameraSources.forEach(cam=>cam.stream.getTracks().forEach(t=>t.stop()));cameraSources.clear();
 
- cameraSources.clear();
-
- ["mic","aux"].forEach(stopInput);
-
- $("cameraStatus").textContent="Toutes les caméras sont arrêtées.";
+ ["mic","aux"].forEach(stopInput);$("cameraStatus").textContent="Toutes les caméras sont arrêtées.";
 
  status("STUDIO PRÊT");renderAll();renderLists();
 
@@ -1324,27 +1116,19 @@ function addMedia(file,type){
 
  if(!file)return;
 
- const url=URL.createObjectURL(file),key=uid();
-
- let el;
+ const url=URL.createObjectURL(file),key=uid();let el;
 
  if(type==="image"){
 
-  el=new Image();el.onload=renderAll;el.src=url;
+  el=new Image();el.onload=renderAll;el.onerror=()=>err("Impossible de charger cette image.");el.src=url;
 
  }else{
 
-  el=document.createElement("video");
+  el=document.createElement("video");el.src=url;el.playsInline=true;el.loop=true;el.preload="auto";el.controls=false;
 
-  el.src=url;el.playsInline=true;el.loop=true;el.preload="auto";el.controls=false;
+  el.addEventListener("loadeddata",()=>{if(audioContext)setupMediaAudio(key,el);renderAll()});
 
-  el.addEventListener("loadeddata",()=>{
-
-   if(audioContext)setupMediaAudio(key,el);
-
-   renderAll();
-
-  });
+  el.addEventListener("error",()=>err("Impossible de lire cette vidéo."));
 
   el.play().catch(()=>{});
 
@@ -1354,9 +1138,7 @@ function addMedia(file,type){
 
  addSource(type,{name:file.name,mediaKey:key,url,x:100,y:80,w:900,h:506});
 
- if(type==="video"&&audioContext)setupMediaAudio(key,el);
-
- renderAll();
+ if(type==="video"&&audioContext)setupMediaAudio(key,el);renderAll();
 
 }
 
@@ -1376,41 +1158,25 @@ function addColor(){
 
 }
 
-/* AUDIO - MIXAGE MLS */
+/* AUDIO */
 
 async function audioInit(){
 
- const AC=window.AudioContext||window.webkitAudioContext;
+ const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error("Audio Web non pris en charge.");
 
- if(!AC)throw Error("Audio Web non pris en charge.");
-
- if(!audioContext){
-
-  audioContext=new AC();
-
-  mixDestination=audioContext.createMediaStreamDestination();
-
- }
+ if(!audioContext){audioContext=new AC();mixDestination=audioContext.createMediaStreamDestination()}
 
  if(audioContext.state==="suspended")await audioContext.resume();
 
- mediaObjects.forEach((el,key)=>{
-
-  if(el instanceof HTMLVideoElement)setupMediaAudio(key,el);
-
- });
+ mediaObjects.forEach((el,key)=>{if(el instanceof HTMLVideoElement)setupMediaAudio(key,el)});
 
 }
 
 function setVolume(name){
 
- const ch=audioChannels[name],slider=$(name+"Volume");
+ const ch=audioChannels[name],slider=$(name+"Volume");if(!slider)return;
 
- if(!slider)return;
-
- const value=Number(slider.value)/100;
-
- if(ch)ch.gain.gain.value=audioMuted[name]?0:value;
+ if(ch)ch.gain.gain.value=audioMuted[name]?0:Number(slider.value)/100;
 
  $(name+"Pct").textContent=slider.value+"%";
 
@@ -1418,25 +1184,13 @@ function setVolume(name){
 
 function channelNode(name,stream){
 
- const src=audioContext.createMediaStreamSource(stream);
+ const src=audioContext.createMediaStreamSource(stream),gain=audioContext.createGain(),analyser=audioContext.createAnalyser();
 
- const gain=audioContext.createGain();
+ analyser.fftSize=256;src.connect(gain);gain.connect(analyser);analyser.connect(mixDestination);
 
- const analyser=audioContext.createAnalyser();
+ audioChannels[name]={stream,src,gain,an:analyser};audioMuted[name]=false;setVolume(name);meterLoop(name);
 
- analyser.fftSize=256;
-
- src.connect(gain);gain.connect(analyser);analyser.connect(mixDestination);
-
- audioChannels[name]={stream,src,gain,an:analyser};
-
- audioMuted[name]=false;
-
- setVolume(name);meterLoop(name);
-
- const muteButton=$(name+"Mute");
-
- if(muteButton){muteButton.disabled=false;muteButton.textContent="MUTE"}
+ const btn=$(name+"Mute");if(btn){btn.disabled=false;btn.textContent="MUTE"}
 
  $(name+"Toggle").textContent="Désactiver";
 
@@ -1448,29 +1202,15 @@ async function startInput(name,deviceId){
 
  try{
 
-  await audioInit();
-
-  if(!navigator.mediaDevices?.getUserMedia)throw Error("Entrée audio indisponible dans ce navigateur.");
+  await audioInit();if(!navigator.mediaDevices?.getUserMedia)throw Error("Entrée audio indisponible.");
 
   if(audioChannels[name])stopInput(name);
 
-  const constraints={audio:{
-
-   echoCancellation:name==="mic",
-
-   noiseSuppression:name==="mic",
-
-   autoGainControl:name==="mic",
-
-   ...(deviceId?{deviceId:{exact:deviceId}}:{})
-
-  },video:false};
+  const constraints={audio:{echoCancellation:name==="mic",noiseSuppression:name==="mic",autoGainControl:name==="mic",...(deviceId?{deviceId:{exact:deviceId}}:{})},video:false};
 
   const stream=await navigator.mediaDevices.getUserMedia(constraints);
 
-  channelNode(name,stream);
-
-  $("audioStatus").textContent=name==="mic"?"Microphone connecté.":"Entrée AUX connectée.";
+  channelNode(name,stream);$("audioStatus").textContent=name==="mic"?"Microphone connecté.":"Entrée AUX connectée.";
 
   await listDevices();status("MIXAGE AUDIO ACTIF",true);
 
@@ -1482,31 +1222,17 @@ function stopInput(name){
 
  const ch=audioChannels[name];if(!ch)return;
 
- ch.stream.getTracks().forEach(track=>track.stop());
+ ch.stream.getTracks().forEach(t=>t.stop());
 
  try{ch.src.disconnect();ch.gain.disconnect();ch.an.disconnect()}catch(e){}
 
- delete audioChannels[name];
+ delete audioChannels[name];$(name+"Toggle").textContent="Activer";$(name+"Meter").style.width="0%";
 
- $(name+"Toggle").textContent="Activer";
-
- $(name+"Meter").style.width="0%";
-
- const muteButton=$(name+"Mute");
-
- if(muteButton){muteButton.disabled=true;muteButton.textContent="MUTE"}
-
- audioMuted[name]=false;
+ const btn=$(name+"Mute");if(btn){btn.disabled=true;btn.textContent="MUTE"}audioMuted[name]=false;
 
 }
 
-function toggleInput(name){
-
- if(audioChannels[name])stopInput(name);
-
- else startInput(name,$(name+"Device").value);
-
-}
+function toggleInput(name){if(audioChannels[name])stopInput(name);else startInput(name,$(name+"Device").value)}
 
 function toggleMute(name){
 
@@ -1516,49 +1242,29 @@ function toggleMute(name){
 
  if(name==="phone"){
 
-  mediaAudioNodes.forEach(node=>{
+  mediaAudioNodes.forEach(node=>node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100);
 
-   node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100;
-
-  });
-
-  $("phoneToggle").textContent=audioMuted.phone?"SON ON":"MUTE";
-
-  return;
+  $("phoneToggle").textContent=audioMuted.phone?"SON ON":"MUTE";return;
 
  }
 
- setVolume(name);
-
- $(name+"Mute").textContent=audioMuted[name]?"SON ON":"MUTE";
+ setVolume(name);$(name+"Mute").textContent=audioMuted[name]?"SON ON":"MUTE";
 
 }
 
 function meterLoop(name){
 
- const ch=audioChannels[name];if(!ch)return;
-
- const data=new Uint8Array(ch.an.frequencyBinCount);
+ const ch=audioChannels[name];if(!ch)return;const data=new Uint8Array(ch.an.frequencyBinCount);
 
  const tick=()=>{
 
-  if(audioChannels[name]!==ch)return;
+  if(audioChannels[name]!==ch)return;ch.an.getByteTimeDomainData(data);let sum=0;
 
-  ch.an.getByteTimeDomainData(data);
+  for(const v of data){const n=(v-128)/128;sum+=n*n}
 
-  let sum=0;
+  $(name+"Meter").style.width=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300))+"%";requestAnimationFrame(tick);
 
-  for(const value of data){const n=(value-128)/128;sum+=n*n}
-
-  const level=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300));
-
-  $(name+"Meter").style.width=level+"%";
-
-  requestAnimationFrame(tick);
-
- };
-
- requestAnimationFrame(tick);
+ };requestAnimationFrame(tick);
 
 }
 
@@ -1570,27 +1276,13 @@ async function listDevices(){
 
  for(const id of ["micDevice","auxDevice"]){
 
-  const select=$(id),old=select.value;
+  const sel=$(id),old=sel.value;
 
-  select.innerHTML=id==="micDevice"
+  sel.innerHTML=id==="micDevice"?'<option value="">Microphone par défaut</option>':'<option value="">Choisir une entrée audio</option>';
 
-   ?'<option value="">Microphone par défaut</option>'
+  devices.filter(d=>d.kind==="audioinput").forEach((d,i)=>{const o=document.createElement("option");o.value=d.deviceId;o.textContent=d.label||"Entrée audio "+(i+1);sel.append(o)});
 
-   :'<option value="">Choisir une entrée audio</option>';
-
-  devices.filter(d=>d.kind==="audioinput").forEach((device,i)=>{
-
-   const option=document.createElement("option");
-
-   option.value=device.deviceId;
-
-   option.textContent=device.label||"Entrée audio "+(i+1);
-
-   select.append(option);
-
-  });
-
-  if([...select.options].some(o=>o.value===old))select.value=old;
+  if([...sel.options].some(o=>o.value===old))sel.value=old;
 
  }
 
@@ -1602,27 +1294,13 @@ function setupMediaAudio(key,el){
 
   if(!audioContext||mediaAudioNodes.has(key))return;
 
-  const source=audioContext.createMediaElementSource(el);
+  const source=audioContext.createMediaElementSource(el),gain=audioContext.createGain(),analyser=audioContext.createAnalyser();
 
-  const gain=audioContext.createGain();
-
-  const analyser=audioContext.createAnalyser();
-
-  analyser.fftSize=256;
-
-  source.connect(gain);
-
-  gain.connect(analyser);
-
-  analyser.connect(mixDestination);
-
-  gain.connect(audioContext.destination);
+  analyser.fftSize=256;source.connect(gain);gain.connect(analyser);analyser.connect(mixDestination);gain.connect(audioContext.destination);
 
   gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100;
 
-  mediaAudioNodes.set(key,{source,gain,analyser});
-
-  mediaMeterLoop(key);
+  mediaAudioNodes.set(key,{source,gain,analyser});mediaMeterLoop(key);
 
  }catch(e){console.warn("Audio média :",e)}
 
@@ -1630,43 +1308,25 @@ function setupMediaAudio(key,el){
 
 function mediaMeterLoop(key){
 
- const node=mediaAudioNodes.get(key);if(!node)return;
-
- const data=new Uint8Array(node.analyser.frequencyBinCount);
+ const node=mediaAudioNodes.get(key);if(!node)return;const data=new Uint8Array(node.analyser.frequencyBinCount);
 
  const tick=()=>{
 
-  if(mediaAudioNodes.get(key)!==node)return;
+  if(mediaAudioNodes.get(key)!==node)return;node.analyser.getByteTimeDomainData(data);let sum=0;
 
-  node.analyser.getByteTimeDomainData(data);
+  for(const v of data){const n=(v-128)/128;sum+=n*n}
 
-  let sum=0;
+  $("phoneMeter").style.width=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300))+"%";requestAnimationFrame(tick);
 
-  for(const value of data){const n=(value-128)/128;sum+=n*n}
-
-  const level=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300));
-
-  $("phoneMeter").style.width=level+"%";
-
-  requestAnimationFrame(tick);
-
- };
-
- requestAnimationFrame(tick);
+ };requestAnimationFrame(tick);
 
 }
-
-function updatePhoneAudio(){toggleMute("phone")}
 
 function updateMediaVolume(){
 
  $("phonePct").textContent=$("phoneVolume").value+"%";
 
- mediaAudioNodes.forEach(node=>{
-
-  node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100;
-
- });
+ mediaAudioNodes.forEach(node=>node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100);
 
 }
 
@@ -1682,11 +1342,7 @@ async function startRecording(){
 
   await audioInit();
 
-  const videoStream=program.captureStream(30);
-
-  const tracks=[...videoStream.getVideoTracks()];
-
-  tracks.push(...mixDestination.stream.getAudioTracks());
+  const videoStream=program.captureStream(30),tracks=[...videoStream.getVideoTracks(),...mixDestination.stream.getAudioTracks()];
 
   const stream=new MediaStream(tracks);
 
@@ -1694,9 +1350,7 @@ async function startRecording(){
 
   const mime=types.find(t=>MediaRecorder.isTypeSupported(t));
 
-  recording=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
-
-  recordChunks=[];
+  recording=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);recordChunks=[];
 
   recording.ondataavailable=e=>{if(e.data.size)recordChunks.push(e.data)};
 
@@ -1704,25 +1358,17 @@ async function startRecording(){
 
    const blob=new Blob(recordChunks,{type:recording.mimeType||"video/webm"});
 
-   if(recordUrl)URL.revokeObjectURL(recordUrl);
+   if(recordUrl)URL.revokeObjectURL(recordUrl);recordUrl=URL.createObjectURL(blob);
 
-   recordUrl=URL.createObjectURL(blob);
-
-   $("downloadBtn").disabled=false;
-
-   $("recordStatus").textContent="Enregistrement terminé. Vidéo prête.";
+   $("downloadBtn").disabled=false;$("recordStatus").textContent="Enregistrement terminé. Vidéo prête.";
 
    stream.getTracks().forEach(t=>t.stop());
 
   };
 
-  recording.start(1000);
+  recording.start(1000);$("recordBtn").textContent="■ Arrêter";
 
-  $("recordBtn").textContent="■ Arrêter";
-
-  $("recordStatus").textContent="Enregistrement du PROGRAM et du mixage audio…";
-
-  status("ENREGISTREMENT",true);
+  $("recordStatus").textContent="Enregistrement du PROGRAM et du mixage audio…";status("ENREGISTREMENT",true);
 
  }catch(e){err(e.message||"Erreur d'enregistrement.")}
 
@@ -1730,15 +1376,7 @@ async function startRecording(){
 
 function stopRecording(){
 
- if(recording?.state==="recording"){
-
-  recording.stop();
-
-  $("recordBtn").textContent="● Démarrer l'enregistrement";
-
-  status("STUDIO PRÊT");
-
- }
+ if(recording?.state==="recording"){recording.stop();$("recordBtn").textContent="● Démarrer l'enregistrement";status("STUDIO PRÊT")}
 
 }
 
@@ -1750,9 +1388,7 @@ function download(){
 
  const mp4=recording?.mimeType?.includes("mp4");
 
- a.download="MERFIL-LIVE-STUDIO-"+new Date().toISOString().slice(0,10)+(mp4?".mp4":".webm");
-
- a.click();
+ a.download="MERFIL-LIVE-STUDIO-"+new Date().toISOString().slice(0,10)+(mp4?".mp4":".webm");a.click();
 
 }
 
@@ -1784,29 +1420,25 @@ $("duplicateSceneBtn").onclick=duplicateScene;
 
 $("deleteSceneBtn").onclick=deleteScene;
 
+$("duplicateSourceBtn").onclick=duplicateSource;
+
+$("lockSourceBtn").onclick=toggleSourceLock;
+
+$("deleteSourceBtn").onclick=()=>{if(selected())removeSource(selectedSourceId)};
+
 $("applyProps").onclick=applyProps;
 
-$("previewBtn").onclick=()=>{
+$("previewBtn").onclick=()=>{renderScene(pctx,previewScene(),true);$("previewStatus").textContent="Preview actualisé : "+(previewScene()?.name||"—")};
 
- renderScene(pctx,previewScene(),true);
+$("takeBtn").onclick=takeScene;
 
- $("previewStatus").textContent="Preview actualisé : "+(previewScene()?.name||"—");
-
-};
-
-$("takeBtn").onclick=()=>takeScene("cut");
-
-$("autoBtn").onclick=()=>takeScene("auto");
+$("autoBtn").onclick=takeScene;
 
 $("blackBtn").onclick=()=>{
 
- if(transitionState)return;
+ if(transitionState)return;programBlack=!programBlack;
 
- programBlack=!programBlack;
-
- if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
-
- else renderScene(gctx,programScene(),false);
+ if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}else renderScene(gctx,programScene(),false);
 
  $("programStatus").textContent=programBlack?"Programme : NOIR":"Programme : "+(programScene()?.name||"—");
 
@@ -1828,7 +1460,7 @@ $("micMute").onclick=()=>toggleMute("mic");
 
 $("auxMute").onclick=()=>toggleMute("aux");
 
-$("phoneToggle").onclick=updatePhoneAudio;
+$("phoneToggle").onclick=()=>toggleMute("phone");
 
 $("micVolume").oninput=()=>setVolume("mic");
 
@@ -1842,35 +1474,15 @@ $("recordBtn").onclick=()=>recording?.state==="recording"?stopRecording():startR
 
 $("downloadBtn").onclick=download;
 
-$("micDevice").onchange=()=>{
+$("micDevice").onchange=()=>{if(audioChannels.mic)startInput("mic",$("micDevice").value)};
 
- if(audioChannels.mic)startInput("mic",$("micDevice").value);
-
-};
-
-$("auxDevice").onchange=()=>{
-
- if(audioChannels.aux)startInput("aux",$("auxDevice").value);
-
-};
+$("auxDevice").onchange=()=>{if(audioChannels.aux)startInput("aux",$("auxDevice").value)};
 
 /* INITIALISATION */
 
-scenes=[
+scenes=[makeScene("Caméra principale"),makeScene("Interview"),makeScene("Pause")];
 
- makeScene("Caméra principale"),
-
- makeScene("Interview"),
-
- makeScene("Pause")
-
-];
-
-previewSceneId=scenes[0].id;
-
-programSceneId=scenes[0].id;
-
-programSnapshot=snapshotScene(scenes[0]);
+previewSceneId=scenes[0].id;programSceneId=scenes[0].id;programSnapshot=snapshotScene(scenes[0]);
 
 renderLists();renderProps();renderAll();setTransition("cut");
 
@@ -1878,11 +1490,7 @@ requestAnimationFrame(animate);
 
 setInterval(()=>$("clock").textContent=new Date().toLocaleTimeString("fr-FR",{hour12:false}),1000);
 
-if(navigator.mediaDevices?.enumerateDevices){
-
- refreshCameras();listDevices();
-
-}
+if(navigator.mediaDevices?.enumerateDevices){refreshCameras();listDevices()}
 
 window.addEventListener("beforeunload",()=>{
 
