@@ -1,4 +1,3 @@
-
 export async function onRequestGet({ request, env }) {
   const adminCode = request.headers.get("x-mls-admin-code");
   const expectedCode = String(env.MLS_ADMIN_CODE || "");
@@ -25,8 +24,9 @@ export async function onRequestGet({ request, env }) {
     const response = await fetch(
       "https://studio.upstream.so/api/v1/streams",
       {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: "Bearer " + apiKey,
           Accept: "application/json"
         }
       }
@@ -34,14 +34,40 @@ export async function onRequestGet({ request, env }) {
 
     const data = await response.json();
 
+    if (!response.ok) {
+      return Response.json({
+        success: false,
+        message: "Erreur de connexion à Upstream."
+      }, { status: 502 });
+    }
+
+    function sanitize(value) {
+      if (Array.isArray(value)) {
+        return value.map(sanitize);
+      }
+
+      if (!value || typeof value !== "object") {
+        return value;
+      }
+
+      const safe = {};
+
+      for (const [key, item] of Object.entries(value)) {
+        if (/token|secret|password|credential|bearer|api.?key|stream.?key|url|uri/i.test(key)) {
+          continue;
+        }
+
+        safe[key] = sanitize(item);
+      }
+
+      return safe;
+    }
+
     return Response.json({
-      success: response.ok,
-      status: response.status,
-      data: response.ok ? data : null,
-      message: response.ok
-        ? "Flux récupérés."
-        : "Erreur Upstream."
-    }, { status: response.ok ? 200 : 502 });
+      success: true,
+      data: sanitize(data),
+      message: "Flux récupérés."
+    });
 
   } catch {
     return Response.json({
