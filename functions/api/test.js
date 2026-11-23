@@ -1,9 +1,12 @@
 
 export async function onRequestGet({ env }) {
-  if (!env.UPSTREAM_API_KEY) {
+  const apiKey = String(env.UPSTREAM_API_KEY || "")
+    .replace(/\s+/g, "");
+
+  if (!apiKey) {
     return Response.json({
       success: false,
-      message: "UPSTREAM_API_KEY introuvable dans Cloudflare."
+      message: "Clé API absente."
     }, { status: 500 });
   }
 
@@ -11,8 +14,9 @@ export async function onRequestGet({ env }) {
     const response = await fetch(
       "https://studio.upstream.so/api/v1/user",
       {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${env.UPSTREAM_API_KEY}`,
+          Authorization: "Bearer " + apiKey,
           Accept: "application/json"
         }
       }
@@ -23,14 +27,14 @@ export async function onRequestGet({ env }) {
       upstreamStatus: response.status,
       message: response.ok
         ? "Connexion à Upstream réussie."
-        : "Upstream a répondu avec une erreur."
+        : "Upstream a refusé la connexion."
     }, { status: response.ok ? 200 : 502 });
 
   } catch (error) {
     return Response.json({
       success: false,
-      message: "Échec de la requête.",
-      detail: error instanceof Error ? error.message : "Erreur inconnue"
+      message: "Erreur de connexion.",
+      detail: error.message
     }, { status: 502 });
   }
 }
