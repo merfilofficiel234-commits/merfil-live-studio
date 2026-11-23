@@ -1,82 +1,163 @@
+
+
 <!DOCTYPE html>
+
 <html lang="fr">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <meta name="theme-color" content="#101216">
+
 <title>MERFIL LIVE STUDIO</title>
+
 <style>
+
 :root{--bg:#101216;--panel:#191d23;--panel2:#252c36;--line:#39424e;--txt:#f4f5f7;--muted:#9aa4b1;--green:#32c987;--red:#ed4545;--blue:#438cff}
+
 *{box-sizing:border-box}
+
 body{margin:0;background:var(--bg);color:var(--txt);font:14px Arial,sans-serif}
+
 button,input,select{font:inherit}
+
 button,select{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:7px;padding:9px;cursor:pointer}
+
 button:disabled{opacity:.4;cursor:not-allowed}
+
 .top{position:sticky;top:0;z-index:20;background:#15191f;border-bottom:1px solid var(--line);padding:12px;display:flex;justify-content:space-between;align-items:center}
+
 .brand{display:flex;gap:10px;align-items:center}.logo{border:1px solid #87919e;border-radius:7px;padding:10px;font-weight:bold}
+
 .brandname{font-weight:bold;font-size:12px;letter-spacing:1px}.sub{font-size:9px;letter-spacing:1.3px;margin-top:4px;color:var(--muted)}
+
 .status{font-size:10px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#929ba8;margin-right:6px}
+
 main{max-width:1400px;margin:auto;padding:12px}
+
 h2,h3{font-size:12px;letter-spacing:1px;margin:0}
+
 .heading{display:flex;justify-content:space-between;align-items:center;margin:8px 0}
+
 .muted,small,.hint,.statusline{color:var(--muted)}
+
 .studio{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
 .monitor-wrap{min-width:0}.monitor{position:relative;width:100%;aspect-ratio:16/9;background:#050608;border:2px solid var(--line);border-radius:8px;overflow:hidden}
+
 .monitor.preview{border-color:var(--blue)}.monitor.program{border-color:var(--red)}
+
 .monitor canvas{width:100%;height:100%;display:block;touch-action:none}
+
 .monitor-label{position:absolute;top:8px;left:8px;background:#111c;padding:6px 9px;border-radius:4px;font-size:10px;font-weight:bold;pointer-events:none}
+
 .preview .monitor-label{background:#174b91}.program .monitor-label{background:#8d2222}
+
 .clock{position:absolute;bottom:8px;right:8px;background:#111c;padding:5px 8px;border-radius:4px;font-size:10px}
+
 .toolbar,.rowbuttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+
 .toolbar button,.rowbuttons button{flex:1;min-width:90px;font-size:11px}
+
 .primary{background:#edf0f3;color:#11151a;font-weight:bold}.good{border-color:#246c50;color:#75e2ad}
+
 .danger{border-color:#744044;color:#ffaaaa}.blue{border-color:#326db8;color:#a9ceff}
+
 .auto{background:#246c50;border-color:#32c987;color:white;font-weight:bold}
+
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px;min-width:0}
+
 .panel h3{margin-bottom:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+
 .scene-list,.source-list{display:grid;gap:7px}
+
 .scene-item,.source-item{display:flex;align-items:center;justify-content:space-between;gap:5px;border:1px solid var(--line);border-radius:7px;padding:7px;background:#151a21;min-width:0}
+
 .scene-item.active,.source-item.active{border-color:#f1f3f5;background:#303844}
+
 .scene-pick,.source-pick{flex:1;text-align:left;background:transparent;border:0;padding:3px;min-width:0;overflow:hidden}
+
 .scene-pick small,.source-pick small{display:block;margin-top:4px}
+
 .mini{padding:6px 7px;font-size:10px;white-space:nowrap}
+
 .field{width:100%;background:#11151b;color:white;border:1px solid var(--line);border-radius:7px;padding:9px;margin:5px 0 9px}
+
 .label{display:block;color:var(--muted);font-size:11px;margin-top:7px}
+
 .props{display:grid;grid-template-columns:1fr 1fr;gap:7px}.props .field{margin:5px 0}
+
 .hint,.statusline{font-size:11px;line-height:1.5;margin-top:9px}
+
 .error{display:none;background:#3b2023;color:#ffb9b9;padding:10px;border-radius:7px;margin:10px 0;font-size:12px}
+
 .audio-row{padding:9px 0;border-bottom:1px solid var(--line)}.audio-row:last-child{border:0}
+
 .audio-head{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px}
+
 .audio-controls{display:flex;gap:8px;align-items:center;margin-top:7px}
+
 .audio-controls input[type=range]{flex:1;min-width:50px}
+
 .audio-controls select{min-width:0;max-width:150px;font-size:10px;padding:7px}
+
 .meter{height:6px;background:#303640;border-radius:8px;overflow:hidden;margin:7px 0 10px}
+
 .meter span{display:block;height:100%;width:0;background:var(--green)}
+
 .transition-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+
 .transition-controls button{font-size:11px}
+
 .multi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+
 .multi-card{border:2px solid var(--line);border-radius:7px;overflow:hidden;background:#101216;min-width:0}
+
 .multi-card.pvw{border-color:var(--blue)}.multi-card.pgm{border-color:var(--red)}
+
 .multi-card canvas{display:block;width:100%;aspect-ratio:16/9;background:#050608}
+
 .multi-info{display:flex;justify-content:space-between;align-items:center;padding:6px;font-size:10px;gap:4px}
+
 .multi-info button{font-size:9px;padding:5px}
+
 .badge{font-size:9px;padding:4px 5px;border-radius:3px;background:#303640}
+
 .badge.pvw{background:#174b91}.badge.pgm{background:#8d2222}
+
 .footer{text-align:center;color:#697380;font-size:10px;padding:22px;letter-spacing:1px}
+
 .source-tools{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+
 .source-tools button{flex:1;font-size:10px}
+
 .record-box{background:#11151b;border:1px solid var(--line);border-radius:8px;padding:12px;margin-top:10px}
+
 .record-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
 .record-time{font-size:25px;font-weight:bold;font-variant-numeric:tabular-nums;letter-spacing:2px}
+
 .record-indicator{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+
 .record-light{width:9px;height:9px;border-radius:50%;background:#66707c}
+
 .record-light.active{background:#ed4545;box-shadow:0 0 0 4px #ed454522}
+
 .record-light.paused{background:#e8b34e}
+
 .record-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:12px}
+
 .record-actions button{font-size:11px}
+
 .record-format{font-size:10px;color:var(--muted);margin-top:9px}
+
 @media(max-width:700px){main{padding:9px}.studio,.grid{grid-template-columns:1fr}.multi-grid{grid-template-columns:repeat(2,1fr)}.toolbar button{min-width:calc(50% - 8px)}}
+
 @media(max-width:380px){.record-actions{grid-template-columns:1fr 1fr}.record-actions button:last-child{grid-column:1/-1}}
+
 
 /* UPSTREAM */
 .upstream-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
@@ -86,758 +167,1523 @@ h2,h3{font-size:12px;letter-spacing:1px;margin:0}
 .upstream-stream b{display:block;font-size:12px;margin-bottom:4px}
 .upstream-stream small{font-size:10px;display:block;margin-top:3px}
 .upstream-status{font-size:11px;line-height:1.5;margin-top:9px;color:var(--muted)}
+.destination-box{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}
+.destination-form{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.destination-form .full{grid-column:1/-1}
+.destination-list{display:grid;gap:7px;margin-top:10px}
+.destination-card{background:#11151b;border:1px solid var(--line);border-radius:7px;padding:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.destination-card small{display:block;margin-top:4px;font-size:10px}
+.destination-card-actions{display:flex;gap:5px;flex-wrap:wrap}
+.destination-card-actions button{font-size:10px;padding:6px}
+.destination-help{font-size:10px;line-height:1.5;color:var(--muted);margin-top:7px}
+@media(max-width:430px){.destination-form{grid-template-columns:1fr}.destination-form .full{grid-column:auto}.destination-card{align-items:flex-start;flex-direction:column}.destination-card-actions{width:100%}.destination-card-actions button{flex:1}}
+
 </style>
+
 </head>
+
 <body>
+
 <header class="top">
+
  <div class="brand"><div class="logo">MLS</div><div><div class="brandname">MERFIL LIVE STUDIO</div><div class="sub">MOBILE PRODUCTION · VERSION 9</div></div></div>
+
  <div class="status"><span class="dot" id="statusDot"></span><span id="statusText">STUDIO PRÊT</span></div>
+
 </header>
+
 <main>
+
  <div class="heading"><h2>RÉGIE STUDIO · PREVIEW / PROGRAM</h2><span class="muted">16:9 · 1280 × 720</span></div>
+
  <div class="studio">
+
   <section class="monitor-wrap">
+
    <div class="heading"><h2>PREVIEW · PVW</h2><span class="badge pvw">PRÉPARATION</span></div>
+
    <div class="monitor preview"><canvas id="previewCanvas" width="1280" height="720"></canvas><div class="monitor-label">PREVIEW</div></div>
+
    <div class="toolbar"><button class="blue" id="previewBtn">Actualiser Preview</button><button class="primary" id="takeBtn">TAKE → PROGRAM</button></div>
+
    <div class="statusline" id="previewStatus">Scène en préparation.</div>
+
   </section>
+
   <section class="monitor-wrap">
+
    <div class="heading"><h2>PROGRAM · PGM</h2><span class="badge pgm">SORTIE PRINCIPALE</span></div>
+
    <div class="monitor program"><canvas id="programCanvas" width="1280" height="720"></canvas><div class="monitor-label">PROGRAM</div><div class="clock" id="clock">00:00:00</div></div>
+
    <div class="toolbar"><button class="auto" id="autoBtn">AUTO · TRANSITION</button><button class="danger" id="blackBtn">NOIR</button></div>
+
    <div class="statusline" id="programStatus">Programme : aucune scène.</div>
+
   </section>
+
  </div>
+
  <div class="error" id="errorBox"></div>
+
  <section class="panel" style="margin-top:12px">
+
   <h3>CONTRÔLE DES TRANSITIONS</h3>
+
   <div class="transition-controls"><button id="cutTransition" class="primary">CUT</button><button id="fadeTransition">FONDU</button><button id="dipTransition">FONDU AU NOIR</button></div>
+
   <label class="label">Durée de transition : <b id="durationText">700 ms</b></label>
+
   <input id="transitionDuration" type="range" min="200" max="3000" step="100" value="700" style="width:100%">
+
   <div class="statusline" id="transitionStatus">Transition sélectionnée : CUT</div>
+
  </section>
+
  <section class="panel" style="margin-top:12px">
+
   <div class="heading"><h2>MULTIVIEW · VUE MULTIPLE</h2><span class="muted">Toutes les scènes</span></div>
+
   <div class="multi-grid" id="multiGrid"></div>
+
   <div class="hint">Sélectionne une scène pour la charger dans Preview. Le Program reste indépendant jusqu'à TAKE ou AUTO.</div>
+
  </section>
+
  <section class="panel" style="margin-top:12px">
+
   <h3>GESTION DES CAMÉRAS</h3>
+
   <label class="label">Caméra disponible sur cet appareil</label>
+
   <select id="cameraDevice" class="field"><option value="">Caméra par défaut</option></select>
+
   <div class="rowbuttons">
+
    <button id="cameraBtn" class="blue">Autoriser les caméras</button>
+
    <button id="addCameraBtn" class="primary">＋ Ajouter cette caméra</button>
+
    <button id="refreshCamerasBtn">Actualiser la liste</button>
+
   </div>
+
   <div class="hint">Chaque ajout crée une source caméra indépendante. Le nombre de caméras utilisables simultanément dépend du téléphone et du navigateur.</div>
+
   <div class="statusline" id="cameraStatus">Aucune caméra source ajoutée.</div>
+
  </section>
+
  <div class="toolbar">
+
   <button id="addTextBtn">＋ Texte</button>
+
   <button class="danger" id="stopBtn">Arrêter les appareils</button>
+
  </div>
+
  <div class="grid">
+
   <section class="panel">
+
    <h3>RÉGIE · SCÈNES</h3>
+
    <div class="rowbuttons">
+
     <button id="newSceneBtn">＋ Nouvelle scène</button><button id="renameSceneBtn">Renommer</button><button id="duplicateSceneBtn">Dupliquer</button><button id="deleteSceneBtn" class="danger">Supprimer</button>
+
    </div>
+
    <div class="scene-list" id="sceneList" style="margin-top:10px"></div>
+
    <div class="statusline" id="sceneStatus">Scène sélectionnée</div>
+
   </section>
+
   <section class="panel">
+
    <h3>SOURCES DE LA SCÈNE PREVIEW</h3>
+
    <div class="rowbuttons">
+
     <button id="addImageBtn">＋ Image</button><button id="addVideoBtn">＋ Vidéo</button><button id="addColorBtn">＋ Fond</button>
+
    </div>
+
    <div class="source-list" id="sourceList" style="margin-top:10px"></div>
+
    <div class="source-tools">
+
     <button id="duplicateSourceBtn">Dupliquer source</button><button id="lockSourceBtn">Verrouiller</button><button id="deleteSourceBtn" class="danger">Supprimer source</button>
+
    </div>
+
    <div class="hint">Chaque scène possède sa propre liste de sources. Sélectionne une source puis déplace-la dans Preview. La poignée en bas à droite permet de la redimensionner.</div>
+
   </section>
- </div> <div class="grid">
-  <section class="panel">
-   <h3>PROPRIÉTÉS DE LA SOURCE</h3>
-   <div id="noSelection" class="statusline">Sélectionne une source pour modifier ses paramètres.</div>
-   <div id="properties" hidden>
-    <label class="label">Nom de la source</label><input class="field" id="propName">
-    <div class="props">
-     <div><label class="label">Position X</label><input class="field" id="propX" type="number"></div>
-     <div><label class="label">Position Y</label><input class="field" id="propY" type="number"></div>
-     <div><label class="label">Largeur</label><input class="field" id="propW" type="number" min="20"></div>
-     <div><label class="label">Hauteur</label><input class="field" id="propH" type="number" min="20"></div>
-    </div>
-    <div id="textProps"><label class="label">Texte affiché</label><input class="field" id="propText"></div>
-    <div id="colorProps"><label class="label">Couleur du fond</label><input class="field" id="propColor" type="color"></div>
-    <label class="label">Opacité</label><input id="propOpacity" type="range" min="0" max="100" value="100" style="width:100%">
-    <button id="applyProps" class="primary" style="width:100%;margin-top:8px">Appliquer les modifications</button>
-   </div>
-  </section>
-  <section class="panel">
-   <h3>MÉLANGEUR AUDIO · MLS</h3>
-   <div class="audio-row">
-    <div class="audio-head"><b>Microphone</b><button class="mini" id="micToggle">Activer</button><button class="mini danger" id="micMute" disabled>MUTE</button></div>
-    <select id="micDevice" class="field"><option value="">Microphone par défaut</option></select>
-    <div class="audio-controls"><input id="micVolume" type="range" min="0" max="150" value="100"><span id="micPct">100%</span></div>
-    <div class="meter"><span id="micMeter"></span></div>
-   </div>
-   <div class="audio-row">
-    <div class="audio-head"><b>Son des médias / téléphone</b><button class="mini danger" id="phoneToggle">MUTE</button></div>
-    <div class="audio-controls"><input id="phoneVolume" type="range" min="0" max="150" value="100"><span id="phonePct">100%</span></div>
-    <div class="meter"><span id="phoneMeter"></span></div>
-    <div class="hint">Contrôle le son des vidéos lues dans MERFIL LIVE STUDIO. Le navigateur ne capture pas le son des autres applications du téléphone.</div>
-   </div>
-   <div class="audio-row">
-    <div class="audio-head"><b>Entrée auxiliaire AUX</b><button class="mini" id="auxToggle">Activer</button><button class="mini danger" id="auxMute" disabled>MUTE</button></div>
-    <select id="auxDevice" class="field"><option value="">Choisir une entrée audio</option></select>
-    <div class="audio-controls"><input id="auxVolume" type="range" min="0" max="150" value="100"><span id="auxPct">100%</span></div>
-    <div class="meter"><span id="auxMeter"></span></div>
-   </div>
-   <div class="statusline" id="audioStatus">Mixeur audio prêt. Active une entrée pour commencer.</div>
-  </section>
+
  </div>
+
+ <div class="grid">
+
+  <section class="panel">
+
+   <h3>PROPRIÉTÉS DE LA SOURCE</h3>
+
+   <div id="noSelection" class="statusline">Sélectionne une source pour modifier ses paramètres.</div>
+
+   <div id="properties" hidden>
+
+    <label class="label">Nom de la source</label><input class="field" id="propName">
+
+    <div class="props">
+
+     <div><label class="label">Position X</label><input class="field" id="propX" type="number"></div>
+
+     <div><label class="label">Position Y</label><input class="field" id="propY" type="number"></div>
+
+     <div><label class="label">Largeur</label><input class="field" id="propW" type="number" min="20"></div>
+
+     <div><label class="label">Hauteur</label><input class="field" id="propH" type="number" min="20"></div>
+
+    </div>
+
+    <div id="textProps"><label class="label">Texte affiché</label><input class="field" id="propText"></div>
+
+    <div id="colorProps"><label class="label">Couleur du fond</label><input class="field" id="propColor" type="color"></div>
+
+    <label class="label">Opacité</label><input id="propOpacity" type="range" min="0" max="100" value="100" style="width:100%">
+
+    <button id="applyProps" class="primary" style="width:100%;margin-top:8px">Appliquer les modifications</button>
+
+   </div>
+
+  </section>
+
+  <section class="panel">
+
+   <h3>MÉLANGEUR AUDIO · MLS</h3>
+
+   <div class="audio-row">
+
+    <div class="audio-head"><b>Microphone</b><button class="mini" id="micToggle">Activer</button><button class="mini danger" id="micMute" disabled>MUTE</button></div>
+
+    <select id="micDevice" class="field"><option value="">Microphone par défaut</option></select>
+
+    <div class="audio-controls"><input id="micVolume" type="range" min="0" max="150" value="100"><span id="micPct">100%</span></div>
+
+    <div class="meter"><span id="micMeter"></span></div>
+
+   </div>
+
+   <div class="audio-row">
+
+    <div class="audio-head"><b>Son des médias / téléphone</b><button class="mini danger" id="phoneToggle">MUTE</button></div>
+
+    <div class="audio-controls"><input id="phoneVolume" type="range" min="0" max="150" value="100"><span id="phonePct">100%</span></div>
+
+    <div class="meter"><span id="phoneMeter"></span></div>
+
+    <div class="hint">Contrôle le son des vidéos lues dans MERFIL LIVE STUDIO. Le navigateur ne capture pas le son des autres applications du téléphone.</div>
+
+   </div>
+
+   <div class="audio-row">
+
+    <div class="audio-head"><b>Entrée auxiliaire AUX</b><button class="mini" id="auxToggle">Activer</button><button class="mini danger" id="auxMute" disabled>MUTE</button></div>
+
+    <select id="auxDevice" class="field"><option value="">Choisir une entrée audio</option></select>
+
+    <div class="audio-controls"><input id="auxVolume" type="range" min="0" max="150" value="100"><span id="auxPct">100%</span></div>
+
+    <div class="meter"><span id="auxMeter"></span></div>
+
+   </div>
+
+   <div class="statusline" id="audioStatus">Mixeur audio prêt. Active une entrée pour commencer.</div>
+
+  </section>
+
+ </div>
+
  <section class="panel" style="margin-top:12px">
+
   <h3>ENREGISTREMENT PROFESSIONNEL · PHASE 5</h3>
+
   <div class="record-box">
+
    <div class="record-top">
+
     <div class="record-time" id="recordTimer">00:00:00</div>
+
     <div class="record-indicator"><span class="record-light" id="recordLight"></span><span id="recordState">PRÊT À ENREGISTRER</span></div>
+
    </div>
+
    <div class="record-actions">
+
     <button class="primary" id="recordBtn">● DÉMARRER</button>
+
     <button id="pauseRecordBtn" disabled>Ⅱ PAUSE</button>
+
     <button class="danger" id="stopRecordBtn" disabled>■ ARRÊTER</button>
+
    </div>
+
    <div class="record-format" id="recordFormat">Format : détection automatique selon le navigateur.</div>
+
    <div class="statusline" id="recordStatus">Le PROGRAM et le mixage audio seront enregistrés ensemble.</div>
+
    <div class="rowbuttons"><button id="downloadBtn" disabled>Télécharger la vidéo</button></div>
+
   </div>
+
   <div class="hint">L'enregistrement capture le PROGRAM affiché, y compris les transitions, ainsi que le mixage du microphone, de l'AUX et des médias. Garde cette page ouverte pendant l'enregistrement.</div>
+
  </section>
- <section class="panel" style="margin-top:12px">
+
+  <section class="panel" style="margin-top:12px">
+
   <h3>DIFFUSION EN DIRECT · CONNEXION UPSTREAM</h3>
+
   <div class="hint">Cette étape permet de vérifier la connexion Upstream et de consulter les flux disponibles. La diffusion du PROGRAM vers Facebook, YouTube ou TikTok n'est pas encore activée.</div>
+
   <label class="label" for="upstreamAdminCode">Code administrateur MLS</label>
   <input class="field" id="upstreamAdminCode" type="password" autocomplete="off" placeholder="Saisir le code administrateur">
+
   <div class="upstream-actions">
    <button class="primary" id="upstreamConnectBtn">CONNECTER UPSTREAM</button>
    <button class="blue" id="upstreamRefreshBtn" disabled>ACTUALISER LES FLUX</button>
   </div>
+
   <div class="upstream-status" id="upstreamStatus" role="status" aria-live="polite">En attente de connexion.</div>
   <div class="upstream-streams" id="upstreamStreams"><div class="hint">Aucun flux chargé.</div></div>
+
+  <div class="destination-box">
+   <h3>DESTINATION DE DIFFUSION · MODE CLASSIQUE</h3>
+   <div class="destination-help">Choisis un flux MLS, puis ajoute une seule plateforme pour ce flux. La clé est transmise directement au serveur et n'est jamais réaffichée ni enregistrée dans le navigateur. Pour diffuser simultanément sur plusieurs plateformes, un module séparé Actiview Multi Live sera nécessaire.</div>
+   <label class="label" for="destinationStreamSelect">Flux MLS concerné</label>
+   <select class="field" id="destinationStreamSelect" disabled><option value="">Connecte Upstream et actualise les flux</option></select>
+   <div class="destination-form">
+    <div class="full"><label class="label" for="destinationName">Nom de la destination</label><input class="field" id="destinationName" maxlength="100" placeholder="Ex. Facebook de MERFIL"></div>
+    <div class="full"><label class="label" for="destinationPlatform">Plateforme</label><select class="field" id="destinationPlatform"><option value="facebook">Facebook</option><option value="youtube">YouTube</option><option value="twitch">Twitch</option><option value="instagram">Instagram</option><option value="kick">Kick</option><option value="rumble">Rumble</option><option value="mixcloud">Mixcloud</option><option value="custom">Autre serveur RTMP</option></select></div>
+    <div class="full" id="destinationServerWrap" hidden><label class="label" for="destinationServer">Adresse du serveur RTMP</label><input class="field" id="destinationServer" placeholder="rtmps://serveur/app" autocomplete="off"></div>
+    <div class="full"><label class="label" for="destinationKey">Clé de diffusion</label><input class="field" id="destinationKey" type="password" autocomplete="new-password" placeholder="Coller la clé fournie par la plateforme"></div>
+    <div class="full destination-help" id="destinationKeyHelp">Pour Facebook, YouTube, Twitch, Kick et Mixcloud, colle uniquement la clé de diffusion.</div>
+    <div class="full upstream-actions"><button class="primary" id="destinationSaveBtn" disabled>AJOUTER LA DESTINATION</button><button id="destinationCancelBtn" type="button" hidden>ANNULER LA MODIFICATION</button></div>
+   </div>
+   <div class="upstream-status" id="destinationStatus" role="status" aria-live="polite">Connecte Upstream pour gérer les destinations.</div>
+   <div class="destination-list" id="destinationList"><div class="hint">Aucune destination chargée.</div></div>
+  </div>
+
  </section>
+
 </main>
+
 <footer class="footer">MERFIL LIVE STUDIO · MLS · VERSION 9.0</footer>
+
 <input id="imageFile" type="file" accept="image/*" hidden>
+
 <input id="videoFile" type="file" accept="video/*" hidden>
+
 <script>
+
 "use strict";
+
 const $=id=>document.getElementById(id);
+
 const preview=$("previewCanvas"),pctx=preview.getContext("2d");
+
 const program=$("programCanvas"),gctx=program.getContext("2d");
+
 let scenes=[],previewSceneId=null,programSceneId=null,programSnapshot=null;
+
 let selectedSourceId=null,sourceCounter=0,sceneCounter=0,cameraCounter=0;
+
 let cameraSources=new Map(),mediaObjects=new Map(),mediaAudioNodes=new Map();
+
 let audioContext=null,mixDestination=null,audioChannels={};
+
 let audioMuted={mic:false,aux:false,phone:false};
+
 let recording=null,recordChunks=[],recordUrl=null,recordStream=null;
+
 let recordStartedAt=0,recordElapsed=0,recordTimerInterval=null;
+
 let recordingMimeType="",recordingExtension="webm",recordingFinalizing=false;
+
 let drag=null,selectedTransition="cut",transitionState=null;
+
 let programBlack=false,lastMultiUpdate=0;
+
 const uid=()=>"src"+(++sourceCounter);
+
 const sceneById=id=>scenes.find(s=>s.id===id);
+
 const previewScene=()=>sceneById(previewSceneId);
+
 const programScene=()=>programSnapshot;
+
 const cloneSource=s=>({...s});
+
 function snapshotScene(sc){return sc?{id:sc.id,name:sc.name,sources:sc.sources.map(s=>({...s}))}:null}
+
 function err(msg){$("errorBox").textContent=msg;$("errorBox").style.display="block"}
+
 function clearErr(){$("errorBox").style.display="none"}
+
 function status(t,on=false){$("statusText").textContent=t;$("statusDot").style.background=on?"#ed4545":"#929ba8"}
+
 function makeScene(name){return{id:"scene"+(++sceneCounter),name,sources:[]}}
+
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
 function addSource(type,extra={}){
+
  const sc=previewScene();if(!sc)return;
+
  const src={id:uid(),type,name:extra.name||({camera:"Caméra",image:"Image",video:"Vidéo",text:"Texte",color:"Fond"}[type]),x:extra.x??120,y:extra.y??100,w:extra.w??(type==="text"?700:900),h:extra.h??(type==="text"?110:506),visible:true,locked:false,opacity:100,...extra};
+
  sc.sources.push(src);selectedSourceId=src.id;renderLists();renderProps();renderAll();
+
 }
+
 function renderLists(){
+
  $("sceneList").innerHTML="";
+
  scenes.forEach(sc=>{
+
   const wrap=document.createElement("div");wrap.className="scene-item"+(sc.id===previewSceneId?" active":"");
+
   const b=document.createElement("button");b.className="scene-pick";
+
   const labels=[];if(sc.id===previewSceneId)labels.push("PREVIEW");if(sc.id===programSceneId)labels.push("PROGRAM");
+
   b.innerHTML="<b>"+escapeHtml(sc.name)+"</b><small>"+sc.sources.length+" source(s) · "+labels.join(" / ")+"</small>";
+
   b.onclick=()=>selectPreview(sc.id);wrap.append(b);$("sceneList").append(wrap);
+
  });
+
  $("sourceList").innerHTML="";
+
  const sc=previewScene();
+
  if(sc)sc.sources.forEach(src=>{
+
   const wrap=document.createElement("div");wrap.className="source-item"+(src.id===selectedSourceId?" active":"");
+
   const b=document.createElement("button");b.className="source-pick";
+
   b.innerHTML=(src.visible?"◉ ":"○ ")+(src.locked?"🔒 ":"")+escapeHtml(src.name)+"<small>"+src.type.toUpperCase()+"</small>";
+
   b.onclick=()=>{selectedSourceId=src.id;renderLists();renderProps();renderAll()};
+
   const vis=document.createElement("button");vis.className="mini";vis.textContent=src.visible?"Masquer":"Afficher";
+
   vis.onclick=()=>{src.visible=!src.visible;renderLists();renderAll()};
+
   const up=document.createElement("button");up.className="mini";up.textContent="↑";up.onclick=()=>moveLayer(src.id,1);
+
   const down=document.createElement("button");down.className="mini";down.textContent="↓";down.onclick=()=>moveLayer(src.id,-1);
+
   const del=document.createElement("button");del.className="mini danger";del.textContent="×";del.onclick=()=>removeSource(src.id);
+
   wrap.append(b,vis,up,down,del);$("sourceList").append(wrap);
+
  });
+
  $("sceneStatus").textContent="Scène en préparation : "+(sc?.name||"—");
+
  $("previewStatus").textContent="Preview : "+(sc?.name||"aucune scène");
+
  $("programStatus").textContent="Programme : "+(programScene()?.name||"aucune scène")+(programBlack?" · NOIR":"");
+
  $("lockSourceBtn").textContent=selected()?.locked?"Déverrouiller":"Verrouiller";
+
  updateCameraStatus();
+
 }
+
 function selectPreview(id){if(!sceneById(id))return;previewSceneId=id;selectedSourceId=null;renderLists();renderProps();renderAll()}
+
 function selected(){return previewScene()?.sources.find(s=>s.id===selectedSourceId)}
+
 function renderProps(){
+
  const s=selected();$("properties").hidden=!s;$("noSelection").hidden=!!s;if(!s)return;
+
  $("propName").value=s.name;$("propX").value=Math.round(s.x);$("propY").value=Math.round(s.y);
+
  $("propW").value=Math.round(s.w);$("propH").value=Math.round(s.h);
+
  $("textProps").hidden=s.type!=="text";$("colorProps").hidden=s.type!=="color";
+
  $("propText").value=s.text||"";$("propColor").value=s.color||"#17202c";$("propOpacity").value=s.opacity??100;
+
  $("lockSourceBtn").textContent=s.locked?"Déverrouiller":"Verrouiller";
+
 }
+
 function applyProps(){
+
  const s=selected();if(!s)return;
+
  s.name=$("propName").value||s.name;s.x=Number($("propX").value)||0;s.y=Number($("propY").value)||0;
+
  s.w=Math.max(20,Number($("propW").value)||20);s.h=Math.max(20,Number($("propH").value)||20);
+
  s.opacity=Number($("propOpacity").value);if(s.type==="text")s.text=$("propText").value;if(s.type==="color")s.color=$("propColor").value;
+
  renderLists();renderProps();renderAll();
+
 }
+
 function isMediaUsed(key){
+
  if(!key)return false;
+
  if(programSnapshot?.sources.some(s=>s.mediaKey===key||s.cameraKey===key))return true;
+
  return scenes.some(sc=>sc.sources.some(s=>s.mediaKey===key||s.cameraKey===key));
+
 }
+
 function cleanupMedia(s){
+
  if(!s)return;
+
  if(s.mediaKey&&!isMediaUsed(s.mediaKey)){
+
   const key=s.mediaKey,node=mediaAudioNodes.get(key);
+
   if(node){try{node.source.disconnect();node.gain.disconnect();node.analyser.disconnect()}catch(e){}mediaAudioNodes.delete(key)}
+
   const el=mediaObjects.get(key);if(el){el.pause?.();el.remove?.();mediaObjects.delete(key)}
+
   if(s.url)URL.revokeObjectURL(s.url);
+
  }
+
  if(s.cameraKey&&!isMediaUsed(s.cameraKey)){
+
   const cam=cameraSources.get(s.cameraKey);if(cam){cam.stream.getTracks().forEach(t=>t.stop());cam.video.srcObject=null;cameraSources.delete(s.cameraKey)}
+
  }
+
  updateCameraStatus();
+
 }
+
 function removeSource(id){
+
  const sc=previewScene();if(!sc)return;const i=sc.sources.findIndex(x=>x.id===id);if(i<0)return;
+
  const [s]=sc.sources.splice(i,1);cleanupMedia(s);selectedSourceId=null;renderLists();renderProps();renderAll();
+
 }
+
 function moveLayer(id,d){
+
  const a=previewScene()?.sources;if(!a)return;const i=a.findIndex(s=>s.id===id),j=i+d;
+
  if(i<0||j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];renderLists();renderAll();
+
 }
+
 function duplicateSource(){
+
  const s=selected(),sc=previewScene();if(!s||!sc)return;
+
  const copy={...s,id:uid(),x:s.x+35,y:s.y+35,name:s.name+" copie"};
+
  sc.sources.push(copy);selectedSourceId=copy.id;renderLists();renderProps();renderAll();
+
 }
+
 function toggleSourceLock(){const s=selected();if(!s)return;s.locked=!s.locked;renderLists();renderProps();renderAll()}
+
 function placeholder(c,s){
+
  c.fillStyle="#111720";c.fillRect(s.x,s.y,s.w,s.h);c.fillStyle="#e8edf3";c.textAlign="center";c.font="bold 32px Arial";c.fillText(s.name||"SOURCE",s.x+s.w/2,s.y+s.h/2);
+
 }
+
 function cover(c,el,x,y,w,h){
+
  const sw=el.videoWidth||el.naturalWidth,sh=el.videoHeight||el.naturalHeight;if(!sw||!sh)return;
+
  const scale=Math.max(w/sw,h/sh),dw=sw*scale,dh=sh*scale;c.save();c.beginPath();c.rect(x,y,w,h);c.clip();c.drawImage(el,x+(w-dw)/2,y+(h-dh)/2,dw,dh);c.restore();
+
 }
+
 function renderScene(c,sc,highlight=false){
+
  c.fillStyle="#080a0e";c.fillRect(0,0,1280,720);
+
  if(!sc){c.fillStyle="#dce2e9";c.textAlign="center";c.font="bold 38px Arial";c.fillText("MERFIL LIVE STUDIO",640,360);return}
+
  for(const s of sc.sources){
+
   if(!s.visible)continue;c.save();c.globalAlpha=Math.max(0,Math.min(100,s.opacity??100))/100;
+
   if(s.type==="color"){c.fillStyle=s.color||"#17202c";c.fillRect(s.x,s.y,s.w,s.h)}
+
   else if(s.type==="text"){
+
    c.fillStyle=s.bg||"rgba(8,12,20,.72)";c.fillRect(s.x,s.y,s.w,s.h);c.fillStyle=s.color||"#fff";c.font=`bold ${s.fontSize||42}px Arial`;c.textAlign=s.align||"left";c.textBaseline="middle";c.fillText(s.text||"Texte",s.x+22,s.y+s.h/2,Math.max(20,s.w-44));
+
   }else if(s.type==="camera"){
+
    const cam=cameraSources.get(s.cameraKey);if(cam&&cam.video.readyState>=2)cover(c,cam.video,s.x,s.y,s.w,s.h);else placeholder(c,s);
+
   }else if(s.type==="image"||s.type==="video"){
+
    const el=mediaObjects.get(s.mediaKey);if(el&&(s.type==="image"?el.complete&&el.naturalWidth:el.readyState>=2))cover(c,el,s.x,s.y,s.w,s.h);else placeholder(c,s);
+
   }
+
   c.globalAlpha=1;
+
   if(highlight&&s.id===selectedSourceId){
+
    c.strokeStyle="#fff";c.lineWidth=3;c.setLineDash([10,7]);c.strokeRect(s.x,s.y,s.w,s.h);c.setLineDash([]);
+
    c.fillStyle="#fff";c.fillRect(s.x+s.w-15,s.y+s.h-15,22,22);
+
    if(s.locked){c.fillStyle="#ffcc66";c.font="bold 18px Arial";c.fillText("🔒",s.x+8,s.y+25)}
+
   }
+
   c.restore();
+
  }
+
 }
+
 function renderAll(){
+
  renderScene(pctx,previewScene(),true);
+
  if(!transitionState){if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}else renderScene(gctx,programScene(),false)}
+
  updateMultiview();
+
 }
+
 function animate(){
+
  renderScene(pctx,previewScene(),true);
+
  if(transitionState){
+
   const t=Math.min(1,(performance.now()-transitionState.start)/transitionState.duration),st=transitionState;
+
   if(st.type==="fade"){gctx.globalAlpha=1-t;gctx.drawImage(st.from,0,0);gctx.globalAlpha=t;gctx.drawImage(st.to,0,0);gctx.globalAlpha=1}
+
   else if(st.type==="dip"){
+
    if(t<.5){gctx.globalAlpha=1-t*2;gctx.drawImage(st.from,0,0);gctx.globalAlpha=1}
+
    else{gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720);gctx.globalAlpha=(t-.5)*2;gctx.drawImage(st.to,0,0);gctx.globalAlpha=1}
+
   }
+
   if(t>=1){transitionState=null;programBlack=false;renderScene(gctx,programScene(),false);$("programStatus").textContent="Programme : "+(programScene()?.name||"—");renderLists()}
+
  }else if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
+
  else renderScene(gctx,programScene(),false);
+
  updateMultiview();requestAnimationFrame(animate);
+
 }
+
 function updateMultiview(){
+
  const now=performance.now();if(now-lastMultiUpdate<500)return;lastMultiUpdate=now;
+
  const grid=$("multiGrid"),oldIds=[...grid.children].map(x=>x.dataset.id),newIds=scenes.map(s=>s.id);
+
  if(oldIds.join("|")!==newIds.join("|")){
+
   grid.innerHTML="";
+
   scenes.forEach(sc=>{
+
    const card=document.createElement("div");card.className="multi-card";card.dataset.id=sc.id;
+
    const c=document.createElement("canvas");c.width=640;c.height=360;
+
    const info=document.createElement("div");info.className="multi-info";
+
    const name=document.createElement("b");name.textContent=sc.name;
+
    const choose=document.createElement("button");choose.textContent="PREVIEW";choose.onclick=()=>selectPreview(sc.id);
+
    info.append(name,choose);card.append(c,info);grid.append(card);
+
   });
+
  }
+
  scenes.forEach(sc=>{
+
   const card=[...grid.children].find(x=>x.dataset.id===sc.id);if(!card)return;
+
   card.classList.toggle("pvw",sc.id===previewSceneId);card.classList.toggle("pgm",sc.id===programSceneId);
+
   const c=card.querySelector("canvas"),cx=c.getContext("2d");cx.clearRect(0,0,c.width,c.height);cx.save();cx.scale(.5,.5);renderScene(cx,sc,false);cx.restore();
+
   card.querySelector("b").textContent=sc.name;
+
   const info=card.querySelector(".multi-info");info.querySelectorAll(".badge").forEach(x=>x.remove());
+
   if(sc.id===previewSceneId){const b=document.createElement("span");b.className="badge pvw";b.textContent="PVW";info.insertBefore(b,info.lastChild)}
+
   if(sc.id===programSceneId){const b=document.createElement("span");b.className="badge pgm";b.textContent="PGM";info.insertBefore(b,info.lastChild)}
+
  });
+
 }
+
 function canvasPoint(e){const r=preview.getBoundingClientRect();return{x:(e.clientX-r.left)*1280/r.width,y:(e.clientY-r.top)*720/r.height}}
+
 preview.addEventListener("pointerdown",e=>{
+
  const p=canvasPoint(e),a=previewScene()?.sources||[];let hit=null;
+
  for(let i=a.length-1;i>=0;i--){const s=a[i];if(s.visible&&p.x>=s.x&&p.x<=s.x+s.w&&p.y>=s.y&&p.y<=s.y+s.h){hit=s;break}}
+
  if(!hit){selectedSourceId=null;renderLists();renderProps();renderAll();return}
+
  selectedSourceId=hit.id;if(hit.locked){renderLists();renderProps();renderAll();return}
+
  drag={id:hit.id,start:p,x:hit.x,y:hit.y,w:hit.w,h:hit.h,resize:p.x>hit.x+hit.w-35&&p.y>hit.y+hit.h-35};
+
  preview.setPointerCapture(e.pointerId);renderLists();renderProps();renderAll();
+
 });
+
 preview.addEventListener("pointermove",e=>{
+
  if(!drag)return;const p=canvasPoint(e),s=selected();if(!s||s.locked)return;
+
  if(drag.resize){s.w=Math.max(30,drag.w+p.x-drag.start.x);s.h=Math.max(30,drag.h+p.y-drag.start.y)}
+
  else{s.x=drag.x+p.x-drag.start.x;s.y=drag.y+p.y-drag.start.y}
+
  $("propX").value=Math.round(s.x);$("propY").value=Math.round(s.y);$("propW").value=Math.round(s.w);$("propH").value=Math.round(s.h);renderAll();
+
 });
+
 preview.addEventListener("pointerup",()=>{if(drag){drag=null;renderProps();renderAll()}});
+
 preview.addEventListener("pointercancel",()=>drag=null);
 
 /* PROGRAM */
+
 function takeScene(){
+
  if(transitionState)return;const target=previewScene();if(!target){err("Aucune scène sélectionnée dans Preview.");return}
+
  const next=snapshotScene(target);
+
  if(selectedTransition==="cut"){
+
   programSceneId=target.id;programSnapshot=next;programBlack=false;transitionState=null;renderScene(gctx,programScene(),false);$("programStatus").textContent="Programme : "+target.name;renderLists();return;
+
  }
+
  const from=document.createElement("canvas"),to=document.createElement("canvas");from.width=to.width=1280;from.height=to.height=720;
+
  const fc=from.getContext("2d"),tc=to.getContext("2d");
+
  if(programBlack){fc.fillStyle="#000";fc.fillRect(0,0,1280,720)}else renderScene(fc,programScene(),false);
+
  renderScene(tc,next,false);programSceneId=target.id;programSnapshot=next;programBlack=false;
+
  transitionState={from,to,type:selectedTransition,start:performance.now(),duration:Number($("transitionDuration").value)};
+
  $("programStatus").textContent="Transition en cours vers : "+target.name;renderLists();
+
 }
+
 function setTransition(type){
+
  selectedTransition=type;["cut","fade","dip"].forEach(id=>$(id+"Transition").classList.toggle("primary",id===type));
+
  $("transitionStatus").textContent="Transition sélectionnée : "+({cut:"CUT",fade:"FONDU",dip:"FONDU AU NOIR"}[type]);
+
 }
 
 /* SCÈNES */
+
 function newScene(){const sc=makeScene("Scène "+(scenes.length+1));scenes.push(sc);selectPreview(sc.id);renderAll()}
+
 function renameScene(){const sc=previewScene();if(!sc)return;const n=prompt("Nom de la scène :",sc.name);if(n?.trim()){sc.name=n.trim();renderLists();renderAll()}}
+
 function duplicateScene(){
+
  const sc=previewScene();if(!sc)return;const copy=makeScene(sc.name+" copie");
+
  copy.sources=sc.sources.map(s=>({...s,id:uid()}));scenes.push(copy);selectPreview(copy.id);renderAll();
+
 }
+
 function deleteScene(){
+
  if(scenes.length<=1){err("Il faut conserver au moins une scène.");return}
+
  const i=scenes.findIndex(s=>s.id===previewSceneId);if(i<0)return;const [removed]=scenes.splice(i,1);
+
  if(removed.id===programSceneId){const fallback=scenes[Math.max(0,i-1)];programSceneId=fallback.id;programSnapshot=snapshotScene(fallback);renderScene(gctx,programScene(),false)}
+
  removed.sources.forEach(cleanupMedia);selectPreview(scenes[Math.max(0,i-1)].id);renderLists();renderAll();
+
 }
 
 /* CAMÉRAS */
+
 async function refreshCameras(){
+
  if(!navigator.mediaDevices?.enumerateDevices){err("La liste des caméras n'est pas disponible.");return}
+
  try{
+
   const devices=await navigator.mediaDevices.enumerateDevices(),cams=devices.filter(d=>d.kind==="videoinput");
+
   const sel=$("cameraDevice"),old=sel.value;sel.innerHTML='<option value="">Caméra par défaut</option>';
+
   cams.forEach((d,i)=>{const o=document.createElement("option");o.value=d.deviceId;o.textContent=d.label||"Caméra "+(i+1);sel.append(o)});
+
   if([...sel.options].some(o=>o.value===old))sel.value=old;$("cameraStatus").textContent=cams.length+" caméra(s) détectée(s).";
+
  }catch(e){err("Impossible de lire les caméras : "+e.message)}
+
 }
+
 async function authorizeCameras(){
+
  clearErr();try{
+
   if(!navigator.mediaDevices?.getUserMedia)throw Error("Caméra indisponible. Ouvre le site en HTTPS dans Safari.");
+
   const stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});stream.getTracks().forEach(t=>t.stop());
+
   await refreshCameras();status("CAMÉRAS AUTORISÉES",true);
+
  }catch(e){err(e.message||"Autorisation caméra refusée.")}
+
 }
+
 async function addCameraSource(){
+
  clearErr();try{
+
   if(!navigator.mediaDevices?.getUserMedia)throw Error("Caméra indisponible. Utilise une connexion HTTPS.");
+
   const deviceId=$("cameraDevice").value;
+
   const constraints=deviceId?{deviceId:{exact:deviceId},width:{ideal:1280},height:{ideal:720}}:{facingMode:"environment",width:{ideal:1280},height:{ideal:720}};
+
   const stream=await navigator.mediaDevices.getUserMedia({video:constraints,audio:false});
+
   const video=document.createElement("video");video.autoplay=true;video.playsInline=true;video.muted=true;video.srcObject=stream;await video.play();
+
   const key="camera"+(++cameraCounter);cameraSources.set(key,{stream,video,deviceId});
+
   addSource("camera",{name:"Caméra "+cameraSources.size,cameraKey:key,x:100,y:80,w:900,h:506});
+
   await refreshCameras();$("cameraStatus").textContent=cameraSources.size+" source(s) caméra active(s).";status("CAMÉRA AJOUTÉE",true);
+
  }catch(e){
+
   let m=e.message||"Impossible d'ajouter cette caméra.";
+
   if(e.name==="NotReadableError")m="Cette caméra est déjà utilisée ou indisponible. Essaie une autre caméra.";
+
   if(e.name==="OverconstrainedError")m="Cette caméra ne peut pas répondre aux paramètres demandés.";err(m);
+
  }
+
 }
+
 function updateCameraStatus(){const n=cameraSources.size;$("cameraStatus").textContent=n?n+" source(s) caméra active(s).":"Aucune source caméra active."}
+
 function stopAll(){
+
  if(recording?.state==="recording"||recording?.state==="paused"){err("Arrête d'abord l'enregistrement.");return}
+
  cameraSources.forEach(cam=>cam.stream.getTracks().forEach(t=>t.stop()));cameraSources.clear();
+
  ["mic","aux"].forEach(stopInput);$("cameraStatus").textContent="Toutes les caméras sont arrêtées.";status("STUDIO PRÊT");renderAll();renderLists();
+
 }
+
 /* MÉDIAS */
+
 function addMedia(file,type){
+
  if(!file)return;const url=URL.createObjectURL(file),key=uid();let el;
+
  if(type==="image"){el=new Image();el.onload=renderAll;el.onerror=()=>err("Impossible de charger cette image.");el.src=url}
+
  else{
+
   el=document.createElement("video");el.src=url;el.playsInline=true;el.loop=true;el.preload="auto";el.controls=false;
+
   el.addEventListener("loadeddata",()=>{if(audioContext)setupMediaAudio(key,el);renderAll()});
+
   el.addEventListener("error",()=>err("Impossible de lire cette vidéo."));el.play().catch(()=>{});
+
  }
+
  mediaObjects.set(key,el);addSource(type,{name:file.name,mediaKey:key,url,x:100,y:80,w:900,h:506});
+
  if(type==="video"&&audioContext)setupMediaAudio(key,el);renderAll();
+
 }
+
 function addText(){const t=prompt("Texte à afficher :","Votre texte");if(t)addSource("text",{name:"Texte",text:t,x:100,y:520,w:900,h:110,fontSize:42})}
+
 function addColor(){const c=prompt("Couleur du fond (ex. #17202c) :","#17202c");if(c)addSource("color",{name:"Fond",color:c,x:0,y:0,w:1280,h:720})}
 
 /* AUDIO */
+
 async function audioInit(){
+
  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error("Audio Web non pris en charge.");
+
  if(!audioContext){audioContext=new AC();mixDestination=audioContext.createMediaStreamDestination()}
+
  if(audioContext.state==="suspended")await audioContext.resume();
+
  mediaObjects.forEach((el,key)=>{if(el instanceof HTMLVideoElement)setupMediaAudio(key,el)});
+
 }
+
 function setVolume(name){
+
  const ch=audioChannels[name],slider=$(name+"Volume");if(!slider)return;
+
  if(ch)ch.gain.gain.value=audioMuted[name]?0:Number(slider.value)/100;$(name+"Pct").textContent=slider.value+"%";
+
 }
+
 function channelNode(name,stream){
+
  const src=audioContext.createMediaStreamSource(stream),gain=audioContext.createGain(),analyser=audioContext.createAnalyser();
+
  analyser.fftSize=256;src.connect(gain);gain.connect(analyser);analyser.connect(mixDestination);
+
  audioChannels[name]={stream,src,gain,an:analyser};audioMuted[name]=false;setVolume(name);meterLoop(name);
+
  const btn=$(name+"Mute");if(btn){btn.disabled=false;btn.textContent="MUTE"}$(name+"Toggle").textContent="Désactiver";
+
 }
+
 async function startInput(name,deviceId){
+
  clearErr();try{
+
   await audioInit();if(!navigator.mediaDevices?.getUserMedia)throw Error("Entrée audio indisponible.");
+
   if(audioChannels[name])stopInput(name);
+
   const constraints={audio:{echoCancellation:name==="mic",noiseSuppression:name==="mic",autoGainControl:name==="mic",...(deviceId?{deviceId:{exact:deviceId}}:{})},video:false};
+
   const stream=await navigator.mediaDevices.getUserMedia(constraints);channelNode(name,stream);
+
   $("audioStatus").textContent=name==="mic"?"Microphone connecté.":"Entrée AUX connectée.";await listDevices();status("MIXAGE AUDIO ACTIF",true);
+
  }catch(e){err(e.message||"Impossible d'activer cette entrée audio.")}
+
 }
+
 function stopInput(name){
+
  const ch=audioChannels[name];if(!ch)return;ch.stream.getTracks().forEach(t=>t.stop());
+
  try{ch.src.disconnect();ch.gain.disconnect();ch.an.disconnect()}catch(e){}
+
  delete audioChannels[name];$(name+"Toggle").textContent="Activer";$(name+"Meter").style.width="0%";
+
  const btn=$(name+"Mute");if(btn){btn.disabled=true;btn.textContent="MUTE"}audioMuted[name]=false;
+
 }
+
 function toggleInput(name){if(audioChannels[name])stopInput(name);else startInput(name,$(name+"Device").value)}
+
 function toggleMute(name){
+
  if(name!=="phone"&&!audioChannels[name])return;audioMuted[name]=!audioMuted[name];
+
  if(name==="phone"){
+
   mediaAudioNodes.forEach(node=>node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100);
+
   $("phoneToggle").textContent=audioMuted.phone?"SON ON":"MUTE";return;
+
  }
+
  setVolume(name);$(name+"Mute").textContent=audioMuted[name]?"SON ON":"MUTE";
+
 }
+
 function meterLoop(name){
+
  const ch=audioChannels[name];if(!ch)return;const data=new Uint8Array(ch.an.frequencyBinCount);
+
  const tick=()=>{if(audioChannels[name]!==ch)return;ch.an.getByteTimeDomainData(data);let sum=0;for(const v of data){const n=(v-128)/128;sum+=n*n}
+
   $(name+"Meter").style.width=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300))+"%";requestAnimationFrame(tick)};
+
  requestAnimationFrame(tick);
+
 }
+
 async function listDevices(){
+
  if(!navigator.mediaDevices?.enumerateDevices)return;const devices=await navigator.mediaDevices.enumerateDevices();
+
  for(const id of ["micDevice","auxDevice"]){
+
   const sel=$(id),old=sel.value;sel.innerHTML=id==="micDevice"?'<option value="">Microphone par défaut</option>':'<option value="">Choisir une entrée audio</option>';
+
   devices.filter(d=>d.kind==="audioinput").forEach((d,i)=>{const o=document.createElement("option");o.value=d.deviceId;o.textContent=d.label||"Entrée audio "+(i+1);sel.append(o)});
+
   if([...sel.options].some(o=>o.value===old))sel.value=old;
+
  }
+
 }
+
 function setupMediaAudio(key,el){
+
  try{
+
   if(!audioContext||mediaAudioNodes.has(key))return;
+
   const source=audioContext.createMediaElementSource(el),gain=audioContext.createGain(),analyser=audioContext.createAnalyser();
+
   analyser.fftSize=256;source.connect(gain);gain.connect(analyser);analyser.connect(mixDestination);gain.connect(audioContext.destination);
+
   gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100;
+
   mediaAudioNodes.set(key,{source,gain,analyser});mediaMeterLoop(key);
+
  }catch(e){console.warn("Audio média :",e)}
+
 }
+
 function mediaMeterLoop(key){
+
  const node=mediaAudioNodes.get(key);if(!node)return;const data=new Uint8Array(node.analyser.frequencyBinCount);
+
  const tick=()=>{if(mediaAudioNodes.get(key)!==node)return;node.analyser.getByteTimeDomainData(data);let sum=0;for(const v of data){const n=(v-128)/128;sum+=n*n}
+
   $("phoneMeter").style.width=Math.min(100,Math.round(Math.sqrt(sum/data.length)*300))+"%";requestAnimationFrame(tick)};
+
  requestAnimationFrame(tick);
+
 }
+
 function updateMediaVolume(){
+
  $("phonePct").textContent=$("phoneVolume").value+"%";
+
  mediaAudioNodes.forEach(node=>node.gain.gain.value=audioMuted.phone?0:Number($("phoneVolume").value)/100);
+
 }
 
 /* ENREGISTREMENT PROFESSIONNEL */
+
 function formatTime(ms){
+
  const total=Math.floor(ms/1000),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;
+
  return [h,m,s].map(v=>String(v).padStart(2,"0")).join(":");
+
 }
+
 function elapsedRecording(){
+
  if(recording?.state==="recording")return recordElapsed+(performance.now()-recordStartedAt);
+
  return recordElapsed;
+
 }
+
 function updateRecordDisplay(){
+
  $("recordTimer").textContent=formatTime(elapsedRecording());
+
 }
+
 function setRecordUI(state){
+
  const light=$("recordLight"),label=$("recordState");
+
  light.className="record-light";
+
  $("recordBtn").disabled=state==="recording"||state==="paused"||state==="processing";
+
  $("pauseRecordBtn").disabled=state!=="recording"&&state!=="paused";
+
  $("stopRecordBtn").disabled=state!=="recording"&&state!=="paused";
+
  if(state==="recording"){
+
   light.classList.add("active");label.textContent="ENREGISTREMENT EN COURS";
+
   $("pauseRecordBtn").textContent="Ⅱ PAUSE";
+
  }else if(state==="paused"){
+
   light.classList.add("paused");label.textContent="ENREGISTREMENT EN PAUSE";
+
   $("pauseRecordBtn").textContent="▶ REPRENDRE";
+
  }else if(state==="processing"){
+
   label.textContent="FINALISATION DE LA VIDÉO…";
+
  }else if(state==="finished"){
+
   label.textContent="ENREGISTREMENT TERMINÉ";
+
  }else{
+
   label.textContent="PRÊT À ENREGISTRER";
+
  }
+
 }
+
 function getRecordingFormat(){
+
  if(!window.MediaRecorder)return null;
+
  if(typeof MediaRecorder.isTypeSupported!=="function")return "";
+
  const types=[
+
   "video/mp4;codecs=avc1.42E01E,mp4a.40.2",
+
   "video/mp4",
+
   "video/webm;codecs=vp9,opus",
+
   "video/webm;codecs=vp8,opus",
+
   "video/webm"
+
  ];
+
  return types.find(type=>MediaRecorder.isTypeSupported(type))||"";
+
 }
+
 function releaseRecordingStream(){
+
  if(recordStream){
+
   recordStream.getTracks().forEach(track=>track.stop());
+
   recordStream=null;
+
  }
+
 }
+
 async function startRecording(){
+
  try{
+
   clearErr();
+
   if(recordingFinalizing)throw Error("La vidéo précédente est encore en cours de finalisation.");
+
   if(!window.MediaRecorder)throw Error("MediaRecorder n'est pas pris en charge par ce navigateur.");
+
   if(!program.captureStream)throw Error("La capture du PROGRAM n'est pas disponible.");
+
   await audioInit();
+
   const videoStream=program.captureStream(30);
+
   const videoTracks=videoStream.getVideoTracks();
+
   const audioTracks=mixDestination.stream.getAudioTracks();
+
   if(!videoTracks.length){
+
    videoStream.getTracks().forEach(track=>track.stop());
+
    throw Error("Aucune piste vidéo disponible dans le PROGRAM.");
+
   }
+
   recordStream=new MediaStream([...videoTracks,...audioTracks]);
+
   const mime=getRecordingFormat();
+
   recording=mime?new MediaRecorder(recordStream,{mimeType:mime}):new MediaRecorder(recordStream);
+
   recordChunks=[];
+
   recordElapsed=0;
+
   recordStartedAt=performance.now();
+
   recordingMimeType=recording.mimeType||mime||"";
+
   recordingExtension=recordingMimeType.includes("mp4")?"mp4":"webm";
+
   if(recordUrl){
+
    URL.revokeObjectURL(recordUrl);
+
    recordUrl=null;
+
   }
+
   $("downloadBtn").disabled=true;
+
   $("recordFormat").textContent="Format utilisé : "+(recordingMimeType||"format automatique du navigateur");
+
   recording.ondataavailable=e=>{
+
    if(e.data&&e.data.size>0)recordChunks.push(e.data);
+
   };
+
   recording.onerror=e=>{
+
    const message=e.error?.message||"Une erreur est survenue pendant l'enregistrement.";
+
    err(message);
+
    $("recordStatus").textContent="Erreur pendant l'enregistrement.";
+
   };
+
   recording.onpause=()=>{
+
    $("recordStatus").textContent="Enregistrement mis en pause.";
+
    setRecordUI("paused");
+
    updateRecordDisplay();
+
   };
+
   recording.onresume=()=>{
+
    $("recordStatus").textContent="Enregistrement repris.";
+
    setRecordUI("recording");
+
   };
+
   recording.onstop=()=>{
+
    clearInterval(recordTimerInterval);
+
    recordTimerInterval=null;
+
    recordingFinalizing=true;
+
    updateRecordDisplay();
+
    setRecordUI("processing");
+
    const actualMime=recording.mimeType||recordingMimeType||"video/webm";
+
    const blob=new Blob(recordChunks,{type:actualMime});
+
    releaseRecordingStream();
+
    if(!blob.size){
+
     recordingFinalizing=false;
+
     $("recordStatus").textContent="Aucune donnée vidéo n'a été enregistrée.";
+
     setRecordUI("ready");
+
     $("recordBtn").textContent="● DÉMARRER";
+
     err("Le fichier enregistré est vide. Réessaie avec un enregistrement plus long.");
+
     return;
+
    }
+
    recordingMimeType=actualMime;
+
    recordingExtension=actualMime.includes("mp4")?"mp4":"webm";
+
    recordUrl=URL.createObjectURL(blob);
+
    $("downloadBtn").disabled=false;
+
    $("recordStatus").textContent="Vidéo prête · "+(blob.size/1024/1024).toFixed(2)+" Mo · "+formatTime(recordElapsed);
+
    $("recordFormat").textContent="Fichier : "+actualMime+" · "+(blob.size/1024/1024).toFixed(2)+" Mo";
+
    recordingFinalizing=false;
+
    setRecordUI("finished");
+
    $("recordBtn").textContent="● NOUVEL ENREGISTREMENT";
+
    $("recordBtn").disabled=false;
+
    status("STUDIO PRÊT");
+
   };
+
   recording.start(1000);
+
   recordTimerInterval=setInterval(updateRecordDisplay,250);
+
   setRecordUI("recording");
+
   $("recordBtn").textContent="● ENREGISTREMENT";
+
   $("recordStatus").textContent="Capture du PROGRAM et du mixage audio en cours…";
+
   $("recordFormat").textContent="Enregistrement : "+(recordingMimeType||"format automatique");
+
   status("ENREGISTREMENT",true);
+
  }catch(e){
+
   releaseRecordingStream();
+
   clearInterval(recordTimerInterval);
+
   recordTimerInterval=null;
+
   recordingFinalizing=false;
+
   setRecordUI("ready");
+
   $("recordBtn").textContent="● DÉMARRER";
+
   $("recordBtn").disabled=false;
+
   err(e.message||"Erreur au démarrage de l'enregistrement.");
+
  }
+
 }
+
 function pauseRecording(){
+
  if(!recording||recordingFinalizing)return;
+
  if(recording.state==="recording"){
+
   recordElapsed+=performance.now()-recordStartedAt;
+
   try{
+
    recording.pause();
+
    setRecordUI("paused");
+
    updateRecordDisplay();
+
   }catch(e){
+
    err("Impossible de mettre en pause : "+e.message);
+
   }
+
  }else if(recording.state==="paused"){
+
   try{
+
    recordStartedAt=performance.now();
+
    recording.resume();
+
    setRecordUI("recording");
+
   }catch(e){
+
    err("Impossible de reprendre : "+e.message);
+
   }
+
  }
+
 }
+
 function stopRecording(){
+
  if(!recording||recordingFinalizing)return;
+
  if(recording.state==="recording"||recording.state==="paused"){
+
   if(recording.state==="recording"){
+
    recordElapsed+=performance.now()-recordStartedAt;
+
   }
+
   try{
+
    recordingFinalizing=true;
+
    recording.stop();
+
    $("recordStatus").textContent="Arrêt demandé. Préparation du fichier…";
+
    $("stopRecordBtn").disabled=true;
+
    $("pauseRecordBtn").disabled=true;
+
    $("recordBtn").textContent="● FINALISATION";
+
    status("FINALISATION",true);
+
   }catch(e){
+
    recordingFinalizing=false;
+
    err("Impossible d'arrêter l'enregistrement : "+e.message);
+
   }
+
  }
+
 }
+
 function download(){
+
  if(!recordUrl){
+
   err("Aucune vidéo prête à télécharger.");
+
   return;
+
  }
+
  const a=document.createElement("a");
+
  a.href=recordUrl;
+
  a.download="MERFIL-LIVE-STUDIO-"+new Date().toISOString().slice(0,10)+"."+recordingExtension;
+
  document.body.appendChild(a);
+
  a.click();
+
  a.remove();
+
  $("recordStatus").textContent="Téléchargement demandé. Vérifie les fichiers de ton appareil.";
+
 }
 
 /* COMMANDES */
+
 $("cameraBtn").onclick=authorizeCameras;
+
 $("addCameraBtn").onclick=addCameraSource;
+
 $("refreshCamerasBtn").onclick=refreshCameras;
+
 $("addTextBtn").onclick=addText;
+
 $("addImageBtn").onclick=()=>$("imageFile").click();
+
 $("addVideoBtn").onclick=()=>$("videoFile").click();
+
 $("imageFile").onchange=e=>{addMedia(e.target.files[0],"image");e.target.value=""};
+
 $("videoFile").onchange=e=>{addMedia(e.target.files[0],"video");e.target.value=""};
+
 $("addColorBtn").onclick=addColor;
+
 $("newSceneBtn").onclick=newScene;
+
 $("renameSceneBtn").onclick=renameScene;
+
 $("duplicateSceneBtn").onclick=duplicateScene;
+
 $("deleteSceneBtn").onclick=deleteScene;
+
 $("duplicateSourceBtn").onclick=duplicateSource;
+
 $("lockSourceBtn").onclick=toggleSourceLock;
+
 $("deleteSourceBtn").onclick=()=>{if(selected())removeSource(selectedSourceId)};
+
 $("applyProps").onclick=applyProps;
+
 $("previewBtn").onclick=()=>{renderScene(pctx,previewScene(),true);$("previewStatus").textContent="Preview actualisé : "+(previewScene()?.name||"—")};
+
 $("takeBtn").onclick=takeScene;
+
 $("autoBtn").onclick=takeScene;
+
 $("blackBtn").onclick=()=>{
+
  if(transitionState)return;
+
  programBlack=!programBlack;
+
  if(programBlack){gctx.fillStyle="#000";gctx.fillRect(0,0,1280,720)}
+
  else renderScene(gctx,programScene(),false);
+
  $("programStatus").textContent=programBlack?"Programme : NOIR":"Programme : "+(programScene()?.name||"—");
+
 };
+
 $("cutTransition").onclick=()=>setTransition("cut");
+
 $("fadeTransition").onclick=()=>setTransition("fade");
+
 $("dipTransition").onclick=()=>setTransition("dip");
+
 $("transitionDuration").oninput=e=>$("durationText").textContent=e.target.value+" ms";
+
 $("micToggle").onclick=()=>toggleInput("mic");
+
 $("auxToggle").onclick=()=>toggleInput("aux");
+
 $("micMute").onclick=()=>toggleMute("mic");
+
 $("auxMute").onclick=()=>toggleMute("aux");
+
 $("phoneToggle").onclick=()=>toggleMute("phone");
+
 $("micVolume").oninput=()=>setVolume("mic");
+
 $("auxVolume").oninput=()=>setVolume("aux");
+
 $("phoneVolume").oninput=updateMediaVolume;
+
 $("stopBtn").onclick=stopAll;
+
 $("recordBtn").onclick=startRecording;
+
 $("pauseRecordBtn").onclick=pauseRecording;
+
 $("stopRecordBtn").onclick=stopRecording;
+
 $("downloadBtn").onclick=download;
+
 $("micDevice").onchange=()=>{if(audioChannels.mic)startInput("mic",$("micDevice").value)};
+
 $("auxDevice").onchange=()=>{if(audioChannels.aux)startInput("aux",$("auxDevice").value)};
+
 
 /* CONNEXION UPSTREAM — consultation des flux uniquement */
 let upstreamConnected=false;
@@ -869,6 +1715,10 @@ function safeUpstreamFields(value){
  return rows.slice(0,12);
 }
 
+let upstreamStreamsData=[];
+let currentDestinations=[];
+let editingDestinationId=null;
+
 function renderUpstreamStreams(payload){
  const container=$("upstreamStreams");
  container.replaceChildren();
@@ -880,38 +1730,40 @@ function renderUpstreamStreams(payload){
   else if(Array.isArray(payload.data?.streams))streams=payload.data.streams;
   else if(Array.isArray(payload.data?.data))streams=payload.data.data;
  }
- if(!streams.length){
-  const empty=document.createElement("div");
-  empty.className="hint";
-  empty.textContent="Aucun flux trouvé dans la réponse Upstream.";
-  container.append(empty);
+ upstreamStreamsData=streams.filter(x=>x&&typeof x.id==="string");
+ const select=$("destinationStreamSelect");
+ const previous=select.value;
+ select.replaceChildren();
+ if(!upstreamStreamsData.length){
+  const opt=document.createElement("option");opt.value="";opt.textContent="Aucun flux disponible";select.append(opt);select.disabled=true;
+  const empty=document.createElement("div");empty.className="hint";empty.textContent="Aucun flux trouvé dans la réponse Upstream.";container.append(empty);
+  $("destinationSaveBtn").disabled=true;
   return;
  }
- streams.slice(0,50).forEach((stream,index)=>{
-  const card=document.createElement("div");
-  card.className="upstream-stream";
-  const fields=safeUpstreamFields(stream);
-  const title=document.createElement("b");
-  title.textContent=fields.find(([k])=>/^(name|title)$/i.test(k))?.[1]||("Flux "+(index+1));
-  card.append(title);
-  fields.filter(([k])=>!(/^(name|title)$/i.test(k))).forEach(([key,value])=>{
-   const line=document.createElement("small");
-   line.textContent=key+": "+value;
-   card.append(line);
-  });
-  if(!fields.length){
-   const line=document.createElement("small");
-   line.textContent="Détails non disponibles.";
-   card.append(line);
-  }
+ upstreamStreamsData.forEach((stream,index)=>{
+  const opt=document.createElement("option");opt.value=stream.id;opt.textContent=String(stream.name||stream.title||("Flux "+(index+1)));select.append(opt);
+ });
+ select.disabled=false;
+ if(upstreamStreamsData.some(x=>x.id===previous))select.value=previous;
+ const stream=upstreamStreamsData.find(x=>x.id===select.value)||upstreamStreamsData[0];
+ select.value=stream.id;
+ $("destinationSaveBtn").disabled=false;
+ upstreamStreamsData.slice(0,50).forEach((item,index)=>{
+  const card=document.createElement("div");card.className="upstream-stream";
+  const title=document.createElement("b");title.textContent=String(item.name||item.title||("Flux "+(index+1)));card.append(title);
+  const details=[item.platform,item.status].filter(Boolean).join(" · ");
+  if(details){const line=document.createElement("small");line.textContent=details;card.append(line)}
   container.append(card);
  });
+ loadDestinationsForSelectedStream().catch(()=>{});
 }
 
-async function upstreamRequest(endpoint,adminCode){
+async function upstreamRequest(endpoint,adminCode,options={}){
  const headers={Accept:"application/json"};
  if(adminCode)headers["x-mls-admin-code"]=adminCode;
- const response=await fetch(endpoint,{method:"GET",headers,cache:"no-store"});
+ const requestOptions={method:options.method||"GET",headers,cache:"no-store"};
+ if(options.body!==undefined){headers["Content-Type"]="application/json";requestOptions.body=JSON.stringify(options.body)}
+ const response=await fetch(endpoint,requestOptions);
  let data={};
  try{data=await response.json()}catch(e){}
  return {response,data};
@@ -987,33 +1839,174 @@ $("upstreamAdminCode").addEventListener("keydown",e=>{
  if(e.key==="Enter")connectUpstream();
 });
 
-/* INITIALISATION */
-scenes=[makeScene("Caméra principale"),makeScene("Interview"),makeScene("Pause")];
-previewSceneId=scenes[0].id;
-programSceneId=scenes[0].id;
-programSnapshot=snapshotScene(scenes[0]);
-renderLists();
-renderProps();
-renderAll();
-setTransition("cut");
-setRecordUI("ready");
-updateRecordDisplay();
-requestAnimationFrame(animate);
-setInterval(()=>$("clock").textContent=new Date().toLocaleTimeString("fr-FR",{hour12:false}),1000);
-if(navigator.mediaDevices?.enumerateDevices){
- refreshCameras();
- listDevices();
+function destinationMessage(message,isError=false){
+ const el=$("destinationStatus");el.textContent=message;el.style.color=isError?"#ffaaaa":"var(--muted)";
 }
-window.addEventListener("beforeunload",()=>{
- if(recording&&(recording.state==="recording"||recording.state==="paused")){
-  try{recording.stop()}catch(e){}
+function selectedStreamId(){return $("destinationStreamSelect").value}
+function currentAdminCode(){return $("upstreamAdminCode").value.trim()}
+function updateDestinationPlatformFields(){
+ const platform=$("destinationPlatform").value;
+ const needsServer=["custom","instagram","rumble"].includes(platform);
+ $("destinationServerWrap").hidden=!needsServer;
+ $("destinationServer").required=needsServer;
+ $("destinationKeyHelp").textContent=needsServer?"Colle l'adresse RTMP du serveur ci-dessus et la clé de diffusion ci-dessous. Le serveur et la clé seront assemblés uniquement pour l'envoi à Upstream.":"Colle uniquement la clé de diffusion fournie par la plateforme, sans adresse du serveur.";
+}
+function resetDestinationForm(){
+ editingDestinationId=null;
+ $("destinationName").value="";$("destinationKey").value="";$("destinationServer").value="";
+ $("destinationPlatform").disabled=false;
+ $("destinationSaveBtn").textContent="AJOUTER LA DESTINATION";
+ $("destinationCancelBtn").hidden=true;
+ updateDestinationPlatformFields();
+}
+async function loadDestinationsForSelectedStream(){
+ const streamId=selectedStreamId();const code=currentAdminCode();
+ if(!streamId||!code||!upstreamConnected)return;
+ destinationMessage("Chargement des destinations…");
+ const {response,data}=await upstreamRequest("/api/destinations?streamId="+encodeURIComponent(streamId),code);
+ if(!response.ok||data.success!==true){destinationMessage(data.message||"Impossible de charger les destinations.",true);return}
+ currentDestinations=Array.isArray(data.data)?data.data:[];
+ renderDestinations();
+ destinationMessage(currentDestinations.length?"Destination(s) récupérée(s). Les clés ne sont jamais affichées.":"Aucune destination enregistrée pour ce flux.");
+}
+function renderDestinations(){
+ const box=$("destinationList");box.replaceChildren();
+ if(!currentDestinations.length){const empty=document.createElement("div");empty.className="hint";empty.textContent="Aucune destination enregistrée.";box.append(empty);return}
+ currentDestinations.forEach(dest=>{
+  const card=document.createElement("div");card.className="destination-card";
+  const info=document.createElement("div");
+  const name=document.createElement("b");name.textContent=String(dest.name||dest.platform||"Destination");info.append(name);
+  const small=document.createElement("small");small.textContent=String(dest.platform||"Plateforme")+" · "+(dest.status==="paused"?"En pause":"Active")+" · clé masquée";info.append(small);
+  const actions=document.createElement("div");actions.className="destination-card-actions";
+  const edit=document.createElement("button");edit.textContent="MODIFIER";edit.onclick=()=>editDestination(dest);actions.append(edit);
+  const del=document.createElement("button");del.className="danger";del.textContent="SUPPRIMER";del.onclick=()=>deleteDestination(dest);actions.append(del);
+  card.append(info,actions);box.append(card);
+ });
+}
+function editDestination(dest){
+ editingDestinationId=String(dest.id);
+ $("destinationName").value=String(dest.name||"");
+ $("destinationPlatform").value=String(dest.platform||"facebook");
+ $("destinationPlatform").disabled=true;
+ $("destinationKey").value="";$("destinationServer").value="";
+ $("destinationSaveBtn").textContent="ENREGISTRER LES MODIFICATIONS";
+ $("destinationCancelBtn").hidden=false;
+ updateDestinationPlatformFields();
+ destinationMessage("Modification : laisse la clé vide pour conserver la clé actuelle. Pour la remplacer, colle une nouvelle clé.");
+ $("destinationName").scrollIntoView({behavior:"smooth",block:"center"});
+}
+function buildDestinationPayload(){
+ const name=$("destinationName").value.trim();
+ const platform=$("destinationPlatform").value;
+ let key=$("destinationKey").value.trim();
+ if(!name)throw new Error("Saisis le nom de la destination.");
+ if(name.length>100)throw new Error("Le nom ne doit pas dépasser 100 caractères.");
+ if(key){
+  if(["custom","instagram","rumble"].includes(platform)){
+   const server=$("destinationServer").value.trim().replace(/\/$/,"");
+   if(!/^rtmps?:\/\//i.test(server))throw new Error("L'adresse du serveur doit commencer par rtmp:// ou rtmps://.");
+   key=server+"/"+key.replace(/^\/+/,"");
+  }
+  if(key.length>510)throw new Error("La clé assemblée dépasse la longueur autorisée.");
  }
+ if(!editingDestinationId&&!key)throw new Error("Colle la clé de diffusion.");
+ const body={name};if(key)body.key=key;
+ if(!editingDestinationId){body.platform=platform;body.status="active";body.include_in_schedule=true}
+ return body;
+}
+async function saveDestination(){
+ if(!upstreamConnected){destinationMessage("Connecte d'abord Upstream.",true);return}
+ const streamId=selectedStreamId(),code=currentAdminCode();
+ if(!streamId){destinationMessage("Sélectionne un flux MLS.",true);return}
+ if(!editingDestinationId&&currentDestinations.length>=1){destinationMessage("Le mode classique autorise une seule plateforme par flux. Supprime ou modifie la destination existante. Actiview Multi Live sera le module multi-plateformes.",true);return}
+ let body;try{body=buildDestinationPayload()}catch(e){destinationMessage(e.message,true);return}
+ const button=$("destinationSaveBtn");button.disabled=true;destinationMessage("Enregistrement de la destination…");
+ try{
+  const edit=Boolean(editingDestinationId);
+  const endpoint="/api/destinations?streamId="+encodeURIComponent(streamId)+(edit?"&destinationId="+encodeURIComponent(editingDestinationId):"");
+  const {response,data}=await upstreamRequest(endpoint,code,{method:edit?"PATCH":"POST",body});
+  if(!response.ok||data.success!==true){destinationMessage(data.message||"L'enregistrement a échoué.",true);return}
+  $("destinationKey").value="";resetDestinationForm();
+  destinationMessage(edit?"Destination modifiée.":"Destination ajoutée.");
+  await loadDestinationsForSelectedStream();
+ }catch(e){destinationMessage("Erreur réseau pendant l'enregistrement.",true)}
+ finally{button.disabled=false}
+}
+async function deleteDestination(dest){
+ if(!confirm("Supprimer la destination « "+String(dest.name||dest.platform||"")+" » ?"))return;
+ const streamId=selectedStreamId(),code=currentAdminCode();
+ destinationMessage("Suppression de la destination…");
+ try{
+  const endpoint="/api/destinations?streamId="+encodeURIComponent(streamId)+"&destinationId="+encodeURIComponent(dest.id);
+  const {response,data}=await upstreamRequest(endpoint,code,{method:"DELETE"});
+  if(!response.ok||data.success!==true){destinationMessage(data.message||"La suppression a échoué.",true);return}
+  if(editingDestinationId===String(dest.id))resetDestinationForm();
+  await loadDestinationsForSelectedStream();
+  destinationMessage("Destination supprimée.");
+ }catch(e){destinationMessage("Erreur réseau pendant la suppression.",true)}
+}
+$("destinationPlatform").addEventListener("change",updateDestinationPlatformFields);
+$("destinationSaveBtn").onclick=saveDestination;
+$("destinationCancelBtn").onclick=()=>{resetDestinationForm();destinationMessage("Modification annulée.")};
+$("destinationStreamSelect").addEventListener("change",()=>{resetDestinationForm();loadDestinationsForSelectedStream().catch(()=>destinationMessage("Erreur lors du chargement des destinations.",true))});
+updateDestinationPlatformFields();
+
+/* INITIALISATION */
+
+scenes=[makeScene("Caméra principale"),makeScene("Interview"),makeScene("Pause")];
+
+previewSceneId=scenes[0].id;
+
+programSceneId=scenes[0].id;
+
+programSnapshot=snapshotScene(scenes[0]);
+
+renderLists();
+
+renderProps();
+
+renderAll();
+
+setTransition("cut");
+
+setRecordUI("ready");
+
+updateRecordDisplay();
+
+requestAnimationFrame(animate);
+
+setInterval(()=>$("clock").textContent=new Date().toLocaleTimeString("fr-FR",{hour12:false}),1000);
+
+if(navigator.mediaDevices?.enumerateDevices){
+
+ refreshCameras();
+
+ listDevices();
+
+}
+
+window.addEventListener("beforeunload",()=>{
+
+ if(recording&&(recording.state==="recording"||recording.state==="paused")){
+
+  try{recording.stop()}catch(e){}
+
+ }
+
  cameraSources.forEach(cam=>cam.stream.getTracks().forEach(t=>t.stop()));
+
  Object.keys(audioChannels).forEach(stopInput);
+
  mediaObjects.forEach(el=>{if(el.pause)el.pause()});
+
  if(recordUrl)URL.revokeObjectURL(recordUrl);
+
  if(audioContext)audioContext.close();
+
 });
+
 </script>
+
 </body>
+
 </html>
