@@ -31,11 +31,10 @@ export async function onRequestGet({ env }) {
         : "Clé refusée par Upstream."
     });
 
-  } catch (error) {
+  } catch {
     return Response.json({
       success: false,
-      message: "Erreur de connexion.",
-      detail: error.message
+      message: "Erreur de connexion."
     });
   }
 }
