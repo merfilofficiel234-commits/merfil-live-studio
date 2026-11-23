@@ -37,4 +37,4 @@ export async function onRequestGet({ env }) {
       detail: error.message
     }, { status: 502 });
   }
-} 
+}
