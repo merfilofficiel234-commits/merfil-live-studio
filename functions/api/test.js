@@ -1,4 +1,3 @@
-
 export async function onRequestGet({ env }) {
   const apiKey = String(env.UPSTREAM_API_KEY || "")
     .replace(/\s+/g, "");
