@@ -6,8 +6,8 @@ export async function onRequestGet({ env }) {
   if (!apiKey) {
     return Response.json({
       success: false,
-      message: "Clé API absente."
-    }, { status: 500 });
+      message: "Clé API absente"
+    });
   }
 
   try {
@@ -16,25 +16,25 @@ export async function onRequestGet({ env }) {
       {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + apiKey,
-          Accept: "application/json"
+          "Authorization": `Bearer ${apiKey}`,
+          "Accept": "application/json"
         }
       }
     );
 
+    const details = await response.text();
+
     return Response.json({
       success: response.ok,
-      upstreamStatus: response.status,
-      message: response.ok
-        ? "Connexion à Upstream réussie."
-        : "Upstream a refusé la connexion."
-    }, { status: response.ok ? 200 : 502 });
+      status: response.status,
+      keyLength: apiKey.length,
+      upstreamResponse: details
+    });
 
   } catch (error) {
     return Response.json({
       success: false,
-      message: "Erreur de connexion.",
-      detail: error.message
-    }, { status: 502 });
+      error: error.message
+    });
   }
 }
