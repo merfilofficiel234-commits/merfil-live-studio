@@ -1,8 +1,14 @@
-export async function onRequestGet({ request, env }) {
-  const adminCode = request.headers.get("x-mls-admin-code");
-  const expectedCode = String(env.MLS_ADMIN_CODE || "");
 
-  if (!expectedCode || adminCode !== expectedCode) {
+export async function onRequestGet({ request, env }) {
+  const adminCode = String(
+    request.headers.get("x-mls-admin-code") || ""
+  ).trim();
+
+  const expectedCode = String(
+    env.MLS_ADMIN_CODE || ""
+  ).trim();
+
+  if (!expectedCode || !adminCode || adminCode !== expectedCode) {
     return Response.json({
       success: false,
       message: "Accès non autorisé."
